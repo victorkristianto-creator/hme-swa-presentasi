@@ -302,6 +302,68 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 .ds-tbl td.n{white-space:normal;text-align:right}
 .ds-pages .thumbs{grid-template-columns:repeat(2,64px);margin-top:6px}
 .ds-pages .thumbs img{aspect-ratio:3/4}
+/* ---------- simulasi investasi ---------- */
+.sm-tick{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:clamp(10px,1.4vw,16px)}
+.sm-tick .big{font:600 clamp(26px,5vh,50px)/1 var(--mono);letter-spacing:-.03em;color:var(--fault);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sm-pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--fault);margin-right:8px;animation:smpl 1.6s infinite}
+@keyframes smpl{0%{box-shadow:0 0 0 0 #ff5a5a99}70%{box-shadow:0 0 0 10px #ff5a5a00}100%{box-shadow:0 0 0 0 #ff5a5a00}}
+.sm-pkgs{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,16px);flex:1;min-height:0}
+.sm-pkg{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:clamp(6px,1.1vh,10px);position:relative;background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:clamp(14px,2vh,20px);transition:border-color .25s,transform .25s var(--ease),box-shadow .25s}
+.sm-pkg:hover{transform:translateY(-2px)}
+.sm-pkg:focus-visible{outline:2px solid var(--hme2);outline-offset:3px}
+.sm-pkg[aria-pressed=true]{border-color:var(--hme);box-shadow:0 0 0 1px var(--hme),0 18px 40px -20px #f7931e66}
+.sm-pkg.sq{cursor:default;border-color:#ff5a5a55}
+.sm-pkg.sq:hover{transform:none}
+.sm-pkg .tag{position:absolute;top:-11px;left:16px;font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--hme);color:#1a0f00;padding:6px 9px;border-radius:99px}
+.sm-pkg .name{font-weight:700;font-size:clamp(15px,2vh,18px)}
+.sm-pkg .desc{font-size:clamp(12px,1.55vh,14px);color:var(--muted);line-height:1.45}
+.sm-pkg dl{margin:auto 0 0;display:grid;grid-template-columns:auto 1fr;gap:clamp(4px,.8vh,8px) 12px;font-size:clamp(12px,1.6vh,14px)}
+.sm-pkg dt{color:var(--muted)}
+.sm-pkg dd{margin:0;text-align:right;font-family:var(--mono);font-weight:600}
+.sm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.sm-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.4vw,16px)}
+.sm-bep .track{position:relative;height:12px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line);overflow:hidden;margin-top:10px}
+.sm-bep .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#ff5a5a55,var(--hme));border-radius:99px;transition:width .8s var(--ease)}
+.sm-bep .after{position:absolute;inset:0 0 0 auto;background:repeating-linear-gradient(45deg,#2fd28a33 0 6px,#2fd28a14 6px 12px);transition:width .8s var(--ease)}
+.sm-bep .scale{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--dim);margin-top:6px}
+.sm-chart{position:relative;flex:1;min-height:180px;display:flex;flex-direction:column}
+.sm-chart .plot{position:relative;flex:1;min-height:0}
+.sm-chart svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.sm-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.sm-legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.sm-legend i.dash{background:repeating-linear-gradient(90deg,#94a6c4 0 4px,transparent 4px 7px)!important;height:2px}
+.sm-tip{position:absolute;pointer-events:none;background:#0c1628f2;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5;min-width:180px;opacity:0;transition:opacity .15s;z-index:3;box-shadow:0 10px 30px -10px #000}
+.sm-tip b{font-family:var(--mono)}
+.sm-tip .row{display:flex;justify-content:space-between;gap:14px}
+.sm-tip .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.sm-split{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(12px,1.8vw,24px);flex:1;min-height:0}
+.sm-brk{display:flex;flex-direction:column;gap:clamp(8px,1.4vh,12px);margin-top:8px}
+.sm-brk .r{display:grid;grid-template-columns:minmax(150px,1.2fr) 1fr 84px;gap:10px;align-items:center;font-size:clamp(12px,1.6vh,14px)}
+.sm-brk .bar{height:12px;border-radius:0 4px 4px 0;transition:width .7s var(--ease);min-width:2px}
+.sm-brk .v{font:600 13px var(--mono);text-align:right}
+.sm-brk .k{display:flex;align-items:center;gap:8px}
+.sm-brk .k i{width:10px;height:10px;border-radius:3px;flex:none}
+.sm-callout{border-left:3px solid var(--hme);padding:10px 14px;background:#f7931e0f;border-radius:0 12px 12px 0;font-size:clamp(12px,1.6vh,14px);line-height:1.5;color:#d8e2f2}
+.sm-callout b{color:var(--ink)}
+table.sm-t{width:100%;border-collapse:collapse;font-size:clamp(12px,1.6vh,14px)}
+.sm-t th,.sm-t td{padding:clamp(5px,.9vh,9px) 6px;border-bottom:1px solid var(--line);text-align:right}
+.sm-t th:first-child,.sm-t td:first-child{text-align:left}
+.sm-t th{color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.sm-t td{font-family:var(--mono)}
+.sm-t td:first-child{font-family:var(--sans)}
+.sm-t tr.hl td{color:var(--fault)}
+.sm-gauge{margin-top:10px;position:relative;height:10px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line)}
+.sm-gauge .m{position:absolute;top:-6px;width:3px;height:20px;border-radius:2px;transition:left .6s var(--ease)}
+.sm-gauge .z{position:absolute;inset:0 0 0 auto;border-radius:0 99px 99px 0;background:repeating-linear-gradient(45deg,#2fd28a40 0 6px,#2fd28a18 6px 12px);transition:width .6s var(--ease)}
+.sm-fld{margin:12px 0}
+.sm-fld label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.sm-fld label output{font:600 13px var(--mono);color:var(--ink);white-space:nowrap}
+.sm-fld .hint{font-size:11px;color:var(--dim);margin-top:4px;line-height:1.4}
+.sm-fld input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--hme) var(--p,50%),var(--line) var(--p,50%));outline:none;cursor:pointer}
+.sm-fld input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--ink);border:3px solid var(--hme)}
+.sm-fld input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--hme)}
+.sm-fld input[type=range]:focus-visible{outline:2px solid var(--hme2);outline-offset:6px}
+.tech .sm-grp{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:18px 0 4px}
 /* ---------- scroll mode (phones / narrow) ---------- */
 body.scroll{overflow:auto}
 body.scroll #deck{position:static;background:var(--bg)}
@@ -333,6 +395,11 @@ body.scroll .num{font-size:26px}
 body.scroll .kv .card{padding:12px;min-width:0}
 body.scroll .kv{grid-template-columns:1fr}
 
+body.scroll .sm-tick,body.scroll .sm-pkgs,body.scroll .sm-split{grid-template-columns:minmax(0,1fr)}
+body.scroll .sm-kpis{grid-template-columns:1fr 1fr}
+body.scroll .sm-chart{flex:none;height:300px}
+body.scroll .sm-brk .r{grid-template-columns:1fr 80px}
+body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 }
@@ -650,7 +717,7 @@ body.scroll .kv{grid-template-columns:1fr}
 <!-- 11 BENEFITS -->
 <section class="slide" data-title="Manfaat">
   <span class="kick rv">Manfaat untuk SWA</span>
-  <div class="rv" style="--d:1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><h2>Lebih dari sekadar cadangan listrik</h2><a class="tbtn" href="simulasi.html" style="text-decoration:none;color:var(--hme2);border-color:var(--hme)">Buka simulasi BEP &amp; NPV →</a></div>
+  <div class="rv" style="--d:1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><h2>Lebih dari sekadar cadangan listrik</h2><a class="tbtn" href="#" data-goto="smS1" style="text-decoration:none;color:var(--hme2);border-color:var(--hme)">Buka simulasi BEP &amp; NPV →</a></div>
   <div class="ben">
     <div class="card rv" style="--d:2"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2fd28a" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg><h4>Produksi tidak terhenti</h4><p>±94% gangguan historis tertutup penuh; mesin kritis tetap berputar.</p></div>
     <div class="card rv" style="--d:3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f7931e" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h4>±61 jam/tahun kembali produktif</h4><p>Waktu restart mesin yang selama ini hilang setiap kali PLN padam.</p></div>
@@ -715,6 +782,115 @@ body.scroll .kv{grid-template-columns:1fr}
     <span>Email</span><b>info@hexamultienergi.com</b>
     <span>Web</span><b>www.hexamultienergi.com</b>
   </div>
+</section>
+
+<!-- SIMULASI INVESTASI (3 slide) -->
+<section class="slide" data-title="Simulasi · Paket" id="smS1">
+  <div class="sm-head rv">
+    <span class="kick">Lampiran · Simulasi investasi 1/3</span>
+    <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
+  </div>
+  <h2 class="rv" style="--d:1;max-width:30ch">Pertanyaannya bukan "berapa biayanya", tapi <span class="c-fault">berapa yang hilang setiap hari menunda</span></h2>
+  <div class="sm-tick rv" style="--d:2">
+    <div class="card"><div class="lbl" style="margin:0 0 8px"><span class="sm-pulse"></span>Potensi yang hilang sejak slide ini dibuka</div><div class="big" id="smTick">Rp 0</div><div class="lbl" id="smTickNote">—</div></div>
+    <div class="card"><div class="num c-fault" id="smMonth">—</div><div class="lbl">Hilang <b style="color:var(--ink)">setiap bulan</b> proyek ditunda</div></div>
+    <div class="card"><div class="num c-fault" id="smLife">—</div><div class="lbl" id="smLifeL">Potensi saving yang tidak diambil</div></div>
+  </div>
+  <div class="sm-pkgs rv" style="--d:3">
+    <div class="sm-pkg sq" aria-disabled="true">
+      <div class="name">Tetap seperti sekarang</div>
+      <div class="desc">Tanpa investasi. Setiap gangguan PLN tetap berarti mesin berhenti dan restart ±30 menit.</div>
+      <dl><dt>Investasi</dt><dd>Rp 0</dd><dt>Padam/tahun</dt><dd>±131×</dd><dt>Kerugian/tahun</dt><dd class="c-fault" id="smSqLoss">—</dd><dt>Produksi hilang</dt><dd class="c-fault" id="smSqH">—</dd></dl>
+    </div>
+    <button class="sm-pkg" data-pkg="ess" aria-pressed="false">
+      <div class="name">ESS Megarevo</div>
+      <div class="desc">Baterai 6,08 MWh + PCS hybrid. Mesin kritis tetap jalan saat padam, plus geser beban WBP.</div>
+      <dl><dt>Investasi</dt><dd id="sm-ess-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-ess-sav">—</dd><dt>Payback</dt><dd id="sm-ess-pb">—</dd><dt>NPV</dt><dd id="sm-ess-npv">—</dd></dl>
+    </button>
+    <button class="sm-pkg" data-pkg="both" aria-pressed="true">
+      <span class="tag">Rekomendasi</span>
+      <div class="name">ESS + PLTS atap 2,5 MWp</div>
+      <div class="desc">Matahari memberi penghematan harian, baterai menjaga produksi. Satu inverter hybrid untuk keduanya.</div>
+      <dl><dt>Investasi</dt><dd id="sm-both-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-both-sav">—</dd><dt>Payback</dt><dd id="sm-both-pb">—</dd><dt>NPV</dt><dd id="sm-both-npv">—</dd></dl>
+    </button>
+  </div>
+  <p class="note rv" style="--d:4;margin:0">Dihitung dari data SWA: 197 gangguan (Jan 2025 – Jun 2026), tagihan PLN Mei 2026, simulasi atap 2.537,5 kWp. Tekan <b>T</b> untuk mengubah asumsi.</p>
+  <aside class="tech"><h3>Asumsi simulasi</h3><p class="note">Semua slide simulasi ikut dihitung ulang.</p>
+    <div class="sm-grp">Kerugian saat padam</div>
+    <div class="sm-fld"><label for="smcm">Margin kontribusi per kg benang <output id="o-smcm"></output></label><input type="range" id="smcm" min="6000" max="25000" step="500"><div class="hint">Harga jual − bahan baku − energi variabel.</div></div>
+    <div class="sm-fld"><label for="smev">Biaya langsung per kejadian per pabrik <output id="o-smev"></output></label><input type="range" id="smev" min="0" max="30000000" step="500000"><div class="hint">Waste benang &amp; roving, sambung ulang, lembur, lot turun grade.</div></div>
+    <div class="sm-fld"><label for="smrs">Waktu restart mesin <output id="o-smrs"></output></label><input type="range" id="smrs" min="10" max="60" step="5"></div>
+    <div class="sm-fld"><label for="smit">Intensitas energi <output id="o-smit"></output></label><input type="range" id="smit" min="2.5" max="5" step="0.1"><div class="hint">Produksi = kWh PLN ÷ kWh/kg → <span id="smKgh" class="mono"></span></div></div>
+    <div class="sm-grp">Investasi</div>
+    <div class="sm-fld"><label for="smce">Harga ESS Megarevo (2 pabrik) <output id="o-smce"></output></label><input type="range" id="smce" min="25131457771" max="45131457771" step="250000000"></div>
+    <div class="sm-fld"><label for="smpc">Biaya PLTS atap per kWp <output id="o-smpc"></output></label><input type="range" id="smpc" min="5000000" max="11000000" step="250000"><div class="hint">Modul + mounting + kabel + pasang. Inverter PV sudah di MPS.</div></div>
+    <div class="sm-fld"><label for="smom">Biaya O&amp;M per tahun <output id="o-smom"></output></label><input type="range" id="smom" min="0.5" max="2.5" step="0.1"></div>
+    <div class="sm-grp">Finansial</div>
+    <div class="sm-fld"><label for="smes">Kenaikan tarif PLN per tahun <output id="o-smes"></output></label><input type="range" id="smes" min="0" max="6" step="0.5"></div>
+    <div class="sm-fld"><label for="smdr">Tingkat diskonto (WACC) <output id="o-smdr"></output></label><input type="range" id="smdr" min="6" max="14" step="0.5"></div>
+    <div class="sm-fld"><label for="smhz">Umur analisa <output id="o-smhz"></output></label><input type="range" id="smhz" min="8" max="15" step="1"><div class="hint">Maks 15 thn = umur desain baterai LFP.</div></div>
+  </aside>
+</section>
+
+<section class="slide" data-title="Simulasi · BEP &amp; NPV" id="smS2">
+  <div class="sm-head rv">
+    <span class="kick">Lampiran · Simulasi investasi 2/3 · <span id="smPkgName" style="color:var(--ink)">ESS + PLTS</span></span>
+    <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
+  </div>
+  <h2 class="rv" style="--d:1">Kapan investasi berubah jadi untung</h2>
+  <div class="sm-kpis rv" style="--d:2">
+    <div class="card"><div class="num c-hme" id="smPb">—</div><div class="lbl">Titik balik modal (BEP)</div></div>
+    <div class="card"><div class="num" id="smNpv">—</div><div class="lbl" id="smNpvL">NPV</div></div>
+    <div class="card"><div class="num" id="smIrr">—</div><div class="lbl">IRR proyek</div></div>
+    <div class="card"><div class="num" id="smTot">—</div><div class="lbl" id="smTotL">Saving bersih</div></div>
+  </div>
+  <div class="card sm-chart rv" style="--d:3">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline">
+      <div class="sm-legend" id="smLg"></div><span class="note mono" id="smBepTxt"></span>
+    </div>
+    <div class="plot" id="smCh"><div class="sm-tip" id="smTip"></div></div>
+    <div class="sm-bep"><div class="track"><div class="fill" id="smBepFill"></div><div class="after" id="smBepAfter"></div></div><div class="scale"><span>Masa modal kembali</span><span class="c-bat">Masa untung bersih →</span></div></div>
+  </div>
+  <aside class="tech"><h3>Cara membaca</h3>
+    <p>Garis = posisi kas kumulatif dibanding <b>tidak berinvestasi</b>. Mulai negatif sebesar investasi, lalu naik setiap tahun sebesar saving bersih. Titik potong garis nol = BEP.</p>
+    <h4>Asumsi utama</h4><ul>
+    <li>Gangguan tertutup baterai (≤120 mnt): SP1 110 kejadian / 734 mnt, SP2 75 / 1.266 mnt per 18 bulan, disetahunkan.</li>
+    <li>Tarif I-3: LWBP Rp 1.035,78 · WBP Rp 1.553,67; PBJT-TL 3% ikut terhemat.</li>
+    <li>WBP: 60% kapasitas/hari, 330 hari, efisiensi 90%, fade baterai 1,5%/thn.</li>
+    <li>PLTS: 1.557 kWh/kWp/thn, degradasi 0,5%/thn, 100% dipakai sendiri.</li>
+    <li>Tidak termasuk pajak, penyusutan, pembiayaan, nilai sisa PLTS setelah tahun ke-15.</li></ul>
+    <p class="note">Ubah asumsi di slide Simulasi 1/3 (tekan T).</p></aside>
+</section>
+
+<section class="slide" data-title="Simulasi · Opportunity loss" id="smS3">
+  <div class="sm-head rv">
+    <span class="kick">Lampiran · Simulasi investasi 3/3</span>
+    <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
+  </div>
+  <h2 class="rv" style="--d:1;max-width:32ch" id="smBrkT">Dari mana uangnya datang</h2>
+  <div class="sm-split">
+    <div class="col rv" style="--d:2">
+      <div class="card"><div class="lbl" style="margin:0 0 6px">Sumber penghematan · tahun pertama</div><div class="sm-brk" id="smBrk"></div></div>
+      <div class="sm-callout" id="smRf1"></div>
+      <div class="sm-callout" id="smRf2"></div>
+    </div>
+    <div class="col rv" style="--d:3">
+      <div class="card"><div class="lbl" style="margin:0 0 6px">Opportunity loss bila proyek ditunda</div>
+        <table class="sm-t" id="smDelay"><thead><tr><th>Mulai operasi</th><th>Potensi hilang</th><th>Padam</th><th>Kerugian padam</th></tr></thead><tbody></tbody></table></div>
+      <div class="card"><div class="lbl" style="margin:0 0 6px">BEP kerugian padam · ESS saja ≤ 8 tahun</div>
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div><div class="num" style="font-size:clamp(20px,3.2vh,30px)" id="smFNow">—</div><div class="lbl">Asumsi kini / kejadian / pabrik</div></div>
+          <div style="text-align:right"><div class="num c-hme" style="font-size:clamp(20px,3.2vh,30px)" id="smFTh">—</div><div class="lbl">Ambang yang dibutuhkan</div></div>
+        </div>
+        <div class="sm-gauge"><div class="z" id="smGz"></div><div class="m" id="smGNow" style="background:var(--ink)"></div><div class="m" id="smGTh" style="background:var(--hme)"></div></div>
+        <p class="lbl" id="smFMsg" style="margin-top:12px"></p>
+      </div>
+    </div>
+  </div>
+  <aside class="tech"><h3>Detail teknis</h3>
+    <h4>Opportunity loss</h4><p>Peralatan tetap harus dibeli, cepat atau lambat. Yang hilang saat menunda adalah penghematan bulan-bulan itu dan gangguan yang tetap terjadi. Mesin spinning jalan 24/7, jadi jam produksi yang hilang tidak bisa dikejar.</p>
+    <h4>BEP kerugian padam</h4><p>Kerugian per kejadian yang membuat <b>ESS saja</b> (tanpa PLTS) balik modal ≤ 8 tahun. Validasi dengan data internal SWA: margin per kg, waste, lembur, klaim kualitas, keterlambatan kirim.</p>
+    <h4>Kenapa tidak PLTS saja?</h4><p>Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</p></aside>
 </section>
 
 <!-- 15-17 DATASHEETS -->
@@ -1114,6 +1290,169 @@ const LAY = { sp1: ['assets/layout-sp1.jpg', '11,1 × 5,0 m', '14,0 × 7,9 m'], 
 $$('#laySeg button').forEach(b => b.onclick = () => { const L = LAY[b.dataset.s]; $$('#laySeg button').forEach(x => x.setAttribute('aria-pressed', x === b));
   $('#layImg').src = L[0]; $('#layImg').parentElement.dataset.zoomsrc = L[0]; $('#lay1').textContent = L[1]; $('#lay2').textContent = L[2]; });
 $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
+
+/* ---------- Simulasi investasi (BEP · NPV · opportunity loss) ---------- */
+{
+  const q = id => document.getElementById(id);
+  const D = {
+    L: 1035.78, W: 1553.67, pbjt: 1.03, kwh: [1010440, 1576320], hrs: 744,
+    ev: [110 * 12 / 18, 75 * 12 / 18], outH: [734 / 60 * 12 / 18, 1266 / 60 * 12 / 18], allEv: 197 * 12 / 18,
+    ess: { mwh: 2.21 + 3.87, use: .6, days: 330, rte: .9, fade: .015 }, pv: { kwp: 2537.5, yld: 1557, deg: .005 }, infl: .03
+  };
+  const PRE = {
+    kons: { cm: 10000, ev: 3000000, rs: 30, it: 3.5, ce: 38131457771, pc: 7500000, om: 1.2, es: 2, dr: 11, hz: 15 },
+    mod: { cm: 14000, ev: 7000000, rs: 30, it: 3.5, ce: 38131457771, pc: 7000000, om: 1.0, es: 3, dr: 10, hz: 15 },
+    opt: { cm: 18000, ev: 12000000, rs: 30, it: 3.3, ce: 38131457771, pc: 6500000, om: 0.8, es: 4, dr: 9, hz: 15 }
+  };
+  let S = { ...PRE.mod }, pkg = 'both', preset = 'mod';
+  const rp = (v, dec) => { const a = Math.abs(v), s = v < 0 ? '−' : '';
+    if (a >= 1e9) return s + 'Rp ' + fmt(a / 1e9, dec ?? 1) + ' M';
+    if (a >= 1e6) return s + 'Rp ' + fmt(a / 1e6, 0) + ' jt';
+    return s + 'Rp ' + fmt(a, 0); };
+  const n1 = v => fmt(v, 1);
+
+  function model(p, o = {}) {
+    const P = { ...S, ...o }, hasE = p !== 'pv', hasP = p !== 'ess';
+    const kwp = hasP ? D.pv.kwp : 0, cap = (hasE ? P.ce : 0) + kwp * P.pc;
+    const kg = D.kwh.map(k => k / D.hrs / P.it), rsH = P.rs / 60, N = P.hz;
+    const flows = [-cap], rows = []; let cum = -cap, pb = null;
+    for (let y = 1; y <= N; y++) {
+      const f = Math.pow(1 + P.es / 100, y - 1), fi = Math.pow(1 + D.infl, y - 1);
+      const pv = kwp * D.pv.yld * Math.pow(1 - D.pv.deg, y - 1) * D.L * f * D.pbjt;
+      let wbp = 0, dt = 0, ws = 0;
+      if (hasE) {
+        const Ed = D.ess.mwh * 1000 * D.ess.use * D.ess.days * Math.pow(1 - D.ess.fade, y - 1);
+        wbp = (Ed * D.W - Ed / D.ess.rte * D.L) * f * D.pbjt;
+        dt = [0, 1].reduce((s, i) => s + (D.ev[i] * rsH + D.outH[i]) * kg[i], 0) * P.cm * fi;
+        ws = (D.ev[0] + D.ev[1]) * P.ev * fi;
+      }
+      const om = cap * P.om / 100 * fi, gross = pv + wbp + dt + ws, net = gross - om;
+      rows.push({ pv, wbp, dt, ws, om, gross, net });
+      if (pb === null && cum + net >= 0) pb = y - 1 + (-cum) / net;
+      cum += net; flows.push(net);
+    }
+    const npvAt = k => flows.reduce((s, c, i) => s + c / Math.pow(1 + k, i), 0);
+    let irr = null;
+    if (npvAt(-.9) > 0 && npvAt(1) < 0) { let lo = -.9, hi = 1; for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; npvAt(m) > 0 ? lo = m : hi = m; } irr = lo; }
+    const c = []; flows.reduce((s, x, i) => (c[i] = s + x, s + x), 0);
+    return { cap, kg, rows, cum: c, pb, npv: npvAt(P.dr / 100), irr, tot: rows.reduce((s, x) => s + x.net, 0), gross: rows.reduce((s, x) => s + x.gross, 0) };
+  }
+  const perEvent = (o = {}) => { const P = { ...S, ...o }, kg = D.kwh.map(k => k / D.hrs / P.it);
+    return [0, 1].reduce((s, i) => s + (D.ev[i] * P.rs / 60 + D.outH[i]) * kg[i] * P.cm + D.ev[i] * P.ev, 0) / (D.ev[0] + D.ev[1]); };
+
+  /* controls */
+  const meta = { cm: v => 'Rp ' + fmt(v, 0) + '/kg', ev: v => rp(v), rs: v => v + ' menit', it: v => n1(v) + ' kWh/kg',
+    ce: v => rp(v, 2), pc: v => 'Rp ' + fmt(v / 1e6, 2) + ' jt', om: v => n1(v) + '% invest.', es: v => n1(v) + '%', dr: v => n1(v) + '%', hz: v => v + ' tahun' };
+  const keys = Object.keys(meta);
+  const paint = k => { const el = q('sm' + k), p = (el.value - el.min) / (el.max - el.min) * 100; el.style.setProperty('--p', p + '%'); q('o-sm' + k).textContent = meta[k](+el.value); };
+  const sync = () => keys.forEach(k => { q('sm' + k).value = S[k]; paint(k); });
+  const setPreset = p => { preset = p; $$('.sm-preset button').forEach(b => b.setAttribute('aria-pressed', b.dataset.preset === p)); };
+  keys.forEach(k => q('sm' + k).addEventListener('input', e => { S[k] = +e.target.value; paint(k); setPreset(null); render(); }));
+  $$('.sm-preset button').forEach(b => b.onclick = () => { S = { ...PRE[b.dataset.preset] }; setPreset(b.dataset.preset); sync(); render(); });
+  $$('.sm-pkg[data-pkg]').forEach(b => b.onclick = () => { pkg = b.dataset.pkg; $$('.sm-pkg[data-pkg]').forEach(x => x.setAttribute('aria-pressed', x === b)); render(); });
+
+  let perSec = 0;
+  const pbTxt = m => m.pb === null ? '> ' + S.hz + ' thn' : n1(m.pb) + ' thn';
+  const cls = v => v >= 0 ? 'c-bat' : 'c-fault';
+
+  function render() {
+    const M = { ess: model('ess'), both: model('both') }, m = M[pkg], y1 = m.rows[0], e1 = M.ess.rows[0];
+    q('smKgh').textContent = 'SP1 ±' + Math.round(m.kg[0]) + ' · SP2 ±' + Math.round(m.kg[1]) + ' kg/jam';
+    q('smSqLoss').textContent = rp(e1.dt + e1.ws) + '/thn';
+    q('smSqH').textContent = '±' + Math.round([0, 1].reduce((s, i) => s + D.ev[i] * S.rs / 60 + D.outH[i], 0)) + ' jam·pabrik';
+    for (const k of ['ess', 'both']) { const x = M[k];
+      q('sm-' + k + '-cap').textContent = rp(x.cap); q('sm-' + k + '-sav').textContent = rp(x.rows[0].net);
+      q('sm-' + k + '-pb').textContent = pbTxt(x); const n = q('sm-' + k + '-npv'); n.textContent = rp(x.npv); n.className = cls(x.npv); }
+    const nm = pkg === 'both' ? 'ESS + PLTS' : 'ESS saja';
+    perSec = y1.gross / (365 * 24 * 3600);
+    q('smMonth').textContent = rp(y1.gross / 12);
+    q('smLife').textContent = rp(m.gross, 0);
+    q('smLifeL').textContent = 'Potensi saving ' + S.hz + ' tahun yang tidak diambil (' + nm + ', nominal)';
+    q('smTickNote').textContent = '≈ ' + rp(y1.gross / 365) + ' per hari · padam, WBP' + (pkg === 'both' ? ' & matahari yang tidak dipanen' : '');
+    /* slide 2 */
+    q('smPkgName').textContent = nm;
+    q('smPb').innerHTML = m.pb === null ? '&gt;' + S.hz + '<small>thn</small>' : n1(m.pb) + '<small>thn</small>';
+    const kn = q('smNpv'); kn.textContent = rp(m.npv); kn.className = 'num ' + cls(m.npv);
+    q('smNpvL').textContent = 'NPV @ ' + n1(S.dr) + '% · ' + S.hz + ' thn';
+    const ki = q('smIrr'); ki.innerHTML = m.irr === null ? '—' : n1(m.irr * 100) + '<small>%</small>'; ki.className = 'num ' + (m.irr !== null && m.irr >= S.dr / 100 ? 'c-bat' : '');
+    const kt = q('smTot'); kt.textContent = rp(m.tot - m.cap); kt.className = 'num ' + cls(m.tot - m.cap);
+    q('smTotL').textContent = 'Saving bersih ' + S.hz + ' thn setelah balik modal';
+    const pct = (m.pb === null ? S.hz : Math.min(m.pb, S.hz)) / S.hz * 100;
+    q('smBepFill').style.width = pct + '%'; q('smBepAfter').style.width = (100 - pct) + '%';
+    q('smBepTxt').textContent = m.pb === null ? 'belum BEP dalam ' + S.hz + ' thn' : 'BEP thn ' + n1(m.pb) + ' · ' + n1(S.hz - m.pb) + ' thn untung bersih';
+    chart(M);
+    /* slide 3 */
+    const items = [['PLTS atap · listrik siang hari', y1.pv, '#3f8fe0'], ['Geser beban WBP (17–22)', y1.wbp, '#b98d10'], ['Waste & biaya restart dihindari', y1.ws, '#9b6cf0'], ['Produksi terselamatkan', y1.dt, '#17a066']].filter(i => i[1] > 0);
+    const mx = Math.max(...items.map(i => i[1]));
+    q('smBrkT').textContent = 'Dari mana ' + rp(y1.gross) + ' per tahun datang, dan harga dari menunda';
+    q('smBrk').innerHTML = items.map(([n, v, c]) => `<div class="r"><span class="k"><i style="background:${c}"></i>${n}</span><span class="bar" style="width:${v / mx * 100}%;background:${c}"></span><span class="v">${rp(v)}</span></div>`).join('')
+      + `<div class="r" style="color:var(--muted)"><span class="k"><i style="border:1px solid var(--line)"></i>Dikurangi O&amp;M</span><span></span><span class="v">−${rp(y1.om)}</span></div>`;
+    const ev = perEvent();
+    q('smRf1').innerHTML = `Investasi ${rp(m.cap)} tersebar ${S.hz} tahun ≈ <b>${rp(m.cap / (S.hz * 365))} per hari</b>. Penghematannya ≈ <b>${rp(y1.gross / 365)} per hari</b>, mulai hari pertama beroperasi.`;
+    q('smRf2').innerHTML = `Satu kali padam di satu pabrik ≈ <b>${rp(ev)}</b> (restart ${S.rs} menit + waste). Dengan ±${Math.round(D.allEv)} gangguan per tahun, SWA membayar "premi" ini tanpa perlindungan apa pun.`;
+    const sq = e1.dt + e1.ws, pm = D.allEv / 12;
+    q('smDelay').querySelector('tbody').innerHTML = [0, 3, 6, 12].map(mo => `<tr class="${mo ? 'hl' : ''}"><td>${mo ? 'Tertunda ' + mo + ' bulan' : 'Sesuai jadwal'}</td><td>${mo ? rp(y1.gross * mo / 12) : '—'}</td><td>${mo ? '±' + Math.round(pm * mo) + '×' : '—'}</td><td>${mo ? rp(sq * mo / 12) : '—'}</td></tr>`).join('');
+    const pbOf = e => { const x = model('ess', { ev: e }); return x.pb === null ? 99 : x.pb; };
+    let lo = 0, hi = 500e6; for (let i = 0; i < 50; i++) { const mid = (lo + hi) / 2; pbOf(mid) > 8 ? lo = mid : hi = mid; }
+    const th = perEvent({ ev: hi }), gm = Math.max(ev, th) * 1.3;
+    q('smFNow').textContent = rp(ev); q('smFTh').textContent = rp(th);
+    q('smGNow').style.left = (ev / gm * 100) + '%'; q('smGTh').style.left = (th / gm * 100) + '%'; q('smGz').style.width = (100 - th / gm * 100) + '%';
+    const pn = { kons: 'konservatif', mod: 'moderat', opt: 'optimis' }[preset] || 'kustom';
+    q('smFMsg').innerHTML = ev >= th ? `Dengan asumsi ini, <b style="color:var(--ink)">ESS saja sudah balik modal ≤ 8 tahun</b>.`
+      : `Asumsi ${pn} baru ${Math.round(ev / th * 100)}% dari ambang. Pertanyaan kunci untuk SWA: <b style="color:var(--ink)">apakah satu kali padam merugikan lebih dari ${rp(th)}?</b> Jika belum, PLTS menutup selisihnya dari penghematan harian.`;
+  }
+
+  /* chart: cumulative cash */
+  const SER = [{ k: 'both', name: 'ESS + PLTS', c: '#f7931e' }, { k: 'ess', name: 'ESS saja', c: '#94a6c4', dash: 1 }];
+  const niceStep = x => { const p = Math.pow(10, Math.floor(Math.log10(x))), n = x / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; };
+  let lastM = null;
+  function chart(M) {
+    lastM = M;
+    const box = q('smCh'), W = Math.max(300, box.clientWidth), H = Math.max(160, box.clientHeight || 260);
+    const pl = 52, pr = 100, pt = 22, pb = 24, N = S.hz;
+    const all = SER.flatMap(s => M[s.k].cum); let lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+    const st = niceStep((hi - lo) / 6); lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+    const X = i => pl + i / N * (W - pl - pr), Y = v => pt + (hi - v) / (hi - lo) * (H - pt - pb);
+    let g = '';
+    for (let v = lo; v <= hi + 1; v += st) g += `<line x1="${pl}" x2="${W - pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v === 0 ? '#5f7396' : '#24375a'}" stroke-width="${v === 0 ? 1.5 : 1}"/><text x="${pl - 8}" y="${Y(v) + 4}" text-anchor="end" fill="#5f7396" font-size="11" font-family="Fira Code">${v / 1e9}</text>`;
+    for (let i = 0; i <= N; i++) if (i % 3 === 0 || i === N) g += `<text x="${X(i)}" y="${H - 4}" text-anchor="middle" fill="#5f7396" font-size="11" font-family="Fira Code">${i}</text>`;
+    g += `<text x="${pl - 8}" y="${pt - 8}" text-anchor="end" fill="#5f7396" font-size="10" font-family="Fira Code">Rp M</text><text x="${W - pr + 12}" y="${H - 4}" fill="#5f7396" font-size="10" font-family="Fira Code">thn</text>`;
+    let ln = '';
+    [...SER].sort((a, b) => (a.k === pkg) - (b.k === pkg)).forEach(s => {
+      const c = M[s.k].cum, on = s.k === pkg, d = c.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+      if (on) ln += `<clipPath id="smCp"><rect x="0" y="0" width="${W}" height="${Y(0)}"/></clipPath><path d="${d}L${X(N)} ${Y(0)}L${X(0)} ${Y(0)}Z" fill="#2fd28a" opacity=".12" clip-path="url(#smCp)"/>`;
+      ln += `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="${on ? 2.5 : 2}" ${s.dash ? 'stroke-dasharray="5 4"' : ''} opacity="${on ? 1 : .75}" stroke-linejoin="round" stroke-linecap="round"/>`;
+      const last = c[N];
+      ln += `<text x="${X(N) + 8}" y="${Y(last) + 4}" fill="#cdd8ea" font-size="12" font-weight="${on ? 600 : 400}">${s.name}</text><text x="${X(N) + 8}" y="${Y(last) + 19}" fill="#94a6c4" font-size="11" font-family="Fira Code">${rp(last)}</text>`;
+      const p = M[s.k].pb;
+      if (p !== null && p <= N) { ln += `<circle cx="${X(p)}" cy="${Y(0)}" r="5.5" fill="${s.c}" stroke="#132139" stroke-width="2"/>`;
+        if (on) ln += `<text x="${X(p)}" y="${Y(0) - 12}" text-anchor="middle" fill="${s.c}" font-size="12" font-weight="600" font-family="Fira Code">BEP ${n1(p)} thn</text>`; }
+    });
+    box.querySelector('svg')?.remove();
+    box.insertAdjacentHTML('afterbegin', `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Arus kas kumulatif per tahun">${g}${ln}<line class="xh" y1="${pt}" y2="${H - pb}" stroke="#94a6c4" stroke-dasharray="3 3" opacity="0"/><rect x="${pl}" y="${pt}" width="${W - pl - pr}" height="${H - pt - pb}" fill="transparent"/></svg>`);
+    q('smLg').innerHTML = SER.map(s => `<span><i class="${s.dash ? 'dash' : ''}" style="background:${s.c}"></i>${s.name}</span>`).join('') + '<span><i style="background:#2fd28a;opacity:.4;height:10px"></i>Zona untung bersih</span>';
+    const svg = box.querySelector('svg'), tip = q('smTip'), xh = svg.querySelector('.xh');
+    svg.addEventListener('pointermove', e => {
+      const r = svg.getBoundingClientRect(), i = Math.max(0, Math.min(N, Math.round(((e.clientX - r.left) * W / r.width - pl) / (W - pl - pr) * N)));
+      xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i)); xh.setAttribute('opacity', 1);
+      tip.innerHTML = `<div style="margin-bottom:4px;color:#94a6c4">Akhir tahun ke-${i}</div>` + SER.map(s => `<div class="row"><span><span class="sw" style="background:${s.c}"></span>${s.name}</span><b>${rp(M[s.k].cum[i])}</b></div>`).join('');
+      tip.style.opacity = 1; tip.style.left = Math.min(X(i) * r.width / W + 14, r.width - 200) + 'px'; tip.style.top = '10px';
+    });
+    svg.addEventListener('pointerleave', () => { tip.style.opacity = 0; xh.setAttribute('opacity', 0); });
+  }
+
+  /* ticker: counts from when slide 1 is entered */
+  let t0 = performance.now();
+  const tick = () => { q('smTick').textContent = 'Rp ' + fmt(Math.floor(perSec * (performance.now() - t0) / 1000), 0); requestAnimationFrame(tick); };
+  const s1 = slides.indexOf(q('smS1')), s2 = slides.indexOf(q('smS2'));
+  hooks[s1] = () => { t0 = performance.now(); };
+  hooks[s2] = () => requestAnimationFrame(() => lastM && chart(lastM));
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => lastM && chart(lastM), 150); });
+  $$('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); const t = q(a.dataset.goto);
+    document.body.classList.contains('scroll') ? t.scrollIntoView({ behavior: 'smooth' }) : go(slides.indexOf(t)); }));
+  sync(); render();
+  reduce ? setInterval(() => q('smTick').textContent = 'Rp ' + fmt(Math.floor(perSec * (performance.now() - t0) / 1000), 0), 1000) : requestAnimationFrame(tick);
+}
 
 /* ---------- mode: deck vs scroll ---------- */
 const mq = matchMedia('(max-width: 820px), (max-height: 520px)');
