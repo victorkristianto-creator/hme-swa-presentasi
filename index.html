@@ -83,6 +83,9 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 #lb{position:fixed;inset:0;background:#000d;display:none;place-items:center;z-index:50;padding:20px;cursor:zoom-out}
 #lb.on{display:grid}
 #lb img{max-width:96vw;max-height:92vh;background:#fff;border-radius:6px}
+#pv3d{position:fixed;inset:0;z-index:60;background:var(--bg);display:none}
+#pv3d.on{display:block}
+#pv3d iframe{width:100%;height:100%;border:0;display:block}
 
 /* ---------- S1 cover ---------- */
 .cover{justify-content:center}
@@ -241,6 +244,8 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 .pvg .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:scale(1.06);transition:transform 6s var(--ease)}
 .active .pvg .photo img,.seen .pvg .photo img{transform:none}
 .pvg .photo span{position:absolute;left:12px;top:12px;font-size:12px;background:#000a;padding:4px 8px;border-radius:6px}
+.pvg .photo .p3d{position:absolute;right:12px;top:12px;background:#0a1220d9;border-color:var(--hme);color:var(--hme2);font-weight:600}
+.pvg .photo .p3d:hover{background:#f7931e33}
 .pvg .sun{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffd76a33 48%,transparent 66%);background-size:250% 100%;background-position:100% 0;pointer-events:none;mix-blend-mode:screen}
 .active .pvg .sun{animation:sweep 5s var(--ease) .6s infinite}
 @keyframes sweep{to{background-position:-150% 0}}
@@ -691,25 +696,25 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
 <!-- 10b PV POTENTIAL -->
 <section class="slide" data-title="Potensi PLTS">
   <span class="kick rv">Potensi PLTS atap</span>
-  <h2 class="rv" style="--d:1">Atap pabrik bisa menghasilkan <span class="c-pv">±4 GWh</span> listrik per tahun</h2>
+  <h2 class="rv" style="--d:1">Atap pabrik bisa menghasilkan <span class="c-pv">±4,3 GWh</span> listrik per tahun</h2>
   <div class="pvg">
-    <div class="photo rv" style="--d:2" data-zoomsrc="assets/pv-atap.webp"><img src="assets/pv-atap.webp" alt="Simulasi tata letak 4.060 modul PV di atap pabrik"><i class="sun"></i><span>Simulasi tata letak modul · klik untuk memperbesar</span></div>
+    <div class="photo rv" style="--d:2" data-zoomsrc="assets/pv3d-render.jpg"><img src="assets/pv3d-render.jpg" alt="Desain 4.320 modul PV di dua atap pabrik"><i class="sun"></i><span>Desain tata letak modul · klik untuk memperbesar</span><button class="tbtn p3d" id="pv3dBtn">⟳ Lihat model 3D</button></div>
     <div class="col rv" style="--d:3">
       <div class="kv">
-        <div class="card"><div class="num c-pv" data-n="2537.5" data-dec="1"><small>kWp</small></div><div class="lbl">Kapasitas DC terpasang</div></div>
-        <div class="card"><div class="num c-grid" data-n="3.95" data-dec="2"><small>GWh/th</small></div><div class="lbl">Estimasi produksi tahunan</div></div>
-        <div class="card"><div class="mini" data-n="4060"><small>modul</small></div><div class="lbl">±625 Wp per modul</div></div>
-        <div class="card"><div class="mini" data-n="10.8" data-dec="1"><small>MWh/hari</small></div><div class="lbl">Rata-rata produksi harian</div></div>
-        <div class="card"><div class="mini c-hme" data-n="4.1" data-dec="1" data-pre="±Rp "><small>miliar/th</small></div><div class="lbl">Setara pembelian kWh PLN (tarif LWBP)</div></div>
-        <div class="card"><div class="mini c-bat" data-n="3400" data-pre="±"><small>t CO₂/th</small></div><div class="lbl">Emisi yang dihindari</div></div>
+        <div class="card"><div class="num c-pv" data-n="3110.4" data-dec="1"><small>kWp</small></div><div class="lbl">Kapasitas DC terpasang</div></div>
+        <div class="card"><div class="num c-grid" data-n="4.26" data-dec="2"><small>GWh/th</small></div><div class="lbl">Estimasi produksi tahunan (PVGIS)</div></div>
+        <div class="card"><div class="mini" data-n="4320"><small>modul</small></div><div class="lbl">Trina Vertex N 720 Wp</div></div>
+        <div class="card"><div class="mini" data-n="11.7" data-dec="1"><small>MWh/hari</small></div><div class="lbl">Rata-rata produksi harian</div></div>
+        <div class="card"><div class="mini c-hme" data-n="4.4" data-dec="1" data-pre="±Rp "><small>miliar/th</small></div><div class="lbl">Setara pembelian kWh PLN (tarif LWBP)</div></div>
+        <div class="card"><div class="mini c-bat" data-n="3700" data-pre="±"><small>t CO₂/th</small></div><div class="lbl">Emisi yang dihindari</div></div>
       </div>
       <p class="lead" style="font-size:clamp(13px,1.8vh,16px)">PV masuk langsung ke <b>input PV inverter MPS</b> — siang hari menyuplai mesin, kelebihannya <b>mengisi baterai</b>, sehingga energi surya terpakai 100% di pabrik.</p>
     </div>
   </div>
   <aside class="tech"><h3>Detail teknis</h3>
-  <h4>Hasil simulasi tata letak</h4>
-  <table><tr><td>Jumlah modul</td><td class="n">4.060</td></tr><tr><td>Kapasitas DC</td><td class="n">2.537,5 kWp</td></tr><tr><td>Estimasi produksi</td><td class="n">3,95 GWh/tahun</td></tr><tr><td>Specific yield</td><td class="n">±1.557 kWh/kWp/th</td></tr></table>
-  <h4>Perhitungan turunan</h4><ul><li>Rata-rata harian = 3,95 GWh ÷ 365 ≈ 10,8 MWh/hari.</li><li>Nilai energi = 3,95 GWh × Rp 1.035,78/kWh (LWBP) ≈ Rp 4,1 miliar/tahun, dengan asumsi seluruh produksi terpakai sendiri.</li><li>CO₂ dihindari ≈ 3,95 GWh × ±0,87 t/MWh (faktor emisi grid Jawa-Bali, asumsi) ≈ ±3.400 t/tahun.</li></ul>
+  <h4>Hasil desain (Solar Design Platform)</h4>
+  <table><tr><td>Jumlah modul</td><td class="n">4.320</td></tr><tr><td>Modul</td><td class="n">Trina Vertex N 720 Wp</td></tr><tr><td>Kapasitas DC</td><td class="n">3.110,4 kWp</td></tr><tr><td>Gedung 1 / Gedung 2</td><td class="n">1.728 / 1.382,4 kWp</td></tr><tr><td>Atap</td><td class="n">pelana 20°, flush mount</td></tr><tr><td>Estimasi produksi</td><td class="n">4,26 GWh/tahun</td></tr><tr><td>Specific yield</td><td class="n">±1.369 kWh/kWp/th</td></tr></table>
+  <h4>Perhitungan turunan</h4><ul><li>Specific yield = 4.258 MWh ÷ 3.110,4 kWp ≈ 1.369 kWh/kWp/tahun (PVGIS-ERA5, 2005–2023; separuh modul di sisi atap menghadap utara, separuh selatan).</li><li>Rata-rata harian = 4,26 GWh ÷ 365 ≈ 11,7 MWh/hari.</li><li>Nilai energi = 4,26 GWh × Rp 1.035,78/kWh (LWBP) ≈ Rp 4,4 miliar/tahun, dengan asumsi seluruh produksi terpakai sendiri.</li><li>CO₂ dihindari ≈ 4,26 GWh × ±0,87 t/MWh (faktor emisi grid Jawa-Bali, asumsi) ≈ ±3.700 t/tahun.</li></ul>
   <h4>Integrasi dengan sistem Megarevo</h4><ul><li>Input PV MPS0500TS: maks 600–720 kW per unit, MPPT 250–850 V. SP1 (4 unit) ≥ 2,4 MW; SP2 (7 unit) ≥ 4,2 MW.</li><li>Sejak Permen ESDM 2/2024 ekspor PLTS atap tidak dikompensasi — baterai menyerap kelebihan siang hari.</li></ul>
   <p class="note">Angka produksi adalah estimasi software desain; final mengikuti survei struktur atap, shading dan izin PLN.</p></aside>
 </section>
@@ -809,12 +814,12 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     </button>
     <button class="sm-pkg" data-pkg="both" aria-pressed="true">
       <span class="tag">Rekomendasi</span>
-      <div class="name">ESS + PLTS atap 2,5 MWp</div>
+      <div class="name">ESS + PLTS atap 3,1 MWp</div>
       <div class="desc">Matahari memberi penghematan harian, baterai menjaga produksi. Satu inverter hybrid untuk keduanya.</div>
       <dl><dt>Investasi</dt><dd id="sm-both-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-both-sav">—</dd><dt>Payback</dt><dd id="sm-both-pb">—</dd><dt>NPV</dt><dd id="sm-both-npv">—</dd></dl>
     </button>
   </div>
-  <p class="note rv" style="--d:4;margin:0">Dihitung dari data SWA: 197 gangguan (Jan 2025 – Jun 2026), tagihan PLN Mei 2026, simulasi atap 2.537,5 kWp. Tekan <b>T</b> untuk mengubah asumsi.</p>
+  <p class="note rv" style="--d:4;margin:0">Dihitung dari data SWA: 197 gangguan (Jan 2025 – Jun 2026), tagihan PLN Mei 2026, desain atap 3.110,4 kWp. Tekan <b>T</b> untuk mengubah asumsi.</p>
   <aside class="tech"><h3>Asumsi simulasi</h3><p class="note">Semua slide simulasi ikut dihitung ulang.</p>
     <div class="sm-grp">Kerugian saat padam</div>
     <div class="sm-fld"><label for="smcm">Margin kontribusi per kg benang <output id="o-smcm"></output></label><input type="range" id="smcm" min="6000" max="25000" step="500"><div class="hint">Harga jual − bahan baku − energi variabel.</div></div>
@@ -822,8 +827,8 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <div class="sm-fld"><label for="smrs">Waktu restart mesin <output id="o-smrs"></output></label><input type="range" id="smrs" min="10" max="60" step="5"></div>
     <div class="sm-fld"><label for="smit">Intensitas energi <output id="o-smit"></output></label><input type="range" id="smit" min="2.5" max="5" step="0.1"><div class="hint">Produksi = kWh PLN ÷ kWh/kg → <span id="smKgh" class="mono"></span></div></div>
     <div class="sm-grp">Investasi</div>
-    <div class="sm-fld"><label for="smce">Harga ESS Megarevo (2 pabrik) <output id="o-smce"></output></label><input type="range" id="smce" min="25131457771" max="45131457771" step="250000000"></div>
-    <div class="sm-fld"><label for="smpc">Biaya PLTS atap per kWp <output id="o-smpc"></output></label><input type="range" id="smpc" min="5000000" max="11000000" step="250000"><div class="hint">Modul + mounting + kabel + pasang. Inverter PV sudah di MPS.</div></div>
+    <div class="sm-fld"><label for="smce">Harga BESS Megarevo, sistem saja (2 pabrik) <output id="o-smce"></output></label><input type="range" id="smce" min="35000000000" max="55000000000" step="250000000"></div>
+    <div class="sm-fld"><label for="smpt">Harga PLTS atap 3,1 MWp (total) <output id="o-smpt"></output></label><input type="range" id="smpt" min="15000000000" max="25000000000" step="250000000"><div class="hint">Modul + mounting + walkway + kabel + pasang. Inverter PV sudah di MPS.</div></div>
     <div class="sm-fld"><label for="smom">Biaya O&amp;M per tahun <output id="o-smom"></output></label><input type="range" id="smom" min="0.5" max="2.5" step="0.1"></div>
     <div class="sm-grp">Finansial</div>
     <div class="sm-fld"><label for="smes">Kenaikan tarif PLN per tahun <output id="o-smes"></output></label><input type="range" id="smes" min="0" max="6" step="0.5"></div>
@@ -857,7 +862,8 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <li>Gangguan tertutup baterai (≤120 mnt): SP1 110 kejadian / 734 mnt, SP2 75 / 1.266 mnt per 18 bulan, disetahunkan.</li>
     <li>Tarif I-3: LWBP Rp 1.035,78 · WBP Rp 1.553,67; PBJT-TL 3% ikut terhemat.</li>
     <li>WBP: 60% kapasitas/hari, 330 hari, efisiensi 90%, fade baterai 1,5%/thn.</li>
-    <li>PLTS: 1.557 kWh/kWp/thn, degradasi 0,5%/thn, 100% dipakai sendiri.</li>
+    <li>Investasi: BESS sistem saja Rp 45 M; PLTS atap 3.110,4 kWp Rp 20 M (±Rp 6,4 jt/kWp).</li>
+    <li>PLTS: 1.369 kWh/kWp/thn (PVGIS, desain atap 20°), degradasi 0,5%/thn, 100% dipakai sendiri.</li>
     <li>Tidak termasuk pajak, penyusutan, pembiayaan, nilai sisa PLTS setelah tahun ke-15.</li></ul>
     <p class="note">Ubah asumsi di slide Simulasi 1/3 (tekan T).</p></aside>
 </section>
@@ -945,6 +951,7 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
   <span class="ct" id="ct"></span>
 </nav>
 <div id="lb" role="dialog" aria-label="Gambar diperbesar"><img alt=""></div>
+<div id="pv3d" role="dialog" aria-label="Model 3D PLTS atap"><iframe title="Model 3D PLTS atap" allow="fullscreen"></iframe></div>
 
 <script>
 (() => {
@@ -987,6 +994,7 @@ function go(i) {
 }
 $('#prev').onclick = () => go(cur - 1); $('#next').onclick = () => go(cur + 1);
 addEventListener('keydown', e => {
+  if ($('#pv3d').classList.contains('on')) { if (e.key === 'Escape') closePv3d(); else $('#pv3d iframe').contentWindow.postMessage({ pv3dKey: e.key }, '*'); return; }
   if (document.body.classList.contains('scroll')) { if (e.key === 't' || e.key === 'T') toggleTech(); return; }
   if ($('#lb').classList.contains('on')) { if (e.key === 'Escape') closeLb(); return; }
   if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
@@ -1012,6 +1020,19 @@ document.addEventListener('click', e => {
   $('img', lb).src = z.dataset.zoomsrc || z.src; lb.classList.add('on');
 });
 lb.onclick = closeLb;
+
+/* 3D PV model (separate page in an overlay so the deck keeps its place) */
+const pv3d = $('#pv3d'), pv3dFrame = $('iframe', pv3d);
+function closePv3d() { pv3d.classList.remove('on'); }
+$('#pv3dBtn').onclick = e => {
+  e.stopPropagation();
+  pv3d.classList.add('on');
+  if (!pv3dFrame.src) pv3dFrame.src = 'pv3d.html';
+  else pv3dFrame.contentWindow.postMessage('pv3d-intro', '*');
+  pv3dFrame.focus();
+};
+pv3dFrame.onload = () => pv3dFrame.contentWindow.focus();
+addEventListener('message', e => { if (e.data === 'pv3d-close') closePv3d(); });
 
 /* ---------- S3 hourly bars ---------- */
 const hrs = [6,5,5,3,3,8,5,5,14,8,8,6,5,19,22,10,8,23,8,9,2,5,5,5];
@@ -1297,12 +1318,12 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
   const D = {
     L: 1035.78, W: 1553.67, pbjt: 1.03, kwh: [1010440, 1576320], hrs: 744,
     ev: [110 * 12 / 18, 75 * 12 / 18], outH: [734 / 60 * 12 / 18, 1266 / 60 * 12 / 18], allEv: 197 * 12 / 18,
-    ess: { mwh: 2.21 + 3.87, use: .6, days: 330, rte: .9, fade: .015 }, pv: { kwp: 2537.5, yld: 1557, deg: .005 }, infl: .03
+    ess: { mwh: 2.21 + 3.87, use: .6, days: 330, rte: .9, fade: .015 }, pv: { kwp: 3110.4, yld: 1369, deg: .005 }, infl: .03
   };
   const PRE = {
-    kons: { cm: 10000, ev: 3000000, rs: 30, it: 3.5, ce: 38131457771, pc: 7500000, om: 1.2, es: 2, dr: 11, hz: 15 },
-    mod: { cm: 14000, ev: 7000000, rs: 30, it: 3.5, ce: 38131457771, pc: 7000000, om: 1.0, es: 3, dr: 10, hz: 15 },
-    opt: { cm: 18000, ev: 12000000, rs: 30, it: 3.3, ce: 38131457771, pc: 6500000, om: 0.8, es: 4, dr: 9, hz: 15 }
+    kons: { cm: 10000, ev: 3000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.2, es: 2, dr: 11, hz: 15 },
+    mod: { cm: 14000, ev: 7000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.0, es: 3, dr: 10, hz: 15 },
+    opt: { cm: 18000, ev: 12000000, rs: 30, it: 3.3, ce: 45e9, pt: 20e9, om: 0.8, es: 4, dr: 9, hz: 15 }
   };
   let S = { ...PRE.mod }, pkg = 'both', preset = 'mod';
   const rp = (v, dec) => { const a = Math.abs(v), s = v < 0 ? '−' : '';
@@ -1313,7 +1334,7 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
 
   function model(p, o = {}) {
     const P = { ...S, ...o }, hasE = p !== 'pv', hasP = p !== 'ess';
-    const kwp = hasP ? D.pv.kwp : 0, cap = (hasE ? P.ce : 0) + kwp * P.pc;
+    const kwp = hasP ? D.pv.kwp : 0, cap = (hasE ? P.ce : 0) + (hasP ? P.pt : 0);
     const kg = D.kwh.map(k => k / D.hrs / P.it), rsH = P.rs / 60, N = P.hz;
     const flows = [-cap], rows = []; let cum = -cap, pb = null;
     for (let y = 1; y <= N; y++) {
@@ -1342,7 +1363,7 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
 
   /* controls */
   const meta = { cm: v => 'Rp ' + fmt(v, 0) + '/kg', ev: v => rp(v), rs: v => v + ' menit', it: v => n1(v) + ' kWh/kg',
-    ce: v => rp(v, 2), pc: v => 'Rp ' + fmt(v / 1e6, 2) + ' jt', om: v => n1(v) + '% invest.', es: v => n1(v) + '%', dr: v => n1(v) + '%', hz: v => v + ' tahun' };
+    ce: v => rp(v, 2), pt: v => rp(v, 2) + ' · ' + fmt(v / D.pv.kwp / 1e6, 2) + ' jt/kWp', om: v => n1(v) + '% invest.', es: v => n1(v) + '%', dr: v => n1(v) + '%', hz: v => v + ' tahun' };
   const keys = Object.keys(meta);
   const paint = k => { const el = q('sm' + k), p = (el.value - el.min) / (el.max - el.min) * 100; el.style.setProperty('--p', p + '%'); q('o-sm' + k).textContent = meta[k](+el.value); };
   const sync = () => keys.forEach(k => { q('sm' + k).value = S[k]; paint(k); });

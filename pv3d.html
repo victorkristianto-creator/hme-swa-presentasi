@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLTS Atap SWA · Model 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1220; --card:#132139ee; --line:#24375a; --ink:#eef3fb; --muted:#94a6c4; --dim:#5f7396;
+  --hme:#f7931e; --hme2:#ffb547; --grid:#f5c84c; --bat:#2fd28a; --pv:#5ab8ff;
+  --sans:'Fira Sans',system-ui,'Segoe UI',sans-serif; --mono:'Fira Code',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+#c{position:fixed;inset:0;display:block;cursor:grab;touch-action:none}
+#c:active{cursor:grabbing}
+.panel{position:fixed;background:var(--card);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(8px)}
+#title{left:16px;top:16px;padding:12px 16px;max-width:min(430px,calc(100vw - 32px))}
+#title .k{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--hme)}
+#title h1{margin:6px 0 2px;font-size:clamp(17px,2.6vh,24px);font-weight:700;letter-spacing:-.01em}
+#title p{margin:0;font-size:12px;color:var(--muted)}
+#tools{right:16px;top:16px;padding:6px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 32px)}
+.b{background:transparent;border:1px solid transparent;border-radius:9px;padding:7px 11px;font-size:13px;cursor:pointer;white-space:nowrap;color:var(--muted);transition:background .2s,color .2s}
+.b:hover{background:#ffffff10;color:var(--ink)}
+.b[aria-pressed="true"]{background:#f7931e22;border-color:#f7931e66;color:var(--hme2)}
+.b.x{color:var(--ink);border-color:var(--line)}
+#stats{left:50%;bottom:16px;transform:translateX(-50%);display:flex;padding:12px 6px;width:min(620px,calc(100vw - 32px))}
+#stats div{flex:1;text-align:center;padding:0 10px;border-left:1px solid var(--line);min-width:0}
+#stats div:first-child{border:0}
+#stats b{display:block;font:600 clamp(16px,2.6vh,24px)/1.1 var(--mono);white-space:nowrap}
+#stats b small{font-size:.55em;color:var(--muted);margin-left:3px}
+#stats span{display:block;font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+#sun{left:16px;bottom:16px;padding:12px 14px;width:230px}
+#sun label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+#sun output{font-family:var(--mono);color:var(--grid)}
+#sun input{width:100%;accent-color:var(--grid);margin:8px 0 6px}
+#sun .now{font:600 18px/1 var(--mono);color:var(--grid)}
+#sun .now small{font-size:.6em;color:var(--muted)}
+#sun .h{font-size:10px;color:var(--dim);margin-top:4px}
+#compass{right:16px;bottom:16px;width:64px;height:64px;border-radius:50%;display:grid;place-items:center}
+.lbl{position:fixed;left:0;top:0;pointer-events:none;background:#0a1220d9;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;white-space:nowrap}
+.lbl b{font-family:var(--mono);color:var(--pv)}
+.lbl::after{content:"";position:absolute;left:50%;bottom:-7px;width:1px;height:7px;background:var(--line)}
+#hint{left:50%;bottom:96px;transform:translateX(-50%);padding:7px 12px;font-size:12px;color:var(--muted);transition:opacity .8s;white-space:nowrap}
+#hint.off{opacity:0}
+#err{left:50%;top:50%;transform:translate(-50%,-50%);padding:16px 20px;max-width:420px;font-size:14px;color:var(--muted)}
+@media (max-width:1180px){ #sun{bottom:96px} }
+@media (max-width:900px){ #hint{display:none} }
+@media (max-width:600px){
+  #title{top:64px}
+  #stats span{font-size:9px}
+  #compass{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="Model 3D PLTS atap — seret untuk memutar"></canvas>
+
+<div id="title" class="panel">
+  <div class="k">Model 3D · PLTS atap</div>
+  <h1 id="tH">Model PLTS atap</h1>
+  <p id="tP"></p>
+</div>
+
+<div id="tools" class="panel">
+  <button class="b" id="bRot" aria-pressed="true" title="R">⟳ Putar otomatis</button>
+  <button class="b" data-view="iso" title="1">Isometrik</button>
+  <button class="b" data-view="top" title="2">Atas</button>
+  <button class="b" data-view="low" title="3">Dekat</button>
+  <button class="b x" id="bClose" title="Esc" hidden>✕ Tutup</button>
+</div>
+
+<div id="hint" class="panel">Seret untuk memutar · scroll untuk zoom · klik kanan + seret untuk geser</div>
+
+<div id="sun" class="panel">
+  <label for="hour">Posisi matahari <output id="oh">10:00</output></label>
+  <input type="range" id="hour" min="6" max="18" step="0.1" value="10">
+  <div class="now" id="pnow">0 <small>kW</small></div>
+  <div class="h">Daya sesaat, ilustrasi cuaca cerah</div>
+</div>
+
+<div id="stats" class="panel">
+  <div><b id="sN">–</b><span>Modul PV</span></div>
+  <div><b id="sP">–</b><span>Daya DC</span></div>
+  <div><b id="sE">–</b><span id="sEl">Estimasi produksi</span></div>
+</div>
+
+<div id="compass" class="panel" title="Arah utara"><svg id="cmp" width="44" height="44" viewBox="-22 -22 44 44"><circle r="20" fill="none" stroke="#24375a"/><path d="M0-17 5 0H-5z" fill="#ff5a5a"/><path d="M0 17 5 0H-5z" fill="#5f7396"/></svg></div>
+
+<script src="assets/vendor/three.min.js"></script>
+<script src="assets/vendor/OrbitControls.js"></script>
+<script src="assets/pv3d-data.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const D = window.PV3D_DATA;
+const inFrame = window.parent !== window;
+if (inFrame) $('#bClose').hidden = false;
+const fmt = (v, d = 0) => v.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+/* ---------- renderer / scene ---------- */
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#9fc3e8');
+scene.fog = new THREE.Fog(scene.background.clone(), 450, 1000);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 1, 3000);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.maxPolarAngle = Math.PI * 0.47;
+controls.minDistance = 20;
+controls.maxDistance = 650;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.6;
+
+const hemi = new THREE.HemisphereLight('#dceaff', '#55603f', 0.55);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight('#fff4e0', 1.6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -180, right: 180, top: 180, bottom: -180, near: 10, far: 800 });
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.3;
+scene.add(sun, sun.target);
+
+function tex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 8;
+  return t;
+}
+const std = (color, o = {}) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.85, metalness: 0 }, o));
+
+if (!D) {
+  document.body.insertAdjacentHTML('beforeend', '<div id="err" class="panel">Data model belum ada. Jalankan <code>python tools/export-pv3d.py</code> untuk menarik proyek dari Solar Design Platform.</div>');
+  throw new Error('PV3D_DATA missing');
+}
+
+/* ---------- site coordinates: x east, y north, z up (metres) → three: X, Y up, Z south ---------- */
+let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+for (const b of D.buildings) for (const [x, y] of b.footprint) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+const CX = (minX + maxX) / 2, CY = (minY + maxY) / 2;
+const V = (x, y, z) => new THREE.Vector3(x - CX, z, -(y - CY));
+const span = Math.max(maxX - minX, maxY - minY);
+
+/* ---------- ground + calibrated satellite photo ---------- */
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), std('#5f6d4b'));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+const img = D.site.image;
+if (img) {
+  const [a, , , d, e, f] = img.transform;
+  const wm = img.w * a, hm = img.h * d;
+  const im = new Image();
+  im.onload = () => {
+    // feather the photo edges into the grass so the square doesn't read as a hard tile
+    const t = tex(1024, 1024, (g, w, h) => {
+      g.drawImage(im, 0, 0, w, h);
+      g.globalCompositeOperation = 'destination-out';
+      const fe = w * 0.08;
+      for (const [x0, y0, x1, y1, rx, ry, rw, rh] of [[0, 0, fe, 0, 0, 0, fe, h], [w, 0, w - fe, 0, w - fe, 0, fe, h], [0, 0, 0, fe, 0, 0, w, fe], [0, h, 0, h - fe, 0, h - fe, w, fe]]) {
+        const gr = g.createLinearGradient(x0, y0, x1, y1); gr.addColorStop(0, '#000'); gr.addColorStop(1, '#0000');
+        g.fillStyle = gr; g.fillRect(rx, ry, rw, rh);
+      }
+    });
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(wm, hm), new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: 1 }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.copy(V(e + wm / 2, f + hm / 2, 0.04));
+    m.receiveShadow = true; scene.add(m);
+  };
+  im.src = img.src;
+}
+
+/* ---------- buildings: walls from footprint, roof from design planes ---------- */
+const roofTex = tex(64, 64, (g, w, h) => {
+  g.fillStyle = '#d8d3c6'; g.fillRect(0, 0, w, h);
+  for (let x = 0; x < w; x += 8) { g.fillStyle = '#c3bcab'; g.fillRect(x, 0, 2, h); g.fillStyle = '#e6e1d5'; g.fillRect(x + 4, 0, 1, h); }
+});
+roofTex.wrapS = roofTex.wrapT = THREE.RepeatWrapping;
+const roofMat = std('#ffffff', { map: roofTex, roughness: 0.55, metalness: 0.25, side: THREE.DoubleSide });
+const wallMat = std('#e3dfd5');
+const gableMat = std('#dcd7cb', { side: THREE.DoubleSide });
+
+function roofPlaneGeo(poly) {
+  // corrugation runs downslope: u along the eave edge, v up the slope
+  const p = poly.map(([x, y, z]) => V(x, y, z));
+  const o = p[0], eu = p[1].clone().sub(p[0]).normalize();
+  const nrm = p[1].clone().sub(p[0]).cross(p[p.length - 1].clone().sub(p[0])).normalize();
+  const ev = nrm.clone().cross(eu);
+  const pos = [], uv = [];
+  for (let i = 1; i < p.length - 1; i++) for (const q of [p[0], p[i], p[i + 1]]) {
+    pos.push(q.x, q.y, q.z);
+    const r = q.clone().sub(o); uv.push(r.dot(eu) / 4, r.dot(ev) / 4);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.computeVertexNormals();
+  return g;
+}
+
+const labelSpecs = [];
+D.buildings.forEach((b, bi) => {
+  const H = b.height, base = b.base || 0;
+  const sh = new THREE.Shape(b.footprint.map(([x, y]) => new THREE.Vector2(x - CX, y - CY)));
+  const wg = new THREE.ExtrudeGeometry(sh, { depth: H, bevelEnabled: false });
+  wg.rotateX(-Math.PI / 2); wg.translate(0, base, 0);
+  const walls = new THREE.Mesh(wg, wallMat); walls.castShadow = walls.receiveShadow = true; scene.add(walls);
+
+  let top = H, n = 0, kw = 0;
+  const highPts = [];
+  for (const pl of b.planes) {
+    if (pl.poly.length >= 3) {
+      const rm = new THREE.Mesh(roofPlaneGeo(pl.poly), roofMat); rm.castShadow = rm.receiveShadow = true; scene.add(rm);
+      for (const pt of pl.poly) { top = Math.max(top, pt[2]); if (pt[2] > H + base + 0.5) highPts.push(pt); }
+    }
+    n += pl.mods.length;
+    kw += pl.mods.reduce((s, m) => s + (D.modules[m[3]]?.power || 0) / 1000, 0);
+  }
+  // gable-end triangles: footprint edge + ridge point standing above it
+  const fp = b.footprint;
+  for (let i = 0; i < fp.length; i++) {
+    const [ax, ay] = fp[i], [bx, by] = fp[(i + 1) % fp.length];
+    const dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
+    const r = highPts.find(([x, y]) => {
+      const t = ((x - ax) * dx + (y - ay) * dy) / L2;
+      const px = ax + t * dx - x, py = ay + t * dy - y;
+      return t > 0.05 && t < 0.95 && px * px + py * py < 1;
+    });
+    if (!r) continue;
+    const g = new THREE.BufferGeometry().setFromPoints([V(ax, ay, H + base), V(bx, by, H + base), V(r[0], r[1], r[2])]);
+    g.computeVertexNormals();
+    const m = new THREE.Mesh(g, gableMat); m.castShadow = m.receiveShadow = true; scene.add(m);
+  }
+  const cx = fp.reduce((s, p) => s + p[0], 0) / fp.length, cy = fp.reduce((s, p) => s + p[1], 0) / fp.length;
+  labelSpecs.push({ name: `Gedung ${bi + 1}`, n, kw, p: V(cx, cy, top + 6) });
+});
+
+/* ---------- PV modules (exact positions from the design) ---------- */
+const pvTex = tex(128, 64, (g, w, h) => {
+  g.fillStyle = '#cfd6e0'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#16235c'; g.fillRect(2, 2, w - 4, h - 4);
+  g.strokeStyle = '#2b3f8c'; g.lineWidth = 1;
+  for (let x = 1; x < 12; x++) { g.beginPath(); g.moveTo(2 + x * (w - 4) / 12, 2); g.lineTo(2 + x * (w - 4) / 12, h - 2); g.stroke(); }
+  for (let y = 1; y < 6; y++) { g.beginPath(); g.moveTo(2, 2 + y * (h - 4) / 6); g.lineTo(w - 2, 2 + y * (h - 4) / 6); g.stroke(); }
+  g.fillStyle = '#ffffff22'; g.fillRect(w / 2 - 1, 2, 2, h - 4);
+});
+const pvMat = new THREE.MeshStandardMaterial({ map: pvTex, roughness: 0.28, metalness: 0.45 });
+const frameMat = std('#b9c2cc', { metalness: 0.6, roughness: 0.4 });
+const unitBox = new THREE.BoxGeometry(1, 1, 1);
+const total = D.buildings.reduce((s, b) => s + b.planes.reduce((t, p) => t + p.mods.length, 0), 0);
+const pv = new THREE.InstancedMesh(unitBox, [frameMat, frameMat, pvMat, frameMat, frameMat, frameMat], total);
+pv.castShadow = pv.receiveShadow = true;
+const m4 = new THREE.Matrix4(), bx = new THREE.Vector3(), by = new THREE.Vector3(), bz = new THREE.Vector3();
+const q = new THREE.Quaternion(), sc = new THREE.Vector3(), pos = new THREE.Vector3();
+const LIFT = 0.12, GAP = 0.02, THICK = 0.035;
+let idx = 0;
+for (const b of D.buildings) for (const pl of b.planes) {
+  const [nx, ny, nz] = pl.n, [x0, y0, z0] = pl.poly[0];
+  const n3 = new THREE.Vector3(nx, nz, -ny).normalize();
+  for (const [x, y, rot, , len, wid] of pl.mods) {
+    const z = z0 - (nx * (x - x0) + ny * (y - y0)) / nz;
+    // rotation = in-plan direction of the module's width (up/down the slope); length runs along the ridge
+    const r = rot * Math.PI / 180, cx = Math.cos(r), cy = Math.sin(r);
+    const dz = -(nx * cx + ny * cy) / nz;
+    bz.set(cx, dz, -cy).normalize();          // site (cx, cy, dz) → three
+    by.copy(n3);
+    bx.crossVectors(by, bz).normalize();
+    m4.makeBasis(bx, by, bz);
+    q.setFromRotationMatrix(m4);
+    pos.copy(V(x, y, z)).addScaledVector(n3, LIFT);
+    sc.set(len - GAP, THICK, wid - GAP);
+    m4.compose(pos, q, sc); pv.setMatrixAt(idx++, m4);
+  }
+}
+scene.add(pv);
+
+/* ---------- walkways: expanded-mesh deck on U-bracket supports ---------- */
+const meshTex = tex(64, 32, (g, w, h) => {
+  // diamond expanded-metal pattern; transparent holes so the roof shows through
+  g.fillStyle = 'rgba(205,210,216,.35)'; g.fillRect(0, 0, w, h);
+  g.strokeStyle = '#e4e8ec'; g.lineWidth = 6;
+  for (const [x0, y0, x1, y1] of [[0, h / 2, w / 2, 0], [w / 2, 0, w, h / 2], [w, h / 2, w / 2, h], [w / 2, h, 0, h / 2]]) { g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke(); }
+});
+meshTex.encoding = THREE.LinearEncoding;
+meshTex.wrapS = meshTex.wrapT = THREE.RepeatWrapping;
+const deckMat = new THREE.MeshStandardMaterial({ color: '#d5dadf', map: meshTex, transparent: true, depthWrite: false, metalness: 0.7, roughness: 0.35, side: THREE.DoubleSide });
+const alu = std('#c8ced4', { metalness: 0.7, roughness: 0.35 });
+const WK_H = 0.32, SUP_STEP = 1.8, ARM = 0.28, LEG = 0.05;
+const supports = [];
+const wkGroup = new THREE.Group();
+let wkLen = 0;
+for (const b of D.buildings) for (const pl of b.planes) {
+  if (!pl.walkways?.length) continue;
+  const [nx, ny, nz] = pl.n, [x0, y0, z0] = pl.poly[0];
+  const n3 = new THREE.Vector3(nx, nz, -ny).normalize();
+  const onRoof = (x, y) => V(x, y, z0 - (nx * (x - x0) + ny * (y - y0)) / nz);
+  for (const wk of pl.walkways) for (let i = 0; i < wk.line.length - 1; i++) {
+    const a = onRoof(...wk.line[i]), c = onRoof(...wk.line[i + 1]);
+    const len = a.distanceTo(c); if (len < 0.2) continue;
+    wkLen += len;
+    const dir = c.clone().sub(a).normalize(), side = new THREE.Vector3().crossVectors(n3, dir).normalize();
+    const basis = new THREE.Matrix4().makeBasis(side, n3, dir), rot = new THREE.Quaternion().setFromRotationMatrix(basis);
+    const mid = a.clone().add(c).multiplyScalar(0.5);
+    // deck grating
+    const dg = new THREE.PlaneGeometry(wk.w, len); dg.rotateX(-Math.PI / 2);
+    const uv = dg.attributes.uv; for (let k = 0; k < uv.count; k++) uv.setXY(k, uv.getX(k) * wk.w / 0.09, uv.getY(k) * len / 0.05);
+    const deck = new THREE.Mesh(dg, deckMat);
+    deck.quaternion.copy(rot); deck.position.copy(mid).addScaledVector(n3, WK_H); deck.castShadow = true; wkGroup.add(deck);
+    // side channels
+    for (const s of [-1, 1]) {
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.07, len), alu);
+      rail.quaternion.copy(rot);
+      rail.position.copy(mid).addScaledVector(n3, WK_H - 0.02).addScaledVector(side, s * wk.w / 2);
+      rail.castShadow = true; wkGroup.add(rail);
+    }
+    // cross supports
+    for (let t = SUP_STEP / 2; t < len; t += SUP_STEP) supports.push({ p: a.clone().addScaledVector(dir, t), rot, side, n3, w: wk.w });
+  }
+}
+// one cross-arm + two U-legs per support, instanced
+if (supports.length) {
+  const armGeo = new THREE.BoxGeometry(1, 1, 1);
+  const arms = new THREE.InstancedMesh(armGeo, alu, supports.length);
+  const legs = new THREE.InstancedMesh(armGeo, alu, supports.length * 4);
+  arms.castShadow = legs.castShadow = true;
+  const mm = new THREE.Matrix4(), pp = new THREE.Vector3(), ss = new THREE.Vector3();
+  supports.forEach((s, i) => {
+    const span = s.w + 2 * ARM;
+    pp.copy(s.p).addScaledVector(s.n3, WK_H - 0.08);
+    mm.compose(pp, s.rot, ss.set(span, 0.05, 0.05)); arms.setMatrixAt(i, mm);
+    // U-shaped foot at each arm end: two posts down to the roof
+    let j = 0;
+    for (const e of [-1, 1]) for (const o of [-0.07, 0.07]) {
+      pp.copy(s.p).addScaledVector(s.side, e * (span / 2 - 0.04) + o).addScaledVector(s.n3, (WK_H - 0.08) / 2);
+      mm.compose(pp, s.rot, ss.set(LEG, WK_H - 0.08, 0.04)); legs.setMatrixAt(i * 4 + j++, mm);
+    }
+  });
+  wkGroup.add(arms, legs);
+}
+scene.add(wkGroup);
+
+/* ---------- HUD text from the design ---------- */
+const S = D.summary;
+const modNames = [...new Set(Object.values(D.modules).map(m => m.name))].join(', ');
+$('#tH').textContent = `${fmt(S.moduleCount)} modul di ${D.buildings.length} atap pabrik`;
+$('#tP').textContent = `${modNames} · desain Solar Design Platform (proyek “${D.project.name}”), di atas citra satelit terkalibrasi.`;
+$('#sN').textContent = fmt(S.moduleCount);
+$('#sP').innerHTML = `${fmt(S.capacityKw, 1)}<small>kWp</small>`;
+if (S.annualKwh) $('#sE').innerHTML = `${fmt(S.annualKwh / 1e6, 2)}<small>GWh/th</small>`;
+$('#sEl').textContent = S.source ? `Produksi · ${S.source.toUpperCase()}` : 'Estimasi produksi';
+const labels = labelSpecs.map(l => {
+  const el = document.createElement('div'); el.className = 'lbl';
+  el.innerHTML = `${l.name} · <b>${fmt(l.n)}</b> modul · ${fmt(l.kw, 1)} kWp`;
+  document.body.appendChild(el); return { el, p: l.p };
+});
+
+/* ---------- sun (simple solar position for the site latitude, today's date) ---------- */
+const hourEl = $('#hour');
+const warm = new THREE.Color('#ffb070'), noon = new THREE.Color('#fff6e6');
+const skyNoon = new THREE.Color('#9fc3e8'), skyDusk = new THREE.Color('#e7b48c');
+const lat = (D.project.lat || -6.76) * Math.PI / 180;
+const doy = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
+const decl = -23.44 * Math.PI / 180 * Math.cos(2 * Math.PI / 365 * (doy + 10));
+function setHour(h) {
+  const ha = (h - 12) * 15 * Math.PI / 180;
+  const sinAlt = Math.sin(lat) * Math.sin(decl) + Math.cos(lat) * Math.cos(decl) * Math.cos(ha);
+  const alt = Math.asin(sinAlt);
+  let az = Math.acos(Math.max(-1, Math.min(1, (Math.sin(decl) - Math.sin(alt) * Math.sin(lat)) / (Math.cos(alt) * Math.cos(lat)))));
+  if (ha > 0) az = 2 * Math.PI - az;                    // azimuth from north, clockwise
+  const el = Math.max(alt, 0.05), ca = Math.cos(el);
+  const dir = new THREE.Vector3(Math.sin(az) * ca, Math.sin(el), -Math.cos(az) * ca);
+  sun.position.copy(dir.multiplyScalar(400)); sun.target.position.set(0, 0, 0);
+  const k = Math.pow(Math.max(sinAlt, 0), 0.6);
+  sun.intensity = 0.25 + 1.55 * k;
+  sun.color.copy(warm).lerp(noon, k);
+  hemi.intensity = 0.3 + 0.35 * k;
+  scene.background.copy(skyDusk).lerp(skyNoon, k); scene.fog.color.copy(scene.background);
+  const pNow = S.capacityKw * 0.8 * Math.pow(Math.max(sinAlt, 0), 1.25);
+  const hh = Math.floor(h), mm = Math.round((h - hh) * 60) % 60;
+  $('#oh').textContent = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  $('#pnow').innerHTML = `${fmt(Math.round(pNow))} <small>kW</small>`;
+}
+hourEl.oninput = () => setHour(+hourEl.value);
+setHour(+hourEl.value);
+
+/* ---------- views ---------- */
+const R = span * 1.25;
+const VIEWS = {
+  iso: { p: [R * 0.8, R * 0.65, R * 0.9], t: [0, 8, 0] },
+  top: { p: [0.1, R * 1.75, 1], t: [0, 0, 0] },
+  low: { p: [-R * 0.55, 30, R * 0.45], t: [-10, 12, 0] },
+};
+let anim = null;
+function fly(name, dur = 1400) {
+  const v = VIEWS[name];
+  anim = { t0: performance.now(), dur, p0: camera.position.clone(), t0v: controls.target.clone(), p1: new THREE.Vector3(...v.p), t1: new THREE.Vector3(...v.t) };
+}
+document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => fly(b.dataset.view));
+const bRot = $('#bRot');
+function setRot(on) { controls.autoRotate = on; bRot.setAttribute('aria-pressed', on); }
+bRot.onclick = () => setRot(!controls.autoRotate);
+controls.addEventListener('start', () => { anim = null; setRot(false); $('#hint').classList.add('off'); });
+
+function close() { if (inFrame) parent.postMessage('pv3d-close', '*'); }
+$('#bClose').onclick = close;
+function onKey(k) {
+  if (k === 'Escape') close();
+  else if (k === 'r' || k === 'R') setRot(!controls.autoRotate);
+  else if (k === '1') fly('iso'); else if (k === '2') fly('top'); else if (k === '3') fly('low');
+  else if ((k === 'f' || k === 'F') && !inFrame) document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+}
+addEventListener('keydown', ev => onKey(ev.key));
+// keys pressed while focus is still on the deck are forwarded here
+addEventListener('message', ev => { if (ev.data === 'pv3d-intro') intro(); else if (ev.data && ev.data.pv3dKey) onKey(ev.data.pv3dKey); });
+
+// opening shot: swing in from high and far
+function intro() {
+  camera.position.set(R * 2.2, R * 1.6, -R * 1.8); controls.target.set(0, 0, 0); controls.update();
+  fly('iso', 2600); setRot(true); $('#hint').classList.remove('off');
+  setTimeout(() => $('#hint').classList.add('off'), 6000);
+}
+
+/* ---------- labels ---------- */
+const tmp = new THREE.Vector3();
+function placeLabels(w, h) {
+  for (const l of labels) {
+    tmp.copy(l.p).project(camera);
+    const vis = tmp.z < 1 && Math.abs(tmp.x) < 1.1 && Math.abs(tmp.y) < 1.1;
+    l.el.style.display = vis ? '' : 'none';
+    if (vis) l.el.style.transform = `translate(${(tmp.x + 1) / 2 * w}px,${(1 - tmp.y) / 2 * h}px) translate(-50%,calc(-100% - 7px))`;
+  }
+}
+
+/* ---------- loop ---------- */
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h;
+  camera.fov = w < h ? 55 : 38; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+const cmp = $('#cmp');
+function frame(now) {
+  if (anim) {
+    const k = ease(Math.min(1, (now - anim.t0) / anim.dur));
+    camera.position.lerpVectors(anim.p0, anim.p1, k); controls.target.lerpVectors(anim.t0v, anim.t1, k);
+    if (k >= 1) anim = null;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+  placeLabels(innerWidth, innerHeight);
+  cmp.style.transform = `rotate(${controls.getAzimuthalAngle()}rad)`;
+  requestAnimationFrame(frame);
+}
+intro();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

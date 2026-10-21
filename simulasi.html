@@ -220,12 +220,12 @@ footer{padding:30px 0 50px;border-top:1px solid var(--line)}
 
       <div class="grp">
         <h3>Investasi</h3>
-        <div class="fld"><label for="ce">Harga ESS Megarevo (2 pabrik) <output id="o-ce"></output></label>
-          <input type="range" id="ce" min="25131457771" max="45131457771" step="250000000">
-          <div class="hint">Default = harga penawaran Okt 2026 (SP1 2 MW/2,21 MWh + SP2 3,5 MW/3,87 MWh).</div></div>
-        <div class="fld"><label for="pc">Biaya PLTS atap per kWp <output id="o-pc"></output></label>
-          <input type="range" id="pc" min="5000000" max="11000000" step="250000">
-          <div class="hint">Modul + mounting + kabel + pasang. Inverter PV sudah termasuk di MPS (input MPPT).</div></div>
+        <div class="fld"><label for="ce">Harga BESS Megarevo, sistem saja (2 pabrik) <output id="o-ce"></output></label>
+          <input type="range" id="ce" min="35000000000" max="55000000000" step="250000000">
+          <div class="hint">Default Rp 45 M (SP1 2 MW/2,21 MWh + SP2 3,5 MW/3,87 MWh).</div></div>
+        <div class="fld"><label for="pt">Harga PLTS atap 3,1 MWp (total) <output id="o-pt"></output></label>
+          <input type="range" id="pt" min="15000000000" max="25000000000" step="250000000">
+          <div class="hint">Default Rp 20 M. Modul + mounting + walkway + kabel + pasang. Inverter PV sudah termasuk di MPS (input MPPT).</div></div>
         <div class="fld"><label for="om">Biaya O&amp;M per tahun <output id="o-om"></output></label>
           <input type="range" id="om" min="0.5" max="2.5" step="0.1"></div>
       </div>
@@ -270,7 +270,7 @@ footer{padding:30px 0 50px;border-top:1px solid var(--line)}
           </button>
           <button class="pkg" data-pkg="both" aria-pressed="true">
             <span class="tag">Rekomendasi</span>
-            <div class="name">ESS + PLTS atap 2,5 MWp</div>
+            <div class="name">ESS + PLTS atap 3,1 MWp</div>
             <div class="desc">Matahari memberi penghematan harian, baterai menjaga produksi. Satu inverter hybrid untuk keduanya.</div>
             <dl>
               <dt>Investasi</dt><dd id="p-both-cap">—</dd>
@@ -357,7 +357,7 @@ footer{padding:30px 0 50px;border-top:1px solid var(--line)}
             <li><b>Produksi:</b> kWh Mei 2026 (SP1 1.010.440 kWh, SP2 1.576.320 kWh) ÷ 744 jam ÷ intensitas energi.</li>
             <li><b>Tarif I-3:</b> LWBP Rp 1.035,78 · WBP Rp 1.553,67 /kWh. PBJT-TL 3% ikut terhemat. Kenaikan tarif berlaku mulai tahun ke-2.</li>
             <li><b>Geser beban WBP:</b> 60% kapasitas (6,08 MWh) dipakai harian, 40% ditahan untuk backup. 330 hari/thn, efisiensi bolak-balik 90% (biaya isi ulang LWBP sudah dikurangkan), penurunan kapasitas baterai 1,5%/thn.</li>
-            <li><b>PLTS:</b> 4.060 modul · 2.537,5 kWp · 1.557 kWh/kWp/thn (simulasi tata letak), degradasi 0,5%/thn, 100% dipakai sendiri karena beban siang (±3,5 MW) &gt; produksi PV. Nilai energi = tarif LWBP.</li>
+            <li><b>PLTS:</b> 4.320 modul Trina 720 Wp · 3.110,4 kWp · 1.369 kWh/kWp/thn (PVGIS, desain Solar Design Platform), degradasi 0,5%/thn, 100% dipakai sendiri karena beban siang (±3,5 MW) &gt; produksi PV. Nilai energi = tarif LWBP.</li>
             <li><b>Kerugian padam</b> naik 3%/thn (inflasi). O&amp;M dihitung dari total investasi, naik 3%/thn.</li>
             <li><b>Tidak termasuk:</b> pajak &amp; penyusutan (tax shield), pembiayaan, nilai sisa PLTS setelah tahun ke-15, biaya klaim kualitas dari pembeli, dan kerusakan VFD/motor akibat padam. Semua ini cenderung <i>menambah</i> nilai proyek.</li>
             <li><b>Kenapa tidak PLTS saja?</b> Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</li>
@@ -380,13 +380,13 @@ const D={
   outH:[734/60*12/18, 1266/60*12/18],  // covered outage hours / yr
   allEv:197*12/18,
   ess:{mwh:2.21+3.87, use:.6, days:330, rte:.9, fade:.015},
-  pv:{kwp:2537.5, yld:1557, deg:.005},
+  pv:{kwp:3110.4, yld:1369, deg:.005},
   infl:.03
 };
 const PRE={
-  kons:{cm:10000, ev:3000000,  rs:30, it:3.5, ce:38131457771, pc:7500000, om:1.2, es:2,   dr:11, hz:15},
-  mod: {cm:14000, ev:7000000,  rs:30, it:3.5, ce:38131457771, pc:7000000, om:1.0, es:3,   dr:10, hz:15},
-  opt: {cm:18000, ev:12000000, rs:30, it:3.3, ce:38131457771, pc:6500000, om:0.8, es:4,   dr:9,  hz:15}
+  kons:{cm:10000, ev:3000000,  rs:30, it:3.5, ce:45e9, pt:20e9, om:1.2, es:2,   dr:11, hz:15},
+  mod: {cm:14000, ev:7000000,  rs:30, it:3.5, ce:45e9, pt:20e9, om:1.0, es:3,   dr:10, hz:15},
+  opt: {cm:18000, ev:12000000, rs:30, it:3.3, ce:45e9, pt:20e9, om:0.8, es:4,   dr:9,  hz:15}
 };
 let S={...PRE.mod}, pkg='both';
 
@@ -402,7 +402,7 @@ const $=id=>document.getElementById(id);
 function model(p, o={}){
   const P={...S,...o};
   const hasE=p!=='pv', hasP=p!=='ess';
-  const capE=hasE?P.ce:0, kwp=hasP?D.pv.kwp:0, capP=kwp*P.pc, cap=capE+capP;
+  const capE=hasE?P.ce:0, kwp=hasP?D.pv.kwp:0, capP=hasP?P.pt:0, cap=capE+capP;
   const kg=D.kwh.map(k=>k/D.hrs/P.it);
   const rsH=P.rs/60, esc=P.es/100, r=P.dr/100, N=P.hz;
   const flows=[-cap], rows=[]; let cum=-cap, pb=null;
@@ -432,7 +432,7 @@ function model(p, o={}){
 // ---------- controls ----------
 const meta={
   cm:v=>'Rp '+v.toLocaleString('id-ID')+'/kg', ev:v=>fmtRp(v), rs:v=>v+' menit', it:v=>fmtN(v)+' kWh/kg',
-  ce:v=>fmtRp(v,2), pc:v=>'Rp '+fmtN(v/1e6,2)+' jt', om:v=>fmtN(v)+'% invest.',
+  ce:v=>fmtRp(v,2), pt:v=>fmtRp(v,2)+' · '+fmtN(v/D.pv.kwp/1e6,2)+' jt/kWp', om:v=>fmtN(v)+'% invest.',
   es:v=>fmtN(v)+'%', dr:v=>fmtN(v)+'%', hz:v=>v+' tahun'
 };
 const inputs=Object.keys(meta).map(k=>$(k));
