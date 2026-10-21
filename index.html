@@ -357,6 +357,24 @@ table.sm-t{width:100%;border-collapse:collapse;font-size:clamp(12px,1.6vh,14px)}
 .sm-t td{font-family:var(--mono)}
 .sm-t td:first-child{font-family:var(--sans)}
 .sm-t tr.hl td{color:var(--fault)}
+.sm-cf{display:grid;grid-template-columns:1.45fr 1fr;gap:clamp(12px,1.8vw,24px);flex:1;min-height:0}
+.sm-cfw{overflow:auto;min-height:0;padding:0 clamp(10px,1.2vw,16px) 6px}
+table.sm-cft{font-size:clamp(11px,1.45vh,13px)}
+.sm-cft th{position:sticky;top:0;background:var(--card);padding-top:12px;z-index:1}
+.sm-cft td,.sm-cft th{padding:clamp(3px,.55vh,6px) 5px;white-space:nowrap}
+.sm-cft th{font-size:10px;letter-spacing:.03em}
+.sm-cft tr.y0 td{color:var(--fault)}
+.sm-cft tr.essend td{border-bottom:1px dashed var(--hme)}
+.sm-cft td.neg{color:var(--fault)}.sm-cft td.pos{color:var(--bat)}
+.sm-cft tfoot td{font-weight:600;border-top:2px solid var(--line);border-bottom:0;position:sticky;bottom:0;background:var(--card)}
+.sm-how{overflow:auto;min-height:0;display:flex;flex-direction:column;gap:clamp(6px,1vh,10px)}
+.sm-how ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:clamp(5px,.9vh,9px);font-size:clamp(12px,1.5vh,14px);line-height:1.45;color:var(--muted)}
+.sm-how li b{color:var(--ink)}
+.sm-how .f{display:block;font:500 clamp(11px,1.35vh,12.5px)/1.5 var(--mono);color:#cdd8ea;background:#ffffff08;border:1px solid var(--line);border-radius:8px;padding:5px 8px;margin-top:3px}
+.sm-how .f em{font-style:normal;color:var(--hme2);font-weight:600}
+.sm-comp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sm-comp div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:11px;color:var(--muted)}
+.sm-comp b{display:block;font:600 clamp(12px,1.6vh,15px)/1.2 var(--mono);margin-bottom:2px;white-space:nowrap}
 .sm-gauge{margin-top:10px;position:relative;height:10px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line)}
 .sm-gauge .m{position:absolute;top:-6px;width:3px;height:20px;border-radius:2px;transition:left .6s var(--ease)}
 .sm-gauge .z{position:absolute;inset:0 0 0 auto;border-radius:0 99px 99px 0;background:repeating-linear-gradient(45deg,#2fd28a40 0 6px,#2fd28a18 6px 12px);transition:width .6s var(--ease)}
@@ -400,7 +418,8 @@ body.scroll .num{font-size:26px}
 body.scroll .kv .card{padding:12px;min-width:0}
 body.scroll .kv{grid-template-columns:1fr}
 
-body.scroll .sm-tick,body.scroll .sm-pkgs,body.scroll .sm-split{grid-template-columns:minmax(0,1fr)}
+body.scroll .sm-tick,body.scroll .sm-pkgs,body.scroll .sm-split,body.scroll .sm-cf{grid-template-columns:minmax(0,1fr)}
+body.scroll .sm-cfw{max-height:420px}
 body.scroll .sm-kpis{grid-template-columns:1fr 1fr}
 body.scroll .sm-chart{flex:none;height:300px}
 body.scroll .sm-brk .r{grid-template-columns:1fr 80px}
@@ -792,7 +811,7 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
 <!-- SIMULASI INVESTASI (3 slide) -->
 <section class="slide" data-title="Simulasi · Paket" id="smS1">
   <div class="sm-head rv">
-    <span class="kick">Lampiran · Simulasi investasi 1/3</span>
+    <span class="kick">Lampiran · Simulasi investasi 1/4</span>
     <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
   </div>
   <h2 class="rv" style="--d:1;max-width:30ch">Pertanyaannya bukan "berapa biayanya", tapi <span class="c-fault">berapa yang hilang setiap hari menunda</span></h2>
@@ -823,7 +842,7 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
   <aside class="tech"><h3>Asumsi simulasi</h3><p class="note">Semua slide simulasi ikut dihitung ulang.</p>
     <div class="sm-grp">Kerugian saat padam</div>
     <div class="sm-fld"><label for="smcm">Margin kontribusi per kg benang <output id="o-smcm"></output></label><input type="range" id="smcm" min="6000" max="25000" step="500"><div class="hint">Harga jual − bahan baku − energi variabel.</div></div>
-    <div class="sm-fld"><label for="smev">Biaya langsung per kejadian per pabrik <output id="o-smev"></output></label><input type="range" id="smev" min="0" max="30000000" step="500000"><div class="hint">Waste benang &amp; roving, sambung ulang, lembur, lot turun grade.</div></div>
+    <div class="sm-fld"><label for="smev">Biaya langsung per kejadian per pabrik <output id="o-smev"></output></label><input type="range" id="smev" min="0" max="30000000" step="500000"><div class="hint">Waste benang &amp; roving, sambung ulang, lembur, lot turun grade. Moderat Rp 12 jt; paket NPV ≥ 0 mulai ±Rp 11 jt (perlu konfirmasi data SWA).</div></div>
     <div class="sm-fld"><label for="smrs">Waktu restart mesin <output id="o-smrs"></output></label><input type="range" id="smrs" min="10" max="60" step="5"></div>
     <div class="sm-fld"><label for="smit">Intensitas energi <output id="o-smit"></output></label><input type="range" id="smit" min="2.5" max="5" step="0.1"><div class="hint">Produksi = kWh PLN ÷ kWh/kg → <span id="smKgh" class="mono"></span></div></div>
     <div class="sm-grp">Investasi</div>
@@ -833,13 +852,13 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <div class="sm-grp">Finansial</div>
     <div class="sm-fld"><label for="smes">Kenaikan tarif PLN per tahun <output id="o-smes"></output></label><input type="range" id="smes" min="0" max="6" step="0.5"></div>
     <div class="sm-fld"><label for="smdr">Tingkat diskonto (WACC) <output id="o-smdr"></output></label><input type="range" id="smdr" min="6" max="14" step="0.5"></div>
-    <div class="sm-fld"><label for="smhz">Umur analisa <output id="o-smhz"></output></label><input type="range" id="smhz" min="8" max="15" step="1"><div class="hint">Maks 15 thn = umur desain baterai LFP.</div></div>
+    <div class="sm-fld"><label for="smhz">Umur analisa (PLTS) <output id="o-smhz"></output></label><input type="range" id="smhz" min="10" max="25" step="1"><div class="hint">Modul PV bergaransi 30 thn. Baterai LFP dihitung 15 thn tanpa penggantian: manfaat &amp; O&amp;M ESS berhenti di tahun ke-16.</div></div>
   </aside>
 </section>
 
 <section class="slide" data-title="Simulasi · BEP &amp; NPV" id="smS2">
   <div class="sm-head rv">
-    <span class="kick">Lampiran · Simulasi investasi 2/3 · <span id="smPkgName" style="color:var(--ink)">ESS + PLTS</span></span>
+    <span class="kick">Lampiran · Simulasi investasi 2/4 · <span id="smPkgName" style="color:var(--ink)">ESS + PLTS</span></span>
     <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
   </div>
   <h2 class="rv" style="--d:1">Kapan investasi berubah jadi untung</h2>
@@ -864,13 +883,42 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <li>WBP: 60% kapasitas/hari, 330 hari, efisiensi 90%, fade baterai 1,5%/thn.</li>
     <li>Investasi: BESS sistem saja Rp 45 M; PLTS atap 3.110,4 kWp Rp 20 M (±Rp 6,4 jt/kWp).</li>
     <li>PLTS: 1.369 kWh/kWp/thn (PVGIS, desain atap 20°), degradasi 0,5%/thn, 100% dipakai sendiri.</li>
-    <li>Tidak termasuk pajak, penyusutan, pembiayaan, nilai sisa PLTS setelah tahun ke-15.</li></ul>
-    <p class="note">Ubah asumsi di slide Simulasi 1/3 (tekan T).</p></aside>
+    <li>Umur analisa 25 thn: PLTS 25 thn; baterai 15 thn tanpa penggantian (manfaat &amp; O&amp;M ESS berhenti tahun ke-16).</li>
+    <li>Biaya langsung per kejadian padam per pabrik (moderat): Rp 12 jt.</li>
+    <li>Tidak termasuk pajak, penyusutan, pembiayaan, nilai sisa.</li></ul>
+    <p class="note">Ubah asumsi di slide Simulasi 1/4 (tekan T). Rincian per tahun di slide 3/4.</p></aside>
+</section>
+
+<section class="slide" data-title="Simulasi · Rincian hitungan" id="smS4">
+  <div class="sm-head rv">
+    <span class="kick">Lampiran · Simulasi investasi 3/4 · <span id="smCfName" style="color:var(--ink)">ESS + PLTS</span></span>
+    <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
+  </div>
+  <h2 class="rv" style="--d:1;max-width:34ch" id="smCfT">Rincian hitungan</h2>
+  <div class="sm-cf">
+    <div class="card sm-cfw rv" style="--d:2"><table class="sm-t sm-cft" id="smCf">
+      <thead><tr><th>Thn</th><th>PLTS</th><th>WBP</th><th>Padam</th><th>O&amp;M</th><th>Arus kas</th><th>Kumulatif</th><th title="Faktor diskonto = 1 ÷ (1 + WACC)^t">DF</th><th>Nilai kini</th></tr></thead>
+      <tbody></tbody><tfoot></tfoot></table></div>
+    <div class="card sm-how rv" style="--d:3">
+      <div class="sm-comp" id="smComp"></div>
+      <div class="lbl" style="margin:0">Cara hitung · contoh tahun pertama (Rp miliar)</div>
+      <ol id="smHow"></ol>
+    </div>
+  </div>
+  <aside class="tech"><h3>Detail teknis</h3>
+    <h4>Kolom tabel</h4><ul>
+    <li><b>PLTS</b>: kWh PV × tarif LWBP × PBJT-TL 1,03. Tarif naik sesuai eskalasi, produksi PV turun 0,5%/thn.</li>
+    <li><b>WBP</b>: energi baterai digeser ke jam 17–22 (selisih tarif WBP vs biaya isi ulang LWBP).</li>
+    <li><b>Padam</b>: produksi yang terselamatkan (jam × kg/jam × margin) + biaya langsung per kejadian.</li>
+    <li><b>O&amp;M</b>: % dari investasi, naik 3%/thn. ESS berhenti di tahun ke-16.</li>
+    <li><b>DF (faktor diskonto)</b> = 1 ÷ (1 + WACC)<sup>t</sup>. Nilai kini = arus kas × faktor diskonto.</li></ul>
+    <h4>Rumus</h4><ul><li>NPV = −Investasi + Σ nilai kini.</li><li>IRR = tingkat diskonto yang membuat NPV = 0.</li><li>BEP = tahun ketika kumulatif ≥ 0 (interpolasi linear di dalam tahun).</li></ul>
+    <p class="note">Garis putus oranye di tabel = akhir umur baterai (tahun ke-15).</p></aside>
 </section>
 
 <section class="slide" data-title="Simulasi · Opportunity loss" id="smS3">
   <div class="sm-head rv">
-    <span class="kick">Lampiran · Simulasi investasi 3/3</span>
+    <span class="kick">Lampiran · Simulasi investasi 4/4</span>
     <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
   </div>
   <h2 class="rv" style="--d:1;max-width:32ch" id="smBrkT">Dari mana uangnya datang</h2>
@@ -1318,12 +1366,12 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
   const D = {
     L: 1035.78, W: 1553.67, pbjt: 1.03, kwh: [1010440, 1576320], hrs: 744,
     ev: [110 * 12 / 18, 75 * 12 / 18], outH: [734 / 60 * 12 / 18, 1266 / 60 * 12 / 18], allEv: 197 * 12 / 18,
-    ess: { mwh: 2.21 + 3.87, use: .6, days: 330, rte: .9, fade: .015 }, pv: { kwp: 3110.4, yld: 1369, deg: .005 }, infl: .03
+    ess: { mwh: 2.21 + 3.87, use: .6, days: 330, rte: .9, fade: .015, life: 15 }, pv: { kwp: 3110.4, yld: 1369, deg: .005 }, infl: .03
   };
   const PRE = {
-    kons: { cm: 10000, ev: 3000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.2, es: 2, dr: 11, hz: 15 },
-    mod: { cm: 14000, ev: 7000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.0, es: 3, dr: 10, hz: 15 },
-    opt: { cm: 18000, ev: 12000000, rs: 30, it: 3.3, ce: 45e9, pt: 20e9, om: 0.8, es: 4, dr: 9, hz: 15 }
+    kons: { cm: 10000, ev: 3000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.2, es: 2, dr: 11, hz: 25 },
+    mod: { cm: 14000, ev: 12000000, rs: 30, it: 3.5, ce: 45e9, pt: 20e9, om: 1.0, es: 3, dr: 10, hz: 25 },
+    opt: { cm: 18000, ev: 18000000, rs: 30, it: 3.3, ce: 45e9, pt: 20e9, om: 0.8, es: 4, dr: 9, hz: 25 }
   };
   let S = { ...PRE.mod }, pkg = 'both', preset = 'mod';
   const rp = (v, dec) => { const a = Math.abs(v), s = v < 0 ? '−' : '';
@@ -1334,21 +1382,23 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
 
   function model(p, o = {}) {
     const P = { ...S, ...o }, hasE = p !== 'pv', hasP = p !== 'ess';
-    const kwp = hasP ? D.pv.kwp : 0, cap = (hasE ? P.ce : 0) + (hasP ? P.pt : 0);
+    const kwp = hasP ? D.pv.kwp : 0, capE = hasE ? P.ce : 0, capP = hasP ? P.pt : 0, cap = capE + capP;
     const kg = D.kwh.map(k => k / D.hrs / P.it), rsH = P.rs / 60, N = P.hz;
     const flows = [-cap], rows = []; let cum = -cap, pb = null;
     for (let y = 1; y <= N; y++) {
       const f = Math.pow(1 + P.es / 100, y - 1), fi = Math.pow(1 + D.infl, y - 1);
       const pv = kwp * D.pv.yld * Math.pow(1 - D.pv.deg, y - 1) * D.L * f * D.pbjt;
       let wbp = 0, dt = 0, ws = 0;
-      if (hasE) {
+      // battery counted for its design life only, no replacement; PV runs the full horizon
+      const essOn = hasE && y <= D.ess.life;
+      if (essOn) {
         const Ed = D.ess.mwh * 1000 * D.ess.use * D.ess.days * Math.pow(1 - D.ess.fade, y - 1);
         wbp = (Ed * D.W - Ed / D.ess.rte * D.L) * f * D.pbjt;
         dt = [0, 1].reduce((s, i) => s + (D.ev[i] * rsH + D.outH[i]) * kg[i], 0) * P.cm * fi;
         ws = (D.ev[0] + D.ev[1]) * P.ev * fi;
       }
-      const om = cap * P.om / 100 * fi, gross = pv + wbp + dt + ws, net = gross - om;
-      rows.push({ pv, wbp, dt, ws, om, gross, net });
+      const om = ((essOn ? capE : 0) + capP) * P.om / 100 * fi, gross = pv + wbp + dt + ws, net = gross - om;
+      rows.push({ y, pv, wbp, dt, ws, om, gross, net, df: 1 / Math.pow(1 + P.dr / 100, y) });
       if (pb === null && cum + net >= 0) pb = y - 1 + (-cum) / net;
       cum += net; flows.push(net);
     }
@@ -1356,7 +1406,7 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
     let irr = null;
     if (npvAt(-.9) > 0 && npvAt(1) < 0) { let lo = -.9, hi = 1; for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; npvAt(m) > 0 ? lo = m : hi = m; } irr = lo; }
     const c = []; flows.reduce((s, x, i) => (c[i] = s + x, s + x), 0);
-    return { cap, kg, rows, cum: c, pb, npv: npvAt(P.dr / 100), irr, tot: rows.reduce((s, x) => s + x.net, 0), gross: rows.reduce((s, x) => s + x.gross, 0) };
+    return { cap, capE, capP, kg, rows, cum: c, pb, npv: npvAt(P.dr / 100), irr, tot: rows.reduce((s, x) => s + x.net, 0), gross: rows.reduce((s, x) => s + x.gross, 0) };
   }
   const perEvent = (o = {}) => { const P = { ...S, ...o }, kg = D.kwh.map(k => k / D.hrs / P.it);
     return [0, 1].reduce((s, i) => s + (D.ev[i] * P.rs / 60 + D.outH[i]) * kg[i] * P.cm + D.ev[i] * P.ev, 0) / (D.ev[0] + D.ev[1]); };
@@ -1402,6 +1452,7 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
     q('smBepFill').style.width = pct + '%'; q('smBepAfter').style.width = (100 - pct) + '%';
     q('smBepTxt').textContent = m.pb === null ? 'belum BEP dalam ' + S.hz + ' thn' : 'BEP thn ' + n1(m.pb) + ' · ' + n1(S.hz - m.pb) + ' thn untung bersih';
     chart(M);
+    cashflow(m, M, nm);
     /* slide 3 */
     const items = [['PLTS atap · listrik siang hari', y1.pv, '#3f8fe0'], ['Geser beban WBP (17–22)', y1.wbp, '#b98d10'], ['Waste & biaya restart dihindari', y1.ws, '#9b6cf0'], ['Produksi terselamatkan', y1.dt, '#17a066']].filter(i => i[1] > 0);
     const mx = Math.max(...items.map(i => i[1]));
@@ -1421,6 +1472,37 @@ $('#lay1').textContent = LAY.sp1[1]; $('#lay2').textContent = LAY.sp1[2];
     const pn = { kons: 'konservatif', mod: 'moderat', opt: 'optimis' }[preset] || 'kustom';
     q('smFMsg').innerHTML = ev >= th ? `Dengan asumsi ini, <b style="color:var(--ink)">ESS saja sudah balik modal ≤ 8 tahun</b>.`
       : `Asumsi ${pn} baru ${Math.round(ev / th * 100)}% dari ambang. Pertanyaan kunci untuk SWA: <b style="color:var(--ink)">apakah satu kali padam merugikan lebih dari ${rp(th)}?</b> Jika belum, PLTS menutup selisihnya dari penghematan harian.`;
+  }
+
+  /* slide 3/4: year-by-year cash flow + worked method */
+  function cashflow(m, M, nm) {
+    const b = v => fmt(v / 1e9, 2), sg = v => (v < 0 ? '−' : '+') + 'Rp ' + fmt(Math.abs(v) / 1e9, 1) + ' M';
+    const y1 = m.rows[0], pvSum = m.rows.reduce((s, r) => s + r.net * r.df, 0);
+    q('smCfName').textContent = nm;
+    q('smCfT').innerHTML = `Investasi ${rp(m.cap)} menghemat bersih ${rp(m.tot, 1)} dalam ${S.hz} tahun · <span class="${cls(m.npv)}">NPV ${sg(m.npv)}</span>`;
+    const tr = (c, cells) => `<tr class="${c}">${cells.map(x => `<td${x[1] ? ` class="${x[1]}"` : ''}>${x[0]}</td>`).join('')}</tr>`;
+    let h = tr('y0', [['0'], ['—'], ['—'], ['—'], ['—'], [b(-m.cap), 'neg'], [b(-m.cap), 'neg'], ['1,000'], [b(-m.cap), 'neg']]);
+    m.rows.forEach((r, i) => {
+      const cum = m.cum[i + 1];
+      h += tr(r.y === D.ess.life && S.hz > D.ess.life ? 'essend' : '', [[r.y], [b(r.pv)], [b(r.wbp)], [b(r.dt + r.ws)], ['−' + b(r.om)], [b(r.net)], [b(cum), cum < 0 ? 'neg' : 'pos'], [fmt(r.df, 3)], [b(r.net * r.df)]]);
+    });
+    q('smCf').querySelector('tbody').innerHTML = h;
+    const sum = k => m.rows.reduce((s, r) => s + r[k], 0);
+    q('smCf').querySelector('tfoot').innerHTML = tr('', [['Σ'], [b(sum('pv'))], [b(sum('wbp'))], [b(sum('dt') + sum('ws'))], ['−' + b(sum('om'))], [b(m.tot)], [b(m.tot - m.cap), m.tot - m.cap < 0 ? 'neg' : 'pos'], [''], [b(pvSum)]]);
+    const Ed = D.ess.mwh * 1000 * D.ess.use * D.ess.days;
+    const hrsLost = [0, 1].reduce((s, i) => s + D.ev[i] * S.rs / 60 + D.outH[i], 0);
+    const steps = [];
+    if (pkg !== 'ess') steps.push(`<b>Hemat PLTS</b> = kWp × yield × tarif LWBP × 1,03<span class="f">${fmt(D.pv.kwp, 1)} × ${fmt(D.pv.yld, 0)} × Rp ${fmt(D.L, 2)} × 1,03 = <em>${b(y1.pv)}</em></span>`);
+    steps.push(`<b>Geser beban WBP</b> = E × (tarif WBP − LWBP ÷ η) × 1,03 · E = ${fmt(D.ess.mwh, 2)} MWh × ${D.ess.use * 100}% × ${D.ess.days} hari<span class="f">${fmt(Ed, 0)} kWh × (${fmt(D.W, 2)} − ${fmt(D.L, 2)} ÷ ${fmt(D.ess.rte, 1)}) × 1,03 = <em>${b(y1.wbp)}</em></span>`);
+    steps.push(`<b>Padam dihindari</b> = jam hilang × kg/jam × margin + kejadian × biaya langsung<span class="f">±${fmt(hrsLost, 0)} jam·pabrik → ${b(y1.dt)} · ${fmt(D.ev[0] + D.ev[1], 0)} × Rp ${fmt(S.ev / 1e6, 0)} jt → ${b(y1.ws)} · total <em>${b(y1.dt + y1.ws)}</em></span>`);
+    steps.push(`<b>O&amp;M</b> = ${n1(S.om)}% × investasi<span class="f">${n1(S.om)}% × ${b(m.cap)} = <em>−${b(y1.om)}</em></span>`);
+    steps.push(`<b>Arus kas bersih tahun 1</b> = <em style="font-style:normal;color:var(--bat);font-family:var(--mono)">${b(y1.net)}</em>. Tahun berikutnya: tarif +${n1(S.es)}%/thn, PV −0,5%/thn, baterai −1,5%/thn, biaya +3%/thn.`);
+    steps.push(`<b>NPV</b> = −Investasi + Σ arus kas ÷ (1 + ${n1(S.dr)}%)<sup>t</sup><span class="f">−${b(m.cap)} + ${b(pvSum)} = <em style="color:${m.npv >= 0 ? 'var(--bat)' : 'var(--fault)'}">${m.npv < 0 ? '−' : '+'}${b(Math.abs(m.npv))}</em></span>`);
+    steps.push(`<b>IRR</b> ${m.irr === null ? '—' : n1(m.irr * 100) + '%'} ${m.irr !== null && m.irr >= S.dr / 100 ? '&gt;' : '&lt;'} WACC ${n1(S.dr)}% · <b>BEP</b> ${pbTxt(m)}`);
+    q('smHow').innerHTML = steps.map(x => `<li>${x}</li>`).join('');
+    const pvOnly = model('pv');
+    q('smComp').innerHTML = [['PLTS saja', pvOnly], ['ESS saja', M.ess], ['ESS + PLTS', M.both]].map(([n, x]) =>
+      `<div><b class="${cls(x.npv)}">${sg(x.npv)}</b>NPV ${n}<br>IRR ${x.irr === null ? '—' : n1(x.irr * 100) + '%'} · BEP ${pbTxt(x)}</div>`).join('');
   }
 
   /* chart: cumulative cash */

@@ -237,9 +237,9 @@ footer{padding:30px 0 50px;border-top:1px solid var(--line)}
           <div class="hint">Tarif I-3 ditahan sejak 2023. Rata-rata historis jangka panjang ±3–5%/thn.</div></div>
         <div class="fld"><label for="dr">Tingkat diskonto (WACC) <output id="o-dr"></output></label>
           <input type="range" id="dr" min="6" max="14" step="0.5"></div>
-        <div class="fld"><label for="hz">Umur analisa <output id="o-hz"></output></label>
-          <input type="range" id="hz" min="8" max="15" step="1">
-          <div class="hint">Dibatasi 15 thn = umur desain baterai LFP (±6.000 siklus). Modul PV sendiri 25+ thn.</div></div>
+        <div class="fld"><label for="hz">Umur analisa (PLTS) <output id="o-hz"></output></label>
+          <input type="range" id="hz" min="10" max="25" step="1">
+          <div class="hint">Modul PV bergaransi 30 thn. Baterai LFP (±6.000 siklus) dihitung 15 thn tanpa penggantian: manfaat &amp; O&amp;M ESS berhenti di tahun ke-16.</div></div>
       </div>
     </aside>
 
@@ -359,7 +359,7 @@ footer{padding:30px 0 50px;border-top:1px solid var(--line)}
             <li><b>Geser beban WBP:</b> 60% kapasitas (6,08 MWh) dipakai harian, 40% ditahan untuk backup. 330 hari/thn, efisiensi bolak-balik 90% (biaya isi ulang LWBP sudah dikurangkan), penurunan kapasitas baterai 1,5%/thn.</li>
             <li><b>PLTS:</b> 4.320 modul Trina 720 Wp · 3.110,4 kWp · 1.369 kWh/kWp/thn (PVGIS, desain Solar Design Platform), degradasi 0,5%/thn, 100% dipakai sendiri karena beban siang (±3,5 MW) &gt; produksi PV. Nilai energi = tarif LWBP.</li>
             <li><b>Kerugian padam</b> naik 3%/thn (inflasi). O&amp;M dihitung dari total investasi, naik 3%/thn.</li>
-            <li><b>Tidak termasuk:</b> pajak &amp; penyusutan (tax shield), pembiayaan, nilai sisa PLTS setelah tahun ke-15, biaya klaim kualitas dari pembeli, dan kerusakan VFD/motor akibat padam. Semua ini cenderung <i>menambah</i> nilai proyek.</li>
+            <li><b>Tidak termasuk:</b> pajak &amp; penyusutan (tax shield), pembiayaan, nilai sisa, biaya klaim kualitas dari pembeli, dan kerusakan VFD/motor akibat padam. Semua ini cenderung <i>menambah</i> nilai proyek.</li>
             <li><b>Kenapa tidak PLTS saja?</b> Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</li>
           </ul>
         </details>
@@ -384,9 +384,9 @@ const D={
   infl:.03
 };
 const PRE={
-  kons:{cm:10000, ev:3000000,  rs:30, it:3.5, ce:45e9, pt:20e9, om:1.2, es:2,   dr:11, hz:15},
-  mod: {cm:14000, ev:7000000,  rs:30, it:3.5, ce:45e9, pt:20e9, om:1.0, es:3,   dr:10, hz:15},
-  opt: {cm:18000, ev:12000000, rs:30, it:3.3, ce:45e9, pt:20e9, om:0.8, es:4,   dr:9,  hz:15}
+  kons:{cm:10000, ev:3000000,  rs:30, it:3.5, ce:45e9, pt:20e9, om:1.2, es:2,   dr:11, hz:25},
+  mod: {cm:14000, ev:12000000, rs:30, it:3.5, ce:45e9, pt:20e9, om:1.0, es:3,   dr:10, hz:25},
+  opt: {cm:18000, ev:18000000, rs:30, it:3.3, ce:45e9, pt:20e9, om:0.8, es:4,   dr:9,  hz:25}
 };
 let S={...PRE.mod}, pkg='both';
 
@@ -399,6 +399,7 @@ const fmtN=(v,d=1)=>v.toLocaleString('id-ID',{maximumFractionDigits:d,minimumFra
 const $=id=>document.getElementById(id);
 
 // ---------- model ----------
+const ESS_LIFE=15;
 function model(p, o={}){
   const P={...S,...o};
   const hasE=p!=='pv', hasP=p!=='ess';
@@ -410,13 +411,15 @@ function model(p, o={}){
     const f=Math.pow(1+esc,y-1), fi=Math.pow(1+D.infl,y-1);
     const pv=kwp*D.pv.yld*Math.pow(1-D.pv.deg,y-1)*D.L*f*D.pbjt;
     let wbp=0,dt=0,ws=0;
-    if(hasE){
+    // battery counted for its design life only, no replacement; PV runs the full horizon
+    const essOn=hasE && y<=ESS_LIFE;
+    if(essOn){
       const Ed=D.ess.mwh*1000*D.ess.use*D.ess.days*Math.pow(1-D.ess.fade,y-1);
       wbp=(Ed*D.W-Ed/D.ess.rte*D.L)*f*D.pbjt;
       dt=[0,1].reduce((s,i)=>s+(D.ev[i]*rsH+D.outH[i])*kg[i],0)*P.cm*fi;
       ws=(D.ev[0]+D.ev[1])*P.ev*fi;
     }
-    const om=cap*P.om/100*fi, gross=pv+wbp+dt+ws, net=gross-om;
+    const om=((essOn?capE:0)+capP)*P.om/100*fi, gross=pv+wbp+dt+ws, net=gross-om;
     rows.push({y,pv,wbp,dt,ws,om,gross,net});
     if(pb===null && cum+net>=0) pb=y-1+(-cum)/net;
     cum+=net; flows.push(net);
