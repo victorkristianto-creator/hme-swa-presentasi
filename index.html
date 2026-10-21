@@ -138,17 +138,7 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 .seg{display:inline-flex;background:#ffffff0a;border:1px solid var(--line);border-radius:99px;padding:4px;gap:4px;flex-wrap:wrap}
 .seg button{border:0;background:transparent;border-radius:99px;padding:8px 16px;cursor:pointer;font-size:14px;color:var(--muted);transition:background .25s,color .25s}
 .seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);font-weight:600}
-#flow{flex:1;min-height:0;width:100%}
-#flow .wire-base{fill:none;stroke:#ffffff12;stroke-width:8;stroke-linecap:round}
-#flow .wire{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:2 16;transition:stroke .4s,opacity .4s}
-#flow .wire.go{animation:dash .7s linear infinite}
-#flow .wire.back{animation:dash .7s linear infinite reverse}
-#flow .wire.off{opacity:0}
 @keyframes dash{to{stroke-dashoffset:-18}}
-#flow .node rect{fill:var(--card);stroke:var(--line);stroke-width:2;transition:stroke .4s,fill .4s}
-#flow .node text{fill:var(--ink);font:600 18px var(--sans)}
-#flow .node .sub{fill:var(--muted);font:400 13px var(--sans)}
-#flow .cut{opacity:0;transition:opacity .3s}
 .flowcap{display:flex;gap:14px;align-items:center;min-height:52px}
 .flowcap .dot{width:12px;height:12px;border-radius:50%;flex:none}
 .flowcap p{margin:0;font-size:clamp(15px,2.1vh,19px)}
@@ -331,7 +321,7 @@ body.scroll .ds-tbl{overflow:visible}
 body.scroll .grow{flex-direction:column}
 body.scroll .hex{display:none}
 body.scroll .bars{height:200px;flex:none}
-body.scroll #flow,body.scroll #sld,body.scroll #tl,body.scroll #day{height:auto;flex:none}
+body.scroll #sld,body.scroll #tl,body.scroll #day{height:auto;flex:none}
 body.scroll .lay .imgbox{height:240px;flex:none}
 body.scroll .epc{grid-template-columns:repeat(3,1fr)}
 body.scroll .step:not(:last-child)::after{display:none}
@@ -484,37 +474,25 @@ body.scroll .kv{grid-template-columns:1fr}
   <h4>Asumsi</h4><p>Waktu pemulihan 30 menit per kejadian berdasarkan informasi tim produksi SWA, tidak bergantung pada durasi padam.</p></aside>
 </section>
 
-<!-- 5 SOLUTION FLOW -->
-<section class="slide" data-title="Solusi">
-  <span class="kick rv">Solusi</span>
-  <h2 class="rv" style="--d:1">Baterai sebagai "bendungan listrik" pabrik</h2>
-  <div class="flowwrap rv" style="--d:2">
-    <div class="seg" role="group" aria-label="Mode operasi">
-      <button data-m="normal" aria-pressed="true">① Normal</button>
-      <button data-m="padam" aria-pressed="false">② PLN padam</button>
-      <button data-m="wbp" aria-pressed="false">③ Jam mahal (WBP)</button>
-    </div>
-    <svg id="flow" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagram aliran energi">
-      <path class="wire-base" d="M150 110 H290"/><path class="wire-base" d="M410 110 H545"/><path class="wire-base" d="M665 110 H800"/><path class="wire-base" d="M605 150 V265"/><path class="wire-base" d="M410 305 C500 305 520 200 560 150"/>
-      <path class="wire" id="w1" d="M150 110 H290"/><path class="wire" id="w2" d="M410 110 H545"/><path class="wire" id="w3" d="M665 110 H800"/><path class="wire" id="w4" d="M605 150 V265"/><path class="wire" id="w5" d="M410 305 C500 305 520 200 560 150"/>
-      <g class="node" id="nPLN"><rect x="30" y="70" width="120" height="80" rx="14"/><text x="90" y="105" text-anchor="middle">PLN</text><text class="sub" x="90" y="128" text-anchor="middle">20 kV</text></g>
-      <g class="cut" id="cut"><circle cx="220" cy="110" r="20" fill="#ff5a5a"/><path d="M211 101l18 18M229 101l-18 18" stroke="#fff" stroke-width="4"/></g>
-      <g class="node"><rect x="290" y="70" width="120" height="80" rx="14"/><text x="350" y="105" text-anchor="middle">Trafo</text><text class="sub" x="350" y="128" text-anchor="middle">→ 400 V</text></g>
-      <g class="node" id="nPCS"><rect x="545" y="70" width="120" height="80" rx="14"/><text x="605" y="105" text-anchor="middle">Inverter</text><text class="sub" x="605" y="128" text-anchor="middle">PCS + EMS</text></g>
-      <g class="node" id="nBAT"><rect x="545" y="265" width="120" height="90" rx="14"/><text x="605" y="300" text-anchor="middle">Baterai</text><text class="sub" x="605" y="322" text-anchor="middle">LiFePO₄</text><rect x="565" y="333" width="80" height="10" rx="5" fill="#24375a"/><rect id="socbar" x="565" y="333" width="60" height="10" rx="5" fill="#2fd28a"/></g>
-      <g class="node" id="nPV"><rect x="290" y="265" width="120" height="80" rx="14" style="stroke:#5ab8ff"/><text x="350" y="300" text-anchor="middle">PLTS atap</text><text class="sub" x="350" y="323" text-anchor="middle">opsional</text></g>
-      <g class="node" id="nLOAD"><rect x="800" y="55" width="170" height="110" rx="14"/><text x="885" y="90" text-anchor="middle">Mesin kritis</text><text class="sub" x="885" y="112" text-anchor="middle">ring · winding · kompresor</text>
-        <g transform="translate(885 140)"><g class="spin"><circle r="14" fill="none" stroke="#2fd28a" stroke-width="3"/><path d="M0 -14V14M-14 0H14M-10 -10L10 10M10 -10L-10 10" stroke="#2fd28a" stroke-width="2"/></g></g></g>
-      <text id="flowTag" x="220" y="60" text-anchor="middle" fill="#ff5a5a" font-size="14" font-weight="700" opacity="0">GANGGUAN</text>
-    </svg>
-    <div class="flowcap"><span class="dot" id="capDot"></span><p id="cap"></p></div>
+<!-- 7b SLD MOTION FLOW -->
+<section class="slide" data-title="Diagram detail" id="sldSlide">
+  <span class="kick rv">Solusi · single line diagram Megarevo</span>
+  <h2 class="rv" style="--d:1">Jalur energi, dari PLN sampai mesin kritis</h2>
+  <div class="sldbar rv" style="--d:2">
+    <div class="seg" role="group" aria-label="Pilih pabrik" id="sldSite"><button data-s="sp1" aria-pressed="true">SP1 · Kudus 5</button><button data-s="sp2" aria-pressed="false">SP2 · Jekulo 3</button></div>
+    <div class="seg" role="group" aria-label="Mode aliran" id="sldMode"><button data-v="normal" aria-pressed="true">① Normal</button><button data-v="padam" aria-pressed="false">② PLN padam</button><button data-v="wbp" aria-pressed="false">③ Jam WBP</button><button data-v="kom" aria-pressed="false">④ Kontrol &amp; komunikasi</button></div>
+    <span class="sp"></span>
+    <button class="tbtn" id="sldOrig" data-zoomsrc="assets/sld-sp1.jpg">SLD asli ↗</button>
   </div>
+  <svg id="sld" class="rv" style="--d:3" viewBox="0 0 1000 505" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagram aliran energi detail berdasarkan SLD Megarevo"></svg>
+  <div class="flowcap rv" style="--d:4"><span class="dot" id="sldDot"></span><p id="sldCap" aria-live="polite"></p></div>
   <aside class="tech"><h3>Detail teknis</h3>
-  <h4>① Normal — tarif LWBP</h4><p>PCS beroperasi <i>grid-following</i>. PLN menyuplai beban; baterai diisi pada jam LWBP (22:00–17:00) sampai SoC target.</p>
-  <h4>② PLN padam</h4><p>EMS mendeteksi hilangnya tegangan/frekuensi PLN, memisahkan diri dari jaringan (anti-islanding), lalu PCS beralih ke mode <i>grid-forming</i> dan menyuplai panel beban kritis dari baterai. Saat PLN normal kembali, sistem sinkron ulang dan kembali ke mode jaringan tanpa memutus beban.</p>
-  <p>Waktu transfer &amp; perilaku terhadap beban VFD diverifikasi pada uji pabrik (FAT) dan commissioning.</p>
-  <h4>③ Jam mahal — WBP 17:00–22:00</h4><p>Baterai melepas sebagian energi untuk mengurangi pembelian kWh WBP (peak shaving / load shifting), dengan <b>cadangan SoC minimum</b> yang selalu dijaga untuk backup.</p>
-  <h4>Siap PLTS</h4><p>Inverter hybrid memiliki input PV. Sejak Permen ESDM 2/2024, ekspor PLTS atap tidak lagi mengurangi tagihan — penyimpanan di baterai membuat energi surya terpakai 100% di pabrik.</p></aside>
+  <h4>Sumber</h4><p>SLD Megarevo "SP1-2MW@2.21MWh ESS + 4 × PMAE0630" dan "SP2-3.5MW@3.87MWh ESS + 7 × PMAE0630" (V1, 11 Sep 2026). Diagram di slide ini adalah penyederhanaan animasi; jumlah blok dan sambungan mengikuti SLD.</p>
+  <h4>Komponen per blok</h4><ul><li><b>PMAE0630</b> — PCS modular dua arah (AC↔DC), grid port ke bus 400 V.</li><li><b>Baterai + BMS</b> — terhubung ke bus DC bersama (BAT input).</li><li><b>MPS0500TS</b> — inverter hybrid/microgrid: PV input (via combiner box), BAT input, dan <b>load port</b> ke panel distribusi AC beban kritis.</li></ul>
+  <h4>Jalur daya</h4><ul><li>Normal: PLN → trafo → bus 400 V → PMAE → bus DC → MPS → panel beban kritis; baterai diisi dari bus DC.</li><li>PLN padam: PMAE berhenti, baterai menyuplai bus DC; beban tetap disuplai MPS dari load port.</li><li>SP2 terbagi 2 grup: 4 blok (2 MW / 2,21 MWh) dan 3 blok (1,5 MW / 1,65 MWh), masing-masing dengan panel distribusi AC &amp; EMS-01 sendiri, pada satu bus 400 V bersama.</li></ul>
+  <h4>Komunikasi</h4><ul><li>EMS-01 ↔ PMAE &amp; MPS: TCP/IP via network switch, ke gateway &amp; monitoring platform.</li><li>BMS ↔ PCS: CAN. Antar MPS paralel: CAN.</li></ul>
+  <img src="assets/sld-sp1.jpg" data-zoom alt="SLD SP1"><p class="note">SP1 — klik untuk memperbesar</p><img src="assets/sld-sp2.jpg" data-zoom alt="SLD SP2"><p class="note">SP2 — klik untuk memperbesar</p>
+  <p class="note">Waktu transfer &amp; perilaku saat PLN padam diverifikasi pada FAT dan commissioning.</p></aside>
 </section>
 
 <!-- 6 CRITICAL LOADS -->
@@ -573,27 +551,6 @@ body.scroll .kv{grid-template-columns:1fr}
   <h4>Arsitektur</h4><ul><li>MPS: port PV, port baterai, port grid dan <b>load port</b> ke panel distribusi beban kritis.</li><li>PMAE: terhubung ke bus 400 V untuk manajemen beban (peak shaving).</li><li>Komunikasi BMS–PCS via CAN, paralel antar inverter via CAN, EMS-01 &amp; monitoring via TCP/IP.</li></ul>
   <h4>Single line diagram</h4><img src="assets/sld-sp1.jpg" data-zoom alt="SLD SP1"><p class="note">SP1 — klik untuk memperbesar</p><img src="assets/sld-sp2.jpg" data-zoom alt="SLD SP2"><p class="note">SP2 — klik untuk memperbesar</p>
   <p class="note">Sizing final (jumlah rak baterai, rasio daya/energi) akan divalidasi dengan profil beban 15 menit hasil survei.</p></aside>
-</section>
-
-<!-- 7b SLD MOTION FLOW -->
-<section class="slide" data-title="Diagram detail" id="sldSlide">
-  <span class="kick rv">Single line diagram · Megarevo</span>
-  <h2 class="rv" style="--d:1">Jalur energi, dari PLN sampai mesin kritis</h2>
-  <div class="sldbar rv" style="--d:2">
-    <div class="seg" role="group" aria-label="Pilih pabrik" id="sldSite"><button data-s="sp1" aria-pressed="true">SP1 · Kudus 5</button><button data-s="sp2" aria-pressed="false">SP2 · Jekulo 3</button></div>
-    <div class="seg" role="group" aria-label="Mode aliran" id="sldMode"><button data-v="normal" aria-pressed="true">① Normal</button><button data-v="padam" aria-pressed="false">② PLN padam</button><button data-v="wbp" aria-pressed="false">③ Jam WBP</button><button data-v="kom" aria-pressed="false">④ Kontrol &amp; komunikasi</button></div>
-    <span class="sp"></span>
-    <button class="tbtn" id="sldOrig" data-zoomsrc="assets/sld-sp1.jpg">SLD asli ↗</button>
-  </div>
-  <svg id="sld" class="rv" style="--d:3" viewBox="0 0 1000 505" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagram aliran energi detail berdasarkan SLD Megarevo"></svg>
-  <div class="flowcap rv" style="--d:4"><span class="dot" id="sldDot"></span><p id="sldCap" aria-live="polite"></p></div>
-  <aside class="tech"><h3>Detail teknis</h3>
-  <h4>Sumber</h4><p>SLD Megarevo "SP1-2MW@2.21MWh ESS + 4 × PMAE0630" dan "SP2-3.5MW@3.87MWh ESS + 7 × PMAE0630" (V1, 11 Sep 2026). Diagram di slide ini adalah penyederhanaan animasi; jumlah blok dan sambungan mengikuti SLD.</p>
-  <h4>Komponen per blok</h4><ul><li><b>PMAE0630</b> — PCS modular dua arah (AC↔DC), grid port ke bus 400 V.</li><li><b>Baterai + BMS</b> — terhubung ke bus DC bersama (BAT input).</li><li><b>MPS0500TS</b> — inverter hybrid/microgrid: PV input (via combiner box), BAT input, dan <b>load port</b> ke panel distribusi AC beban kritis.</li></ul>
-  <h4>Jalur daya</h4><ul><li>Normal: PLN → trafo → bus 400 V → PMAE → bus DC → MPS → panel beban kritis; baterai diisi dari bus DC.</li><li>PLN padam: PMAE berhenti, baterai menyuplai bus DC; beban tetap disuplai MPS dari load port.</li><li>SP2 terbagi 2 grup: 4 blok (2 MW / 2,21 MWh) dan 3 blok (1,5 MW / 1,65 MWh), masing-masing dengan panel distribusi AC &amp; EMS-01 sendiri, pada satu bus 400 V bersama.</li></ul>
-  <h4>Komunikasi</h4><ul><li>EMS-01 ↔ PMAE &amp; MPS: TCP/IP via network switch, ke gateway &amp; monitoring platform.</li><li>BMS ↔ PCS: CAN. Antar MPS paralel: CAN.</li></ul>
-  <img src="assets/sld-sp1.jpg" data-zoom alt="SLD SP1"><p class="note">SP1 — klik untuk memperbesar</p><img src="assets/sld-sp2.jpg" data-zoom alt="SLD SP2"><p class="note">SP2 — klik untuk memperbesar</p>
-  <p class="note">Waktu transfer &amp; perilaku saat PLN padam diverifikasi pada FAT dan commissioning.</p></aside>
 </section>
 
 <!-- 8 COVERAGE -->
@@ -887,31 +844,6 @@ $('#bars').innerHTML = hrs.map((v, h) => `<div class="b ${v >= 19 ? 'hot' : ''}"
 $('#hours').innerHTML = hrs.map((_, h) => `<span>${h % 3 === 0 ? String(h).padStart(2, '0') : ''}</span>`).join('');
 hooks[2] = s => { $$('.b', s).forEach(b => { b.style.height = '0'; requestAnimationFrame(() => requestAnimationFrame(() => b.style.height = b.dataset.h)); }); };
 
-/* ---------- S5 energy flow ---------- */
-const C = { grid: '#f5c84c', bat: '#2fd28a', fault: '#ff5a5a', pv: '#5ab8ff' };
-const MODES = {
-  normal: { w: { w1: ['go', C.grid], w2: ['go', C.grid], w3: ['go', C.grid], w4: ['go', C.bat], w5: ['go', C.pv] }, pln: C.grid, soc: 85, cut: 0,
-    cap: 'PLN menyuplai mesin dan mengisi baterai di jam tarif murah (LWBP).', dot: C.grid },
-  padam: { w: { w1: ['off'], w2: ['off'], w3: ['go', C.bat], w4: ['back', C.bat], w5: ['go', C.pv] }, pln: C.fault, soc: 60, cut: 1,
-    cap: 'PLN padam → baterai otomatis mengambil alih. Mesin kritis tetap berputar.', dot: C.bat },
-  wbp: { w: { w1: ['go', C.grid], w2: ['go', C.grid], w3: ['go', C.bat], w4: ['back', C.bat], w5: ['go', C.pv] }, pln: C.grid, soc: 55, cut: 0,
-    cap: 'Jam 17:00–22:00 (WBP): baterai ikut menyuplai, pembelian listrik mahal berkurang.', dot: '#f7931e' }
-};
-let flowTimer = null, flowIdx = 0; const order = ['normal', 'padam', 'wbp'];
-function setMode(m) {
-  const M = MODES[m];
-  Object.entries(M.w).forEach(([id, [st, col]]) => { const p = $('#' + id); p.classList.remove('go', 'back', 'off'); p.classList.add(st); if (col) p.style.stroke = col; });
-  $('#nPLN rect').style.stroke = M.pln; $('#cut').style.opacity = M.cut; $('#flowTag').style.opacity = M.cut;
-  $('#nBAT rect').style.stroke = m === 'normal' ? '#24375a' : C.bat; $('#nLOAD rect').style.stroke = m === 'padam' ? C.bat : '#24375a';
-  $('#socbar').setAttribute('width', Math.round(M.soc / 100 * 80));
-  $('#cap').textContent = M.cap; $('#capDot').style.background = M.dot;
-  $$('.seg button[data-m]').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === m));
-  flowIdx = order.indexOf(m);
-}
-$$('.seg button[data-m]').forEach(b => b.onclick = () => { clearInterval(flowTimer); flowTimer = null; setMode(b.dataset.m); });
-hooks[4] = () => { setMode('normal'); clearInterval(flowTimer); if (!reduce) flowTimer = setInterval(() => { if (cur !== 4) { clearInterval(flowTimer); return; } setMode(order[(flowIdx + 1) % 3]); }, 4500); };
-setMode('normal');
-
 /* ---------- S7 config ---------- */
 const CFG = { sp1: { n: 4, pow: '2,0', cap: '2,21', load: '0,90', time: '±2,1' }, sp2: { n: 7, pow: '3,5', cap: '3,87', load: '1,68', time: '±2,0' } };
 function setCfg(k) {
@@ -1029,7 +961,7 @@ const LIM = { sp1: 126, sp2: 118 };
   });
   $('#tl').innerHTML = g;
 })();
-hooks[8] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'; c.style.opacity = 0; c.style.transform = 'scale(.2)';
+hooks[7] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'; c.style.opacity = 0; c.style.transform = 'scale(.2)';
   requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transition = ''; c.style.transitionDelay = (reduce ? 0 : 300 + c.dataset.d * 3) + 'ms'; c.style.opacity = 1; c.style.transform = 'none'; })); }); };
 
 /* ---------- S9 day profile ---------- */
@@ -1175,7 +1107,7 @@ hooks[8] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'
   });
   window.__daySim = sim; sim();
 })();
-hooks[9] = s => { const p = $('#day .soc'); p.style.transition = 'none'; p.style.strokeDashoffset = 2000; requestAnimationFrame(() => requestAnimationFrame(() => { p.style.transition = ''; p.style.strokeDashoffset = ''; })); window.__daySim(true); };
+hooks[8] = s => { const p = $('#day .soc'); p.style.transition = 'none'; p.style.strokeDashoffset = 2000; requestAnimationFrame(() => requestAnimationFrame(() => { p.style.transition = ''; p.style.strokeDashoffset = ''; })); window.__daySim(true); };
 
 /* ---------- S10 layout ---------- */
 const LAY = { sp1: ['assets/layout-sp1.jpg', '11,1 × 5,0 m', '14,0 × 7,9 m'], sp2: ['assets/layout-sp2.jpg', '11,0 × 7,0 m', '15,1 × 10,5 m'] };
