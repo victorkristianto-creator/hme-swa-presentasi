@@ -390,9 +390,6 @@ table.sm-cft{font-size:clamp(11px,1.45vh,13px)}
 .sm-comp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .sm-comp div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:11px;color:var(--muted)}
 .sm-comp b{display:block;font:600 clamp(12px,1.6vh,15px)/1.2 var(--mono);margin-bottom:2px;white-space:nowrap}
-.sm-gauge{margin-top:10px;position:relative;height:10px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line)}
-.sm-gauge .m{position:absolute;top:-6px;width:3px;height:20px;border-radius:2px;transition:left .6s var(--ease)}
-.sm-gauge .z{position:absolute;inset:0 0 0 auto;border-radius:0 99px 99px 0;background:repeating-linear-gradient(45deg,#2fd28a40 0 6px,#2fd28a18 6px 12px);transition:width .6s var(--ease)}
 .sm-fld{margin:12px 0}
 .sm-fld label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:6px}
 .sm-fld label output{font:600 13px var(--mono);color:var(--ink);white-space:nowrap}
@@ -1090,20 +1087,11 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <div class="col rv" style="--d:3">
       <div class="card"><div class="lbl" style="margin:0 0 6px">Opportunity loss bila proyek ditunda</div>
         <table class="sm-t" id="smDelay"><thead><tr><th>Mulai operasi</th><th>Potensi hilang</th><th>Padam</th><th>Kerugian padam</th></tr></thead><tbody></tbody></table></div>
-      <div class="card"><div class="lbl" style="margin:0 0 6px">BEP kerugian padam · ESS saja ≤ 8 tahun</div>
-        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div><div class="num" style="font-size:clamp(20px,3.2vh,30px)" id="smFNow">—</div><div class="lbl">Asumsi kini / kejadian / pabrik</div></div>
-          <div style="text-align:right"><div class="num c-hme" style="font-size:clamp(20px,3.2vh,30px)" id="smFTh">—</div><div class="lbl">Ambang yang dibutuhkan</div></div>
-        </div>
-        <div class="sm-gauge"><div class="z" id="smGz"></div><div class="m" id="smGNow" style="background:var(--ink)"></div><div class="m" id="smGTh" style="background:var(--hme)"></div></div>
-        <p class="lbl" id="smFMsg" style="margin-top:12px"></p>
-      </div>
     </div>
   </div>
   <aside class="tech"><h3>Detail teknis</h3>
     <h4>Opportunity loss</h4><p>Peralatan tetap harus dibeli, cepat atau lambat. Yang hilang saat menunda adalah penghematan bulan-bulan itu dan gangguan yang tetap terjadi. Mesin spinning jalan 24/7, jadi jam produksi yang hilang tidak bisa dikejar.</p>
-    <h4>BEP kerugian padam</h4><p>Kerugian per kejadian yang membuat <b>ESS saja</b> (tanpa PLTS) balik modal ≤ 8 tahun. Validasi dengan data internal SWA: margin per kg, waste, lembur, klaim kualitas, keterlambatan kirim.</p>
-    <h4>Kenapa tidak PLTS saja?</h4><p>Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</p></aside>
+        <h4>Kenapa tidak PLTS saja?</h4><p>Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</p></aside>
 </section>
 
 <!-- 15-17 DATASHEETS -->
@@ -1653,14 +1641,6 @@ setLay('sp1');
     q('smRf2').innerHTML = `Satu kali padam di satu pabrik ≈ <b>${rp(ev)}</b> (restart ${S.rs} menit + waste). Dengan ±${Math.round(D.allEv)} gangguan per tahun, SWA membayar "premi" ini tanpa perlindungan apa pun.`;
     const sq = e1.dt + e1.ws, pm = D.allEv / 12;
     q('smDelay').querySelector('tbody').innerHTML = [0, 3, 6, 12].map(mo => `<tr class="${mo ? 'hl' : ''}"><td>${mo ? 'Tertunda ' + mo + ' bulan' : 'Sesuai jadwal'}</td><td>${mo ? rp(y1.gross * mo / 12) : '—'}</td><td>${mo ? '±' + Math.round(pm * mo) + '×' : '—'}</td><td>${mo ? rp(sq * mo / 12) : '—'}</td></tr>`).join('');
-    const pbOf = e => { const x = model('ess', { ev: e }); return x.pb === null ? 99 : x.pb; };
-    let lo = 0, hi = 500e6; for (let i = 0; i < 50; i++) { const mid = (lo + hi) / 2; pbOf(mid) > 8 ? lo = mid : hi = mid; }
-    const th = perEvent({ ev: hi }), gm = Math.max(ev, th) * 1.3;
-    q('smFNow').textContent = rp(ev); q('smFTh').textContent = rp(th);
-    q('smGNow').style.left = (ev / gm * 100) + '%'; q('smGTh').style.left = (th / gm * 100) + '%'; q('smGz').style.width = (100 - th / gm * 100) + '%';
-    const pn = { kons: 'konservatif', mod: 'moderat', opt: 'optimis' }[preset] || 'kustom';
-    q('smFMsg').innerHTML = ev >= th ? `Dengan asumsi ini, <b style="color:var(--ink)">ESS saja sudah balik modal ≤ 8 tahun</b>.`
-      : `Asumsi ${pn} baru ${Math.round(ev / th * 100)}% dari ambang. Pertanyaan kunci untuk SWA: <b style="color:var(--ink)">apakah satu kali padam merugikan lebih dari ${rp(th)}?</b> Jika belum, PLTS menutup selisihnya dari penghematan harian.`;
   }
 
   /* slide 3/4: year-by-year cash flow + worked method */
