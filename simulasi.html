@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulasi Investasi ESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Fira+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1220; --bg2:#0f1a2e; --card:#132139; --card2:#18294a; --line:#24375a;
+  --ink:#eef3fb; --muted:#94a6c4; --dim:#6a7fa3;
+  --hme:#f7931e; --hme2:#ffb547; --bat:#2fd28a; --fault:#ff6b6b; --grid:#f5c84c;
+  /* chart categorical (validated on #132139): PLTS, WBP, waste, downtime */
+  --s1:#3f8fe0; --s2:#b98d10; --s3:#9b6cf0; --s4:#17a066;
+  --sans:'Fira Sans',system-ui,'Segoe UI',sans-serif; --mono:'Fira Code',ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+  background:radial-gradient(1200px 700px at 85% -10%,#1b2d52 0%,transparent 60%),radial-gradient(900px 600px at -10% 110%,#2a1c0c 0%,transparent 55%),var(--bg);background-attachment:fixed}
+button,input{font:inherit;color:inherit}
+a{color:var(--hme2)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.kick{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--hme);display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.kick::before{content:"";width:28px;height:2px;background:var(--hme)}
+h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.1}
+h1{font-size:clamp(30px,4.6vw,54px);font-weight:800;max-width:22ch;text-wrap:balance}
+h2{font-size:clamp(22px,2.6vw,32px);font-weight:800;text-wrap:balance}
+h3{font-size:15px;font-weight:600}
+p{line-height:1.55}
+.lead{font-size:clamp(15px,1.5vw,19px);color:var(--muted);max-width:64ch;margin:14px 0 0}
+.lead b{color:var(--ink);font-weight:600}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:clamp(16px,2vw,24px)}
+.num{font:600 clamp(26px,3.2vw,40px)/1 var(--mono);letter-spacing:-.03em;white-space:nowrap}
+.num small{font-size:.48em;color:var(--muted);margin-left:4px;letter-spacing:0}
+.lbl{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.4}
+.note{font-size:12px;color:var(--dim);line-height:1.5}
+.c-hme{color:var(--hme)}.c-bat{color:var(--bat)}.c-fault{color:var(--fault)}
+
+/* top */
+header.top{position:sticky;top:0;z-index:10;background:#0a1220d9;backdrop-filter:blur(10px);border-bottom:1px solid #24375a80}
+header.top .wrap{display:flex;align-items:center;gap:12px;height:56px}
+header.top img{width:28px;height:28px}
+header.top .brand{font:600 12px var(--mono);letter-spacing:.08em;color:var(--muted)}
+header.top .sp{flex:1}
+.tbtn{display:inline-flex;align-items:center;gap:8px;background:#ffffff0d;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:13px;cursor:pointer;text-decoration:none;color:var(--ink);transition:background .2s}
+.tbtn:hover{background:#ffffff1a}
+
+/* hero */
+.hero{padding:clamp(36px,6vw,72px) 0 28px}
+.ticker{margin-top:28px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px}
+.ticker .card{position:relative;overflow:hidden}
+.ticker .big{font:600 clamp(30px,4.4vw,54px)/1 var(--mono);letter-spacing:-.03em;color:var(--fault);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--fault);margin-right:8px;animation:pl 1.6s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 #ff6b6b99}70%{box-shadow:0 0 0 10px #ff6b6b00}100%{box-shadow:0 0 0 0 #ff6b6b00}}
+
+/* layout */
+.main{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;padding-bottom:60px}
+aside.ctrl{position:sticky;top:72px;max-height:calc(100vh - 88px);overflow:auto;scrollbar-width:thin}
+.sec{margin-top:28px}
+.sec:first-child{margin-top:0}
+
+/* packages */
+.pkgs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pkg{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:10px;position:relative;background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:18px;transition:border-color .25s,transform .25s var(--ease),box-shadow .25s}
+.pkg:hover{transform:translateY(-2px)}
+.pkg:focus-visible{outline:2px solid var(--hme2);outline-offset:3px}
+.pkg[aria-pressed=true]{border-color:var(--hme);box-shadow:0 0 0 1px var(--hme),0 18px 40px -20px #f7931e66}
+.pkg.sq{cursor:default}
+.pkg.sq:hover{transform:none}
+.pkg .tag{position:absolute;top:-11px;left:16px;font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--hme);color:#1a0f00;padding:6px 9px;border-radius:99px}
+.pkg .name{font-weight:700;font-size:17px}
+.pkg .desc{font-size:13px;color:var(--muted);line-height:1.45;min-height:3.9em}
+.pkg dl{margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px}
+.pkg dt{color:var(--muted)}
+.pkg dd{margin:0;text-align:right;font-family:var(--mono);font-weight:600}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.bep{margin-top:14px}
+.bep .track{position:relative;height:14px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line);overflow:hidden}
+.bep .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#ff6b6b55,var(--hme));border-radius:99px;transition:width .8s var(--ease)}
+.bep .after{position:absolute;inset:0 0 0 auto;background:repeating-linear-gradient(45deg,#2fd28a33 0 6px,#2fd28a14 6px 12px);transition:width .8s var(--ease)}
+.bep .scale{display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--dim);margin-top:6px}
+
+/* chart */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:2px 0 10px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.legend i.dash{background:repeating-linear-gradient(90deg,currentColor 0 4px,transparent 4px 7px)!important;height:2px}
+.tip{position:absolute;pointer-events:none;background:#0c1628f2;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5;min-width:170px;opacity:0;transition:opacity .15s;z-index:3;box-shadow:0 10px 30px -10px #000}
+.tip b{font-family:var(--mono)}
+.tip .row{display:flex;justify-content:space-between;gap:14px}
+.tip .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+
+/* breakdown */
+.brk{display:flex;flex-direction:column;gap:12px}
+.brk .r{display:grid;grid-template-columns:200px 1fr 92px;gap:12px;align-items:center;font-size:14px}
+.brk .bar{height:14px;border-radius:0 4px 4px 0;transition:width .7s var(--ease);min-width:2px}
+.brk .v{font:600 13px var(--mono);text-align:right}
+.brk .k{display:flex;align-items:center;gap:8px}
+.brk .k i{width:10px;height:10px;border-radius:3px;flex:none}
+.reframe{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+
+/* table */
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+.t th,.t td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:right}
+.t th:first-child,.t td:first-child{text-align:left}
+.t th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.t td{font-family:var(--mono)}
+.t td:first-child{font-family:var(--sans)}
+.t tr.hl td{color:var(--fault)}
+
+/* controls */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:#ffffff0a;border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 4px;font-size:13px;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--card2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.seg button:focus-visible{outline:2px solid var(--hme2)}
+.grp{margin-top:20px}
+.grp h3{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.fld{margin:12px 0}
+.fld label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.fld label output{font:600 13px var(--mono);color:var(--ink);white-space:nowrap}
+.fld .hint{font-size:11px;color:var(--dim);margin-top:4px;line-height:1.4}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--hme) var(--p,50%),var(--line) var(--p,50%));outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--ink);border:3px solid var(--hme);box-shadow:0 2px 6px #0008}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--hme)}
+input[type=range]:focus-visible{outline:2px solid var(--hme2);outline-offset:6px}
+
+.finder{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gauge{margin-top:12px;position:relative;height:10px;border-radius:99px;background:#ffffff0f;border:1px solid var(--line)}
+.gauge .m{position:absolute;top:-6px;width:3px;height:20px;border-radius:2px}
+.gauge .z{position:absolute;inset:0 0 0 auto;border-radius:0 99px 99px 0;background:repeating-linear-gradient(45deg,#2fd28a40 0 6px,#2fd28a18 6px 12px)}
+.callout{border-left:3px solid var(--hme);padding:12px 16px;background:#f7931e0f;border-radius:0 12px 12px 0;font-size:14px;line-height:1.55;color:#d8e2f2}
+.callout b{color:var(--ink)}
+details.asm summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px}
+details.asm summary::before{content:"+";font-family:var(--mono);color:var(--hme);width:14px}
+details.asm[open] summary::before{content:"–"}
+details.asm ul{margin:12px 0 0;padding-left:18px;font-size:13px;color:#cdd8ea;line-height:1.6}
+footer{padding:30px 0 50px;border-top:1px solid var(--line)}
+
+@media (max-width:1060px){
+  .main{grid-template-columns:1fr}
+  aside.ctrl{position:static;max-height:none}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .ticker,.pkgs,.reframe,.finder{grid-template-columns:1fr}
+  .brk .r{grid-template-columns:1fr 80px}
+  .brk .r .bar{grid-column:1/-1;grid-row:2}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <img src="assets/hme-logo.png" alt="HME">
+    <span class="brand">HME × SWA · SIMULASI INVESTASI</span>
+    <span class="sp"></span>
+    <a class="tbtn" href="index.html">← Kembali ke presentasi</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="kick">Simulasi BEP · Saving · NPV · Opportunity loss</p>
+    <h1>Pertanyaannya bukan "berapa biayanya", tapi <span class="c-fault">berapa yang hilang setiap hari kita menunda.</span></h1>
+    <p class="lead">Semua angka dihitung dari <b>data SWA sendiri</b>: 197 gangguan PLN tercatat (Jan 2025 – Jun 2026), tagihan PLN Mei 2026 kedua pabrik, dan hasil simulasi atap. Geser asumsi di panel kiri, dan semua hasil langsung dihitung ulang.</p>
+
+    <div class="ticker">
+      <div class="card">
+        <div class="lbl" style="margin:0 0 10px"><span class="pulse"></span>Potensi yang hilang sejak halaman ini dibuka</div>
+        <div class="big" id="tick">Rp 0</div>
+        <div class="lbl" id="tickNote">—</div>
+      </div>
+      <div class="card">
+        <div class="num c-fault" id="tMonth">—</div>
+        <div class="lbl">Hilang <b style="color:var(--ink)">setiap bulan</b> proyek ditunda</div>
+      </div>
+      <div class="card">
+        <div class="num c-fault" id="tLife">—</div>
+        <div class="lbl" id="tLifeLbl">Total potensi yang tidak diambil selama 15 tahun</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+    <!-- ============ CONTROLS ============ -->
+    <aside class="ctrl card" aria-label="Asumsi simulasi">
+      <h3 style="font-size:16px">Asumsi</h3>
+      <p class="note" style="margin:4px 0 12px">Pilih skenario, lalu sesuaikan dengan angka internal SWA.</p>
+      <div class="seg" role="group" aria-label="Skenario">
+        <button data-preset="kons" aria-pressed="false">Konservatif</button>
+        <button data-preset="mod" aria-pressed="true">Moderat</button>
+        <button data-preset="opt" aria-pressed="false">Optimis</button>
+      </div>
+
+      <div class="grp">
+        <h3>Kerugian saat padam</h3>
+        <div class="fld"><label for="cm">Margin kontribusi per kg benang <output id="o-cm"></output></label>
+          <input type="range" id="cm" min="6000" max="25000" step="500">
+          <div class="hint">Harga jual − bahan baku − energi variabel. Yang benar-benar hilang saat mesin diam.</div></div>
+        <div class="fld"><label for="ev">Biaya langsung per kejadian per pabrik <output id="o-ev"></output></label>
+          <input type="range" id="ev" min="0" max="30000000" step="500000">
+          <div class="hint">Waste benang &amp; roving, sambung ulang, lembur operator, lot turun grade.</div></div>
+        <div class="fld"><label for="rs">Waktu restart mesin <output id="o-rs"></output></label>
+          <input type="range" id="rs" min="10" max="60" step="5"></div>
+        <div class="fld"><label for="it">Intensitas energi <output id="o-it"></output></label>
+          <input type="range" id="it" min="2.5" max="5" step="0.1">
+          <div class="hint">Dipakai untuk menaksir produksi: kWh PLN ÷ kWh/kg → <span id="kgh" class="mono"></span></div></div>
+      </div>
+
+      <div class="grp">
+        <h3>Investasi</h3>
+        <div class="fld"><label for="ce">Harga ESS Megarevo (2 pabrik) <output id="o-ce"></output></label>
+          <input type="range" id="ce" min="25131457771" max="45131457771" step="250000000">
+          <div class="hint">Default = harga penawaran Okt 2026 (SP1 2 MW/2,21 MWh + SP2 3,5 MW/3,87 MWh).</div></div>
+        <div class="fld"><label for="pc">Biaya PLTS atap per kWp <output id="o-pc"></output></label>
+          <input type="range" id="pc" min="5000000" max="11000000" step="250000">
+          <div class="hint">Modul + mounting + kabel + pasang. Inverter PV sudah termasuk di MPS (input MPPT).</div></div>
+        <div class="fld"><label for="om">Biaya O&amp;M per tahun <output id="o-om"></output></label>
+          <input type="range" id="om" min="0.5" max="2.5" step="0.1"></div>
+      </div>
+
+      <div class="grp">
+        <h3>Finansial</h3>
+        <div class="fld"><label for="es">Kenaikan tarif PLN per tahun <output id="o-es"></output></label>
+          <input type="range" id="es" min="0" max="6" step="0.5">
+          <div class="hint">Tarif I-3 ditahan sejak 2023. Rata-rata historis jangka panjang ±3–5%/thn.</div></div>
+        <div class="fld"><label for="dr">Tingkat diskonto (WACC) <output id="o-dr"></output></label>
+          <input type="range" id="dr" min="6" max="14" step="0.5"></div>
+        <div class="fld"><label for="hz">Umur analisa <output id="o-hz"></output></label>
+          <input type="range" id="hz" min="8" max="15" step="1">
+          <div class="hint">Dibatasi 15 thn = umur desain baterai LFP (±6.000 siklus). Modul PV sendiri 25+ thn.</div></div>
+      </div>
+    </aside>
+
+    <!-- ============ RESULTS ============ -->
+    <div>
+      <section class="sec">
+        <p class="kick">01 · Pilih paket</p>
+        <div class="pkgs" id="pkgs">
+          <div class="pkg sq" aria-disabled="true">
+            <div class="name">Tetap seperti sekarang</div>
+            <div class="desc">Tanpa investasi. Setiap gangguan PLN tetap berarti mesin berhenti dan restart ±30 menit.</div>
+            <dl>
+              <dt>Investasi</dt><dd>Rp 0</dd>
+              <dt>Padam/tahun</dt><dd>±131×</dd>
+              <dt>Kerugian/tahun</dt><dd class="c-fault" id="sqLoss">—</dd>
+              <dt>Produksi hilang</dt><dd class="c-fault" id="sqHours">—</dd>
+            </dl>
+          </div>
+          <button class="pkg" data-pkg="ess" aria-pressed="false">
+            <div class="name">ESS Megarevo</div>
+            <div class="desc">Baterai 6,08 MWh + PCS hybrid. Mesin kritis tetap jalan saat padam, plus geser beban WBP.</div>
+            <dl>
+              <dt>Investasi</dt><dd id="p-ess-cap">—</dd>
+              <dt>Saving thn-1</dt><dd id="p-ess-sav">—</dd>
+              <dt>Payback</dt><dd id="p-ess-pb">—</dd>
+              <dt>NPV</dt><dd id="p-ess-npv">—</dd>
+            </dl>
+          </button>
+          <button class="pkg" data-pkg="both" aria-pressed="true">
+            <span class="tag">Rekomendasi</span>
+            <div class="name">ESS + PLTS atap 2,5 MWp</div>
+            <div class="desc">Matahari memberi penghematan harian, baterai menjaga produksi. Satu inverter hybrid untuk keduanya.</div>
+            <dl>
+              <dt>Investasi</dt><dd id="p-both-cap">—</dd>
+              <dt>Saving thn-1</dt><dd id="p-both-sav">—</dd>
+              <dt>Payback</dt><dd id="p-both-pb">—</dd>
+              <dt>NPV</dt><dd id="p-both-npv">—</dd>
+            </dl>
+          </button>
+        </div>
+      </section>
+
+      <section class="sec">
+        <p class="kick">02 · Hasil paket terpilih</p>
+        <div class="kpis">
+          <div class="card"><div class="num c-hme" id="kPb">—</div><div class="lbl">Titik balik modal (BEP)</div></div>
+          <div class="card"><div class="num" id="kNpv">—</div><div class="lbl" id="kNpvL">NPV</div></div>
+          <div class="card"><div class="num" id="kIrr">—</div><div class="lbl">IRR proyek</div></div>
+          <div class="card"><div class="num c-bat" id="kTot">—</div><div class="lbl" id="kTotL">Total saving bersih</div></div>
+        </div>
+        <div class="card bep">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px">
+            <span>Masa modal kembali <span class="muted">→</span> <b class="c-bat">masa untung bersih</b></span>
+            <span class="mono muted" id="bepTxt"></span>
+          </div>
+          <div class="track" style="margin-top:12px"><div class="fill" id="bepFill"></div><div class="after" id="bepAfter"></div></div>
+          <div class="scale" id="bepScale"></div>
+        </div>
+      </section>
+
+      <section class="sec card">
+        <p class="kick">03 · Arus kas kumulatif</p>
+        <h2>Kapan investasi berubah jadi untung</h2>
+        <p class="note" style="margin:6px 0 12px">Posisi kas dibanding tidak berinvestasi. Titik potong garis nol = BEP.</p>
+        <div class="legend" id="lg1"></div>
+        <div class="chart" id="ch1"><div class="tip" id="tip1"></div></div>
+      </section>
+
+      <section class="sec card">
+        <p class="kick">04 · Sumber penghematan · tahun pertama</p>
+        <h2 id="brkTitle">Dari mana uangnya datang</h2>
+        <div class="brk" id="brk" style="margin-top:18px"></div>
+        <div class="reframe">
+          <div class="callout" id="rf1"></div>
+          <div class="callout" id="rf2"></div>
+        </div>
+      </section>
+
+      <section class="sec card">
+        <p class="kick">05 · Opportunity loss</p>
+        <h2>Harga dari menunda</h2>
+        <p class="note" style="margin:6px 0 14px">Peralatan tetap harus dibeli, cepat atau lambat. Yang hilang adalah bulan-bulan penghematan dan gangguan yang tetap terjadi selama menunggu. Mesin spinning jalan 24/7, jadi jam produksi yang hilang tidak bisa dikejar.</p>
+        <table class="t" id="delay">
+          <thead><tr><th>Mulai operasi</th><th>Potensi hilang</th><th>Padam tak terlindungi</th><th>Kerugian padam ditanggung</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="sec card">
+        <p class="kick">06 · BEP kerugian padam</p>
+        <h2>Berapa sebenarnya kerugian SWA per kejadian padam?</h2>
+        <p class="note" style="margin:6px 0 14px">Angka ini hanya SWA yang tahu. Ambang di bawah menunjukkan kerugian per kejadian yang membuat <b style="color:var(--ink)">ESS saja</b> balik modal dalam periode tertentu, di luar manfaat PLTS.</p>
+        <div class="finder">
+          <div class="card" style="background:var(--bg2)">
+            <div class="lbl" style="margin:0 0 8px">Asumsi saat ini · per kejadian, per pabrik</div>
+            <div class="num" id="fNow">—</div>
+            <div class="lbl" id="fNowD"></div>
+          </div>
+          <div class="card" style="background:var(--bg2)">
+            <div class="lbl" style="margin:0 0 8px">Ambang agar ESS saja BEP ≤ <span id="fYrs">8</span> tahun</div>
+            <div class="num c-hme" id="fTh">—</div>
+            <div class="lbl" id="fThD"></div>
+          </div>
+        </div>
+        <div class="gauge" id="gauge"><div class="z" id="gz"></div><div class="m" id="gNow" style="background:var(--ink)"></div><div class="m" id="gTh" style="background:var(--hme)"></div></div>
+        <div class="scale bep" style="display:flex;justify-content:space-between;font:500 11px var(--mono);color:var(--dim);margin-top:8px"><span>Rp 0</span><span id="gMax"></span></div>
+        <div class="callout" style="margin-top:16px" id="fMsg"></div>
+      </section>
+
+      <section class="sec card">
+        <details class="asm">
+          <summary>Asumsi &amp; sumber data (transparan)</summary>
+          <ul>
+            <li><b>Gangguan:</b> SP1 116 &amp; SP2 81 kejadian (18 bulan). Tertutup penuh oleh baterai (≤120 menit): SP1 110 kejadian / 734 menit, SP2 75 kejadian / 1.266 menit. Disetahunkan ×12/18. Gangguan &gt;120 menit dianggap <i>tidak</i> dihindari (konservatif), padahal baterai tetap memberi waktu shutdown terkendali.</li>
+            <li><b>Produksi:</b> kWh Mei 2026 (SP1 1.010.440 kWh, SP2 1.576.320 kWh) ÷ 744 jam ÷ intensitas energi.</li>
+            <li><b>Tarif I-3:</b> LWBP Rp 1.035,78 · WBP Rp 1.553,67 /kWh. PBJT-TL 3% ikut terhemat. Kenaikan tarif berlaku mulai tahun ke-2.</li>
+            <li><b>Geser beban WBP:</b> 60% kapasitas (6,08 MWh) dipakai harian, 40% ditahan untuk backup. 330 hari/thn, efisiensi bolak-balik 90% (biaya isi ulang LWBP sudah dikurangkan), penurunan kapasitas baterai 1,5%/thn.</li>
+            <li><b>PLTS:</b> 4.060 modul · 2.537,5 kWp · 1.557 kWh/kWp/thn (simulasi tata letak), degradasi 0,5%/thn, 100% dipakai sendiri karena beban siang (±3,5 MW) &gt; produksi PV. Nilai energi = tarif LWBP.</li>
+            <li><b>Kerugian padam</b> naik 3%/thn (inflasi). O&amp;M dihitung dari total investasi, naik 3%/thn.</li>
+            <li><b>Tidak termasuk:</b> pajak &amp; penyusutan (tax shield), pembiayaan, nilai sisa PLTS setelah tahun ke-15, biaya klaim kualitas dari pembeli, dan kerusakan VFD/motor akibat padam. Semua ini cenderung <i>menambah</i> nilai proyek.</li>
+            <li><b>Kenapa tidak PLTS saja?</b> Payback PLTS lebih cepat, tetapi inverter PV on-grid wajib mati saat PLN padam (anti-islanding). Tanpa baterai, padam tetap menghentikan pabrik, termasuk panel suryanya.</li>
+          </ul>
+        </details>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap note">Simulasi indikatif untuk diskusi, bukan penawaran final. Angka final mengikuti survei detail, profil beban 15 menit, dan konfirmasi data produksi SWA. · HME (EPC) × Megarevo</div></footer>
+
+<script>
+(()=>{
+// ---------- fixed data ----------
+const D={
+  L:1035.78, W:1553.67, pbjt:1.03,
+  kwh:[1010440,1576320], hrs:744,
+  ev:[110*12/18, 75*12/18],            // covered events / yr
+  outH:[734/60*12/18, 1266/60*12/18],  // covered outage hours / yr
+  allEv:197*12/18,
+  ess:{mwh:2.21+3.87, use:.6, days:330, rte:.9, fade:.015},
+  pv:{kwp:2537.5, yld:1557, deg:.005},
+  infl:.03
+};
+const PRE={
+  kons:{cm:10000, ev:3000000,  rs:30, it:3.5, ce:38131457771, pc:7500000, om:1.2, es:2,   dr:11, hz:15},
+  mod: {cm:14000, ev:7000000,  rs:30, it:3.5, ce:38131457771, pc:7000000, om:1.0, es:3,   dr:10, hz:15},
+  opt: {cm:18000, ev:12000000, rs:30, it:3.3, ce:38131457771, pc:6500000, om:0.8, es:4,   dr:9,  hz:15}
+};
+let S={...PRE.mod}, pkg='both';
+
+// ---------- formatting ----------
+const fmtRp=(v,dec)=>{const a=Math.abs(v),s=v<0?'−':'';
+  if(a>=1e9) return s+'Rp '+(a/1e9).toLocaleString('id-ID',{maximumFractionDigits:dec??1,minimumFractionDigits:dec??1})+' M';
+  if(a>=1e6) return s+'Rp '+(a/1e6).toLocaleString('id-ID',{maximumFractionDigits:0})+' jt';
+  return s+'Rp '+Math.round(a).toLocaleString('id-ID');};
+const fmtN=(v,d=1)=>v.toLocaleString('id-ID',{maximumFractionDigits:d,minimumFractionDigits:d});
+const $=id=>document.getElementById(id);
+
+// ---------- model ----------
+function model(p, o={}){
+  const P={...S,...o};
+  const hasE=p!=='pv', hasP=p!=='ess';
+  const capE=hasE?P.ce:0, kwp=hasP?D.pv.kwp:0, capP=kwp*P.pc, cap=capE+capP;
+  const kg=D.kwh.map(k=>k/D.hrs/P.it);
+  const rsH=P.rs/60, esc=P.es/100, r=P.dr/100, N=P.hz;
+  const flows=[-cap], rows=[]; let cum=-cap, pb=null;
+  for(let y=1;y<=N;y++){
+    const f=Math.pow(1+esc,y-1), fi=Math.pow(1+D.infl,y-1);
+    const pv=kwp*D.pv.yld*Math.pow(1-D.pv.deg,y-1)*D.L*f*D.pbjt;
+    let wbp=0,dt=0,ws=0;
+    if(hasE){
+      const Ed=D.ess.mwh*1000*D.ess.use*D.ess.days*Math.pow(1-D.ess.fade,y-1);
+      wbp=(Ed*D.W-Ed/D.ess.rte*D.L)*f*D.pbjt;
+      dt=[0,1].reduce((s,i)=>s+(D.ev[i]*rsH+D.outH[i])*kg[i],0)*P.cm*fi;
+      ws=(D.ev[0]+D.ev[1])*P.ev*fi;
+    }
+    const om=cap*P.om/100*fi, gross=pv+wbp+dt+ws, net=gross-om;
+    rows.push({y,pv,wbp,dt,ws,om,gross,net});
+    if(pb===null && cum+net>=0) pb=y-1+(-cum)/net;
+    cum+=net; flows.push(net);
+  }
+  const npvAt=k=>flows.reduce((s,c,i)=>s+c/Math.pow(1+k,i),0);
+  let irr=null;
+  if(npvAt(-.9)>0 && npvAt(1)<0){let lo=-.9,hi=1;for(let i=0;i<80;i++){const m=(lo+hi)/2;npvAt(m)>0?lo=m:hi=m}irr=lo}
+  const cumArr=[]; flows.reduce((s,c,i)=>(cumArr[i]=s+c,s+c),0);
+  return {cap,capE,capP,kg,rows,flows,cum:cumArr,pb,npv:npvAt(r),irr,
+    tot:rows.reduce((s,x)=>s+x.net,0), gross:rows.reduce((s,x)=>s+x.gross,0)};
+}
+
+// ---------- controls ----------
+const meta={
+  cm:v=>'Rp '+v.toLocaleString('id-ID')+'/kg', ev:v=>fmtRp(v), rs:v=>v+' menit', it:v=>fmtN(v)+' kWh/kg',
+  ce:v=>fmtRp(v,2), pc:v=>'Rp '+fmtN(v/1e6,2)+' jt', om:v=>fmtN(v)+'% invest.',
+  es:v=>fmtN(v)+'%', dr:v=>fmtN(v)+'%', hz:v=>v+' tahun'
+};
+const inputs=Object.keys(meta).map(k=>$(k));
+function syncInputs(){
+  inputs.forEach(el=>{el.value=S[el.id];paint(el)});
+}
+function paint(el){
+  const p=(el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--p',p+'%');
+  $('o-'+el.id).textContent=meta[el.id](+el.value);
+}
+inputs.forEach(el=>el.addEventListener('input',()=>{
+  S[el.id]=+el.value; paint(el);
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  render();
+}));
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  S={...PRE[b.dataset.preset]};
+  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  syncInputs(); render();
+}));
+document.querySelectorAll('.pkg[data-pkg]').forEach(b=>b.addEventListener('click',()=>{
+  pkg=b.dataset.pkg;
+  document.querySelectorAll('.pkg[data-pkg]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  render();
+}));
+
+// ---------- render ----------
+let perSec=0, t0=performance.now();
+function pbTxt(m){return m.pb===null?'> '+S.hz+' thn':fmtN(m.pb)+' thn'}
+function npvCls(v){return v>=0?'c-bat':'c-fault'}
+
+function render(){
+  const M={ess:model('ess'), both:model('both')}, m=M[pkg], y1=m.rows[0];
+
+  // status quo card (loss the ESS would avoid)
+  const e1=M.ess.rows[0], sqLoss=e1.dt+e1.ws;
+  const lostH=[0,1].reduce((s,i)=>s+D.ev[i]*S.rs/60+D.outH[i],0);
+  $('kgh').textContent='SP1 ±'+Math.round(m.kg[0])+' · SP2 ±'+Math.round(m.kg[1])+' kg/jam';
+  $('sqLoss').textContent=fmtRp(sqLoss)+'/thn';
+  $('sqHours').textContent='±'+Math.round(lostH)+' jam·pabrik';
+
+  for(const k of ['ess','both']){
+    const x=M[k];
+    $('p-'+k+'-cap').textContent=fmtRp(x.cap);
+    $('p-'+k+'-sav').textContent=fmtRp(x.rows[0].net);
+    $('p-'+k+'-pb').textContent=pbTxt(x);
+    const n=$('p-'+k+'-npv'); n.textContent=fmtRp(x.npv); n.className=npvCls(x.npv);
+  }
+
+  // hero ticker: gross benefit forgone
+  perSec=y1.gross/(365*24*3600);
+  $('tMonth').textContent=fmtRp(y1.gross/12);
+  $('tLife').textContent=fmtRp(m.gross,0);
+  $('tLifeLbl').textContent='Potensi saving '+S.hz+' tahun yang tidak diambil ('+(pkg==='both'?'ESS + PLTS':'ESS')+', nominal)';
+  $('tickNote').textContent='≈ '+fmtRp(y1.gross/365)+' per hari · padam, WBP'+(pkg==='both'?' & matahari yang tidak dipanen':'');
+
+  // KPIs
+  $('kPb').innerHTML=m.pb===null?'&gt;'+S.hz+'<small>thn</small>':fmtN(m.pb)+'<small>thn</small>';
+  const kn=$('kNpv'); kn.textContent=fmtRp(m.npv); kn.className='num '+npvCls(m.npv);
+  $('kNpvL').textContent='NPV @ '+fmtN(S.dr)+'% · '+S.hz+' thn';
+  $('kIrr').innerHTML=m.irr===null?'—':fmtN(m.irr*100)+'<small>%</small>';
+  $('kIrr').className='num '+(m.irr!==null&&m.irr>=S.dr/100?'c-bat':'');
+  const kt=$('kTot'); kt.textContent=fmtRp(m.tot-m.cap,1); kt.className='num '+npvCls(m.tot-m.cap);
+  $('kTotL').textContent='Saving bersih '+S.hz+' thn setelah balik modal';
+
+  // BEP bar
+  const pbv=m.pb===null?S.hz:Math.min(m.pb,S.hz), pct=pbv/S.hz*100;
+  $('bepFill').style.width=pct+'%'; $('bepAfter').style.width=(100-pct)+'%';
+  $('bepTxt').textContent=m.pb===null?'belum BEP dalam '+S.hz+' thn':'BEP thn '+fmtN(m.pb)+' · '+fmtN(S.hz-m.pb)+' thn untung bersih';
+  $('bepScale').innerHTML=Array.from({length:Math.floor(S.hz/3)+1},(_,i)=>'<span>thn '+(i*3)+'</span>').join('');
+
+  chart(M);
+  breakdown(m,y1);
+  delay(m);
+  finder();
+}
+
+// ---------- chart: cumulative cash ----------
+const SER=[{k:'both',name:'ESS + PLTS',c:'#f7931e'},{k:'ess',name:'ESS saja',c:'#94a6c4',dash:1}];
+function chart(M){
+  const box=$('ch1'), W=Math.max(320,box.clientWidth), H=Math.round(Math.min(380,Math.max(240,W*.42)));
+  const pl=62,pr=96,pt=16,pb=34, N=S.hz;
+  const all=SER.flatMap(s=>M[s.k].cum); let lo=Math.min(0,...all), hi=Math.max(0,...all);
+  const step=niceStep((hi-lo)/6); lo=Math.floor(lo/step)*step; hi=Math.ceil(hi/step)*step;
+  const X=i=>pl+i/N*(W-pl-pr), Y=v=>pt+(hi-v)/(hi-lo)*(H-pt-pb);
+  let g='';
+  for(let v=lo;v<=hi+1;v+=step) g+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v===0?'#5f7396':'#24375a'}" stroke-width="${v===0?1.5:1}"/><text x="${pl-8}" y="${Y(v)+4}" text-anchor="end" fill="#6a7fa3" font-size="11" font-family="Fira Code">${v/1e9}</text>`;
+  for(let i=0;i<=N;i++) if(i%(N>10?3:2)===0||i===N) g+=`<text x="${X(i)}" y="${H-12}" text-anchor="middle" fill="#6a7fa3" font-size="11" font-family="Fira Code">${i}</text>`;
+  g+=`<text x="${pl-8}" y="${pt-4}" text-anchor="end" fill="#6a7fa3" font-size="10" font-family="Fira Code">Rp M</text><text x="${W-pr}" y="${H-12}" dx="14" fill="#6a7fa3" font-size="10" font-family="Fira Code">thn</text>`;
+  // profit zone shading for selected
+  const sel=M[pkg];
+  let lines='';
+  // draw non-selected first
+  [...SER].sort((a,b)=>(a.k===pkg)-(b.k===pkg)).forEach(s=>{
+    const c=M[s.k].cum, on=s.k===pkg;
+    const d=c.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('');
+    if(on){
+      const area=d+`L${X(N)} ${Y(0)}L${X(0)} ${Y(0)}Z`;
+      lines+=`<clipPath id="cp"><rect x="0" y="0" width="${W}" height="${Y(0)}"/></clipPath><path d="${area}" fill="#2fd28a" opacity=".12" clip-path="url(#cp)"/>`;
+    }
+    lines+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="${on?2.5:2}" ${s.dash?'stroke-dasharray="5 4"':''} opacity="${on?1:.75}" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const last=c[N]; lines+=`<text x="${X(N)+8}" y="${Y(last)+4}" fill="#cdd8ea" font-size="12" font-family="Fira Sans" font-weight="${on?600:400}">${s.name}</text><text x="${X(N)+8}" y="${Y(last)+19}" fill="#94a6c4" font-size="11" font-family="Fira Code">${fmtRp(last)}</text>`;
+    const p=M[s.k].pb;
+    if(p!==null && p<=N){
+      lines+=`<circle cx="${X(p)}" cy="${Y(0)}" r="5.5" fill="${s.c}" stroke="#132139" stroke-width="2"/>`;
+      if(on) lines+=`<text x="${X(p)}" y="${Y(0)-12}" text-anchor="middle" fill="${s.c}" font-size="12" font-weight="600" font-family="Fira Code">BEP ${fmtN(p)} thn</text>`;
+    }
+  });
+  box.querySelector('svg')?.remove();
+  box.insertAdjacentHTML('afterbegin',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Arus kas kumulatif per tahun">${g}${lines}<line id="xh" y1="${pt}" y2="${H-pb}" stroke="#94a6c4" stroke-dasharray="3 3" opacity="0"/><rect id="hit" x="${pl}" y="${pt}" width="${W-pl-pr}" height="${H-pt-pb}" fill="transparent"/></svg>`);
+  $('lg1').innerHTML=SER.map(s=>`<span><i class="${s.dash?'dash':''}" style="background:${s.c};color:${s.c}"></i>${s.name}</span>`).join('')+'<span><i style="background:#2fd28a;opacity:.4;height:10px"></i>Zona untung bersih</span>';
+  const svg=box.querySelector('svg'), tip=$('tip1'), xh=svg.querySelector('#xh');
+  const move=e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*W/r.width;
+    const i=Math.max(0,Math.min(N,Math.round((sx-pl)/(W-pl-pr)*N)));
+    xh.setAttribute('x1',X(i));xh.setAttribute('x2',X(i));xh.setAttribute('opacity',1);
+    tip.innerHTML=`<div style="margin-bottom:4px;color:#94a6c4">Akhir tahun ke-${i}</div>`+SER.map(s=>`<div class="row"><span><span class="sw" style="background:${s.c}"></span>${s.name}</span><b>${fmtRp(M[s.k].cum[i])}</b></div>`).join('');
+    tip.style.opacity=1;
+    const px=X(i)*r.width/W; tip.style.left=Math.min(px+14,r.width-190)+'px'; tip.style.top='20px';
+  };
+  svg.addEventListener('pointermove',move);
+  svg.addEventListener('pointerleave',()=>{tip.style.opacity=0;xh.setAttribute('opacity',0)});
+}
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x))),n=x/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+
+// ---------- breakdown ----------
+function breakdown(m,y){
+  const items=[
+    {n:'PLTS atap · listrik gratis siang hari',v:y.pv,c:'var(--s1)'},
+    {n:'Geser beban WBP (17–22)',v:y.wbp,c:'var(--s2)'},
+    {n:'Waste & biaya restart dihindari',v:y.ws,c:'var(--s3)'},
+    {n:'Produksi terselamatkan',v:y.dt,c:'var(--s4)'}
+  ].filter(i=>i.v>0);
+  const mx=Math.max(...items.map(i=>i.v));
+  $('brkTitle').textContent='Dari mana '+fmtRp(y.gross)+' per tahun datang';
+  $('brk').innerHTML=items.map(i=>`<div class="r"><span class="k"><i style="background:${i.c}"></i>${i.n}</span><span class="bar" style="width:${i.v/mx*100}%;background:${i.c}"></span><span class="v">${fmtRp(i.v)}</span></div>`).join('')+
+    `<div class="r" style="color:var(--muted)"><span class="k"><i style="background:transparent;border:1px solid var(--line)"></i>Dikurangi O&amp;M</span><span></span><span class="v">−${fmtRp(y.om)}</span></div>`;
+  const perDayInv=m.cap/(S.hz*365);
+  const evLoss=perEventLoss();
+  $('rf1').innerHTML=`Investasi ${fmtRp(m.cap)} tersebar ${S.hz} tahun ≈ <b>${fmtRp(perDayInv)} per hari</b>. Penghematannya ≈ <b>${fmtRp(y.gross/365)} per hari</b>, mulai hari pertama beroperasi.`;
+  $('rf2').innerHTML=`Satu kali padam di satu pabrik ≈ <b>${fmtRp(evLoss)}</b> (restart ${S.rs} menit + waste). Dengan ±${Math.round(D.allEv)} gangguan per tahun, SWA membayar "premi" ini tanpa mendapat perlindungan apa pun.`;
+}
+function sqLossY1(){const r=model('ess').rows[0];return r.dt+r.ws}
+function perEventLoss(o={}){
+  const P={...S,...o}, kg=D.kwh.map(k=>k/D.hrs/P.it);
+  const tot=[0,1].reduce((s,i)=>s+(D.ev[i]*P.rs/60+D.outH[i])*kg[i]*P.cm+D.ev[i]*P.ev,0);
+  return tot/(D.ev[0]+D.ev[1]);
+}
+
+// ---------- delay table ----------
+function delay(m){
+  const r=S.dr/100, rows=[0,3,6,12];
+  const y1=m.rows[0], perMonthEv=D.allEv/12;
+  $('delay').querySelector('tbody').innerHTML=rows.map(mo=>{
+    const lost=y1.gross*mo/12, sq=sqLossY1()*mo/12;
+    return `<tr class="${mo?'hl':''}"><td>${mo?'Tertunda '+mo+' bulan':'Sesuai jadwal'}</td><td>${mo?fmtRp(lost):'—'}</td><td>${mo?'±'+Math.round(perMonthEv*mo)+'×':'—'}</td><td>${mo?fmtRp(sq):'—'}</td></tr>`;
+  }).join('');
+}
+
+// ---------- BEP finder ----------
+function finder(){
+  const yrs=8; $('fYrs').textContent=yrs;
+  const now=perEventLoss();
+  // solve per-event direct cost "ev" so ESS payback = yrs
+  const pbOf=ev=>{const x=model('ess',{ev});return x.pb===null?99:x.pb};
+  let lo=0,hi=500e6;
+  if(pbOf(hi)>yrs){ $('fTh').textContent='> Rp 500 jt'; }
+  for(let i=0;i<60;i++){const mid=(lo+hi)/2; pbOf(mid)>yrs?lo=mid:hi=mid}
+  const th=perEventLoss({ev:hi});
+  $('fNow').textContent=fmtRp(now);
+  $('fNowD').textContent=`Restart ${S.rs} mnt × ±${Math.round((model('ess').kg[0]+model('ess').kg[1])/2)} kg/jam × Rp ${(S.cm/1000).toLocaleString('id-ID')} rb/kg + biaya langsung ${fmtRp(S.ev)}`;
+  $('fTh').textContent=fmtRp(th);
+  $('fThD').textContent=`≈ ${fmtRp(th*(D.ev[0]+D.ev[1]))} per tahun dari ±${Math.round(D.ev[0]+D.ev[1])} gangguan yang tertutup baterai`;
+  const mx=Math.max(now,th)*1.3;
+  $('gNow').style.left=(now/mx*100)+'%'; $('gTh').style.left=(th/mx*100)+'%';
+  $('gz').style.width=(100-th/mx*100)+'%'; $('gMax').textContent=fmtRp(mx);
+  const ratio=now/th;
+  $('fMsg').innerHTML= ratio>=1
+    ? `Dengan asumsi ini, <b>ESS saja sudah balik modal ≤ ${yrs} tahun</b>, karena kerugian per padam sudah di atas ambang.`
+    : `Dengan asumsi ${PRE_NAME()}, ESS saja belum mencapai ambang (${Math.round(ratio*100)}%). Pertanyaan kunci untuk SWA: <b>apakah satu kali padam benar-benar merugikan lebih dari ${fmtRp(th)}?</b> Hitung juga klaim kualitas, keterlambatan kirim, dan lembur. Jika belum, paket <b>ESS + PLTS</b> menutup selisihnya dari penghematan listrik harian.`;
+}
+const PRE_NAME=()=>{const b=document.querySelector('.seg button[aria-pressed=true]');return b?b.textContent.toLowerCase():'kustom'};
+
+// ---------- ticker ----------
+const tick=$('tick');
+function loop(){
+  const s=(performance.now()-t0)/1000;
+  tick.textContent='Rp '+Math.floor(perSec*s).toLocaleString('id-ID');
+  requestAnimationFrame(loop);
+}
+
+syncInputs(); render();
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches) requestAnimationFrame(loop);
+else { setInterval(()=>{tick.textContent='Rp '+Math.floor(perSec*(performance.now()-t0)/1000).toLocaleString('id-ID')},1000); }
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>chart({ess:model('ess'),both:model('both')}),120)});
+})();
+</script>
+</body>
+</html>
