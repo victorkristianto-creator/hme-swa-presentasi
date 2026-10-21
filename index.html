@@ -897,7 +897,7 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
 <!-- 11 BENEFITS -->
 <section class="slide" data-title="Manfaat">
   <span class="kick rv">Manfaat untuk SWA</span>
-  <div class="rv" style="--d:1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><h2>Lebih dari sekadar cadangan listrik</h2><a class="tbtn" href="#" data-goto="smS1" style="text-decoration:none;color:var(--hme2);border-color:var(--hme)">Buka simulasi BEP &amp; NPV →</a></div>
+  <div class="rv" style="--d:1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><h2>Lebih dari sekadar cadangan listrik</h2><a class="tbtn" href="#" data-goto="smS1" style="text-decoration:none;color:var(--hme2);border-color:var(--hme)">Buka simulasi BEP &amp; saving →</a></div>
   <div class="ben">
     <div class="card rv" style="--d:2"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2fd28a" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg><h4>Produksi tidak terhenti</h4><p>±94% gangguan historis tertutup penuh; mesin kritis tetap berputar.</p></div>
     <div class="card rv" style="--d:3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f7931e" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h4>±61 jam/tahun kembali produktif</h4><p>Waktu restart mesin yang selama ini hilang setiap kali PLN padam.</p></div>
@@ -985,20 +985,20 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <button class="sm-pkg" data-pkg="ess" aria-pressed="false">
       <div class="name">ESS Megarevo</div>
       <div class="desc">Baterai 6,08 MWh + PCS hybrid. Mesin kritis tetap jalan saat padam, plus geser beban WBP.</div>
-      <dl><dt>Investasi</dt><dd id="sm-ess-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-ess-sav">—</dd><dt>Payback</dt><dd id="sm-ess-pb">—</dd><dt>NPV</dt><dd id="sm-ess-npv">—</dd></dl>
+      <dl><dt>Investasi</dt><dd id="sm-ess-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-ess-sav">—</dd><dt>Payback</dt><dd id="sm-ess-pb">—</dd><dt>Untung bersih</dt><dd id="sm-ess-npv">—</dd></dl>
     </button>
     <button class="sm-pkg" data-pkg="both" aria-pressed="true">
       <span class="tag">Rekomendasi</span>
       <div class="name">ESS + PLTS atap 3,1 MWp</div>
       <div class="desc">Matahari memberi penghematan harian, baterai menjaga produksi. Satu inverter hybrid untuk keduanya.</div>
-      <dl><dt>Investasi</dt><dd id="sm-both-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-both-sav">—</dd><dt>Payback</dt><dd id="sm-both-pb">—</dd><dt>NPV</dt><dd id="sm-both-npv">—</dd></dl>
+      <dl><dt>Investasi</dt><dd id="sm-both-cap">—</dd><dt>Saving thn-1</dt><dd id="sm-both-sav">—</dd><dt>Payback</dt><dd id="sm-both-pb">—</dd><dt>Untung bersih</dt><dd id="sm-both-npv">—</dd></dl>
     </button>
   </div>
   <p class="note rv" style="--d:4;margin:0">Dihitung dari data SWA: 197 gangguan (Jan 2025 – Jun 2026), tagihan PLN Mei 2026, desain atap 3.110,4 kWp. Tekan <b>T</b> untuk mengubah asumsi.</p>
   <aside class="tech"><h3>Asumsi simulasi</h3><p class="note">Semua slide simulasi ikut dihitung ulang.</p>
     <div class="sm-grp">Kerugian saat padam</div>
     <div class="sm-fld"><label for="smcm">Margin kontribusi per kg benang <output id="o-smcm"></output></label><input type="range" id="smcm" min="6000" max="25000" step="500"><div class="hint">Harga jual − bahan baku − energi variabel.</div></div>
-    <div class="sm-fld"><label for="smev">Biaya langsung per kejadian per pabrik <output id="o-smev"></output></label><input type="range" id="smev" min="0" max="30000000" step="500000"><div class="hint">Waste benang &amp; roving, sambung ulang, lembur, lot turun grade. Moderat Rp 12 jt; paket NPV ≥ 0 mulai ±Rp 11 jt (perlu konfirmasi data SWA).</div></div>
+    <div class="sm-fld"><label for="smev">Biaya langsung per kejadian per pabrik <output id="o-smev"></output></label><input type="range" id="smev" min="0" max="30000000" step="500000"><div class="hint">Waste benang &amp; roving, sambung ulang, lembur, lot turun grade. Moderat Rp 12 jt (perlu konfirmasi data SWA).</div></div>
     <div class="sm-fld"><label for="smrs">Waktu restart mesin <output id="o-smrs"></output></label><input type="range" id="smrs" min="10" max="60" step="5"></div>
     <div class="sm-fld"><label for="smit">Intensitas energi <output id="o-smit"></output></label><input type="range" id="smit" min="2.5" max="5" step="0.1"><div class="hint">Produksi = kWh PLN ÷ kWh/kg → <span id="smKgh" class="mono"></span></div></div>
     <div class="sm-grp">Investasi</div>
@@ -1007,12 +1007,11 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <div class="sm-fld"><label for="smom">Biaya O&amp;M per tahun <output id="o-smom"></output></label><input type="range" id="smom" min="0.5" max="2.5" step="0.1"></div>
     <div class="sm-grp">Finansial</div>
     <div class="sm-fld"><label for="smes">Kenaikan tarif PLN per tahun <output id="o-smes"></output></label><input type="range" id="smes" min="0" max="6" step="0.5"></div>
-    <div class="sm-fld"><label for="smdr">Tingkat diskonto (WACC) <output id="o-smdr"></output></label><input type="range" id="smdr" min="6" max="14" step="0.5"></div>
     <div class="sm-fld"><label for="smhz">Umur analisa (PLTS) <output id="o-smhz"></output></label><input type="range" id="smhz" min="10" max="25" step="1"><div class="hint">Modul PV bergaransi 30 thn. Baterai LFP dihitung 15 thn tanpa penggantian: manfaat &amp; O&amp;M ESS berhenti di tahun ke-16.</div></div>
   </aside>
 </section>
 
-<section class="slide" data-title="Simulasi · BEP &amp; NPV" id="smS2">
+<section class="slide" data-title="Simulasi · BEP &amp; saving" id="smS2">
   <div class="sm-head rv">
     <span class="kick">Lampiran · Simulasi investasi 2/4 · <span id="smPkgName" style="color:var(--ink)">ESS + PLTS</span></span>
     <div class="seg sm-preset" role="group" aria-label="Skenario"><button data-preset="kons" aria-pressed="false">Konservatif</button><button data-preset="mod" aria-pressed="true">Moderat</button><button data-preset="opt" aria-pressed="false">Optimis</button></div>
@@ -1020,8 +1019,8 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
   <h2 class="rv" style="--d:1">Kapan investasi berubah jadi untung</h2>
   <div class="sm-kpis rv" style="--d:2">
     <div class="card"><div class="num c-hme" id="smPb">—</div><div class="lbl">Titik balik modal (BEP)</div></div>
-    <div class="card"><div class="num" id="smNpv">—</div><div class="lbl" id="smNpvL">NPV</div></div>
-    <div class="card"><div class="num" id="smIrr">—</div><div class="lbl">IRR proyek</div></div>
+    <div class="card"><div class="num c-bat" id="smNpv">—</div><div class="lbl" id="smNpvL">Saving bersih per tahun</div></div>
+    <div class="card"><div class="num" id="smIrr">—</div><div class="lbl">Imbal hasil per tahun (IRR)</div></div>
     <div class="card"><div class="num" id="smTot">—</div><div class="lbl" id="smTotL">Saving bersih</div></div>
   </div>
   <div class="card sm-chart rv" style="--d:3">
@@ -1053,7 +1052,7 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
   <h2 class="rv" style="--d:1;max-width:34ch" id="smCfT">Rincian hitungan</h2>
   <div class="sm-cf">
     <div class="card sm-cfw rv" style="--d:2"><table class="sm-t sm-cft" id="smCf">
-      <thead><tr><th>Thn</th><th>PLTS</th><th>WBP</th><th>Padam</th><th>O&amp;M</th><th>Arus kas</th><th>Kumulatif</th><th title="Faktor diskonto = 1 ÷ (1 + WACC)^t">DF</th><th>Nilai kini</th></tr></thead>
+      <thead><tr><th>Thn</th><th>PLTS</th><th>WBP</th><th>Padam</th><th>O&amp;M</th><th>Arus kas</th><th>Kumulatif</th></tr></thead>
       <tbody></tbody><tfoot></tfoot></table></div>
     <div class="card sm-how rv" style="--d:3">
       <div class="sm-comp" id="smComp"></div>
@@ -1067,8 +1066,8 @@ body.scroll .sm-brk .r .bar{grid-column:1/-1;grid-row:2}
     <li><b>WBP</b>: energi baterai digeser ke jam 17–22 (selisih tarif WBP vs biaya isi ulang LWBP).</li>
     <li><b>Padam</b>: produksi yang terselamatkan (jam × kg/jam × margin) + biaya langsung per kejadian.</li>
     <li><b>O&amp;M</b>: % dari investasi, naik 3%/thn. ESS berhenti di tahun ke-16.</li>
-    <li><b>DF (faktor diskonto)</b> = 1 ÷ (1 + WACC)<sup>t</sup>. Nilai kini = arus kas × faktor diskonto.</li></ul>
-    <h4>Rumus</h4><ul><li>NPV = −Investasi + Σ nilai kini.</li><li>IRR = tingkat diskonto yang membuat NPV = 0.</li><li>BEP = tahun ketika kumulatif ≥ 0 (interpolasi linear di dalam tahun).</li></ul>
+    </ul>
+    <h4>Rumus</h4><ul><li>Untung bersih = jumlah arus kas semua tahun − investasi.</li><li>Imbal hasil (IRR) = "bunga" tahunan yang diberikan proyek atas uang yang ditanam, untuk dibandingkan dengan bunga deposito atau pinjaman.</li><li>BEP = tahun ketika kumulatif ≥ 0 (interpolasi linear di dalam tahun).</li></ul>
     <p class="note">Garis putus oranye di tabel = akhir umur baterai (tahun ke-15).</p></aside>
 </section>
 
@@ -1537,7 +1536,7 @@ function setLay(k) {
 $$('#laySeg button').forEach(b => b.onclick = () => setLay(b.dataset.s));
 setLay('sp1');
 
-/* ---------- Simulasi investasi (BEP · NPV · opportunity loss) ---------- */
+/* ---------- Simulasi investasi (BEP · saving · opportunity loss) ---------- */
 {
   const q = id => document.getElementById(id);
   const D = {
@@ -1590,7 +1589,7 @@ setLay('sp1');
 
   /* controls */
   const meta = { cm: v => 'Rp ' + fmt(v, 0) + '/kg', ev: v => rp(v), rs: v => v + ' menit', it: v => n1(v) + ' kWh/kg',
-    ce: v => rp(v, 2), pt: v => rp(v, 2) + ' · ' + fmt(v / D.pv.kwp / 1e6, 2) + ' jt/kWp', om: v => n1(v) + '% invest.', es: v => n1(v) + '%', dr: v => n1(v) + '%', hz: v => v + ' tahun' };
+    ce: v => rp(v, 2), pt: v => rp(v, 2) + ' · ' + fmt(v / D.pv.kwp / 1e6, 2) + ' jt/kWp', om: v => n1(v) + '% invest.', es: v => n1(v) + '%', hz: v => v + ' tahun' };
   const keys = Object.keys(meta);
   const paint = k => { const el = q('sm' + k), p = (el.value - el.min) / (el.max - el.min) * 100; el.style.setProperty('--p', p + '%'); q('o-sm' + k).textContent = meta[k](+el.value); };
   const sync = () => keys.forEach(k => { q('sm' + k).value = S[k]; paint(k); });
@@ -1610,7 +1609,7 @@ setLay('sp1');
     q('smSqH').textContent = '±' + Math.round([0, 1].reduce((s, i) => s + D.ev[i] * S.rs / 60 + D.outH[i], 0)) + ' jam·pabrik';
     for (const k of ['ess', 'both']) { const x = M[k];
       q('sm-' + k + '-cap').textContent = rp(x.cap); q('sm-' + k + '-sav').textContent = rp(x.rows[0].net);
-      q('sm-' + k + '-pb').textContent = pbTxt(x); const n = q('sm-' + k + '-npv'); n.textContent = rp(x.npv); n.className = cls(x.npv); }
+      q('sm-' + k + '-pb').textContent = pbTxt(x); const n = q('sm-' + k + '-npv'); n.textContent = rp(x.tot - x.cap); n.className = cls(x.tot - x.cap); }
     const nm = pkg === 'both' ? 'ESS + PLTS' : 'ESS saja';
     perSec = y1.gross / (365 * 24 * 3600);
     q('smMonth').textContent = rp(y1.gross / 12);
@@ -1620,9 +1619,9 @@ setLay('sp1');
     /* slide 2 */
     q('smPkgName').textContent = nm;
     q('smPb').innerHTML = m.pb === null ? '&gt;' + S.hz + '<small>thn</small>' : n1(m.pb) + '<small>thn</small>';
-    const kn = q('smNpv'); kn.textContent = rp(m.npv); kn.className = 'num ' + cls(m.npv);
-    q('smNpvL').textContent = 'NPV @ ' + n1(S.dr) + '% · ' + S.hz + ' thn';
-    const ki = q('smIrr'); ki.innerHTML = m.irr === null ? '—' : n1(m.irr * 100) + '<small>%</small>'; ki.className = 'num ' + (m.irr !== null && m.irr >= S.dr / 100 ? 'c-bat' : '');
+    q('smNpv').textContent = rp(y1.net);
+    q('smNpvL').textContent = 'Saving bersih tahun pertama';
+    const ki = q('smIrr'); ki.innerHTML = m.irr === null ? '—' : n1(m.irr * 100) + '<small>%</small>'; ki.className = 'num ' + (m.irr !== null && m.irr > 0 ? 'c-bat' : '');
     const kt = q('smTot'); kt.textContent = rp(m.tot - m.cap); kt.className = 'num ' + cls(m.tot - m.cap);
     q('smTotL').textContent = 'Saving bersih ' + S.hz + ' thn setelah balik modal';
     const pct = (m.pb === null ? S.hz : Math.min(m.pb, S.hz)) / S.hz * 100;
@@ -1646,18 +1645,18 @@ setLay('sp1');
   /* slide 3/4: year-by-year cash flow + worked method */
   function cashflow(m, M, nm) {
     const b = v => fmt(v / 1e9, 2), sg = v => (v < 0 ? '−' : '+') + 'Rp ' + fmt(Math.abs(v) / 1e9, 1) + ' M';
-    const y1 = m.rows[0], pvSum = m.rows.reduce((s, r) => s + r.net * r.df, 0);
+    const y1 = m.rows[0];
     q('smCfName').textContent = nm;
-    q('smCfT').innerHTML = `Investasi ${rp(m.cap)} menghemat bersih ${rp(m.tot, 1)} dalam ${S.hz} tahun · <span class="${cls(m.npv)}">NPV ${sg(m.npv)}</span>`;
+    q('smCfT').innerHTML = `Investasi ${rp(m.cap)} menghemat bersih ${rp(m.tot, 1)} dalam ${S.hz} tahun · <span class="${cls(m.tot - m.cap)}">untung bersih ${sg(m.tot - m.cap)}</span>`;
     const tr = (c, cells) => `<tr class="${c}">${cells.map(x => `<td${x[1] ? ` class="${x[1]}"` : ''}>${x[0]}</td>`).join('')}</tr>`;
-    let h = tr('y0', [['0'], ['—'], ['—'], ['—'], ['—'], [b(-m.cap), 'neg'], [b(-m.cap), 'neg'], ['1,000'], [b(-m.cap), 'neg']]);
+    let h = tr('y0', [['0'], ['—'], ['—'], ['—'], ['—'], [b(-m.cap), 'neg'], [b(-m.cap), 'neg']]);
     m.rows.forEach((r, i) => {
       const cum = m.cum[i + 1];
-      h += tr(r.y === D.ess.life && S.hz > D.ess.life ? 'essend' : '', [[r.y], [b(r.pv)], [b(r.wbp)], [b(r.dt + r.ws)], ['−' + b(r.om)], [b(r.net)], [b(cum), cum < 0 ? 'neg' : 'pos'], [fmt(r.df, 3)], [b(r.net * r.df)]]);
+      h += tr(r.y === D.ess.life && S.hz > D.ess.life ? 'essend' : '', [[r.y], [b(r.pv)], [b(r.wbp)], [b(r.dt + r.ws)], ['−' + b(r.om)], [b(r.net)], [b(cum), cum < 0 ? 'neg' : 'pos']]);
     });
     q('smCf').querySelector('tbody').innerHTML = h;
     const sum = k => m.rows.reduce((s, r) => s + r[k], 0);
-    q('smCf').querySelector('tfoot').innerHTML = tr('', [['Σ'], [b(sum('pv'))], [b(sum('wbp'))], [b(sum('dt') + sum('ws'))], ['−' + b(sum('om'))], [b(m.tot)], [b(m.tot - m.cap), m.tot - m.cap < 0 ? 'neg' : 'pos'], [''], [b(pvSum)]]);
+    q('smCf').querySelector('tfoot').innerHTML = tr('', [['Σ'], [b(sum('pv'))], [b(sum('wbp'))], [b(sum('dt') + sum('ws'))], ['−' + b(sum('om'))], [b(m.tot)], [b(m.tot - m.cap), m.tot - m.cap < 0 ? 'neg' : 'pos']]);
     const Ed = D.ess.mwh * 1000 * D.ess.use * D.ess.days;
     const hrsLost = [0, 1].reduce((s, i) => s + D.ev[i] * S.rs / 60 + D.outH[i], 0);
     const steps = [];
@@ -1666,12 +1665,12 @@ setLay('sp1');
     steps.push(`<b>Padam dihindari</b> = jam hilang × kg/jam × margin + kejadian × biaya langsung<span class="f">±${fmt(hrsLost, 0)} jam·pabrik → ${b(y1.dt)} · ${fmt(D.ev[0] + D.ev[1], 0)} × Rp ${fmt(S.ev / 1e6, 0)} jt → ${b(y1.ws)} · total <em>${b(y1.dt + y1.ws)}</em></span>`);
     steps.push(`<b>O&amp;M</b> = ${n1(S.om)}% × investasi<span class="f">${n1(S.om)}% × ${b(m.cap)} = <em>−${b(y1.om)}</em></span>`);
     steps.push(`<b>Arus kas bersih tahun 1</b> = <em style="font-style:normal;color:var(--bat);font-family:var(--mono)">${b(y1.net)}</em>. Tahun berikutnya: tarif +${n1(S.es)}%/thn, PV −0,5%/thn, baterai −1,5%/thn, biaya +3%/thn.`);
-    steps.push(`<b>NPV</b> = −Investasi + Σ arus kas ÷ (1 + ${n1(S.dr)}%)<sup>t</sup><span class="f">−${b(m.cap)} + ${b(pvSum)} = <em style="color:${m.npv >= 0 ? 'var(--bat)' : 'var(--fault)'}">${m.npv < 0 ? '−' : '+'}${b(Math.abs(m.npv))}</em></span>`);
-    steps.push(`<b>IRR</b> ${m.irr === null ? '—' : n1(m.irr * 100) + '%'} ${m.irr !== null && m.irr >= S.dr / 100 ? '&gt;' : '&lt;'} WACC ${n1(S.dr)}% · <b>BEP</b> ${pbTxt(m)}`);
+    steps.push(`<b>Untung bersih</b> = Σ arus kas − investasi<span class="f">${b(m.tot)} − ${b(m.cap)} = <em style="color:${m.tot - m.cap >= 0 ? 'var(--bat)' : 'var(--fault)'}">${sg(m.tot - m.cap)}</em></span>`);
+    steps.push(`<b>BEP</b> ${pbTxt(m)} · <b>Imbal hasil</b> ${m.irr === null ? '—' : n1(m.irr * 100) + '%/thn'}`);
     q('smHow').innerHTML = steps.map(x => `<li>${x}</li>`).join('');
     const pvOnly = model('pv');
     q('smComp').innerHTML = [['PLTS saja', pvOnly], ['ESS saja', M.ess], ['ESS + PLTS', M.both]].map(([n, x]) =>
-      `<div><b class="${cls(x.npv)}">${sg(x.npv)}</b>NPV ${n}<br>IRR ${x.irr === null ? '—' : n1(x.irr * 100) + '%'} · BEP ${pbTxt(x)}</div>`).join('');
+      `<div><b class="${cls(x.tot - x.cap)}">${sg(x.tot - x.cap)}</b>Untung bersih ${n}<br>BEP ${pbTxt(x)} · imbal hasil ${x.irr === null ? '—' : n1(x.irr * 100) + '%'}</div>`).join('');
   }
 
   /* chart: cumulative cash */
