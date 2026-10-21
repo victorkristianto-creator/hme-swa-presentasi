@@ -171,6 +171,32 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 .u.mps{background:#5ab8ff22;color:var(--pv)}.u.pm{background:#f7931e22;color:var(--hme)}.u.bt{background:#2fd28a22;color:var(--bat)}
 .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
+/* S7b SLD motion flow */
+.sldbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sldbar .sp{flex:1}
+#sld{flex:1;min-height:0;width:100%}
+#sld text{fill:var(--ink);font-family:var(--sans)}
+#sld .t{font-weight:600}
+#sld .s{fill:var(--muted);font-family:var(--mono)}
+#sld .bx{fill:var(--card);stroke:var(--line);stroke-width:1.5;transition:stroke .4s}
+#sld .wb{fill:none;stroke:#ffffff10;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+#sld .w{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 10;transition:stroke .4s,opacity .4s}
+#sld .w.go{animation:dash12 .6s linear infinite}
+#sld .w.back{animation:dash12 .6s linear infinite reverse}
+#sld .w.off{opacity:0}
+@keyframes dash12{to{stroke-dashoffset:-12}}
+#sld .com{opacity:0;transition:opacity .4s}
+#sld.kom .com{opacity:1}
+#sld .com path{fill:none;stroke-width:1.6;stroke-dasharray:5 4;animation:dash9 1.2s linear infinite}
+@keyframes dash9{to{stroke-dashoffset:-18}}
+#sld .dimk{transition:opacity .4s}
+#sld.kom .dimk{opacity:.4}
+#sld .soc{transform-box:fill-box;transform-origin:left;transition:transform 1.2s var(--ease)}
+#sld .cutx{opacity:0;transition:opacity .3s}
+#sld .bi{opacity:0;transform:translateY(8px);transform-box:fill-box}
+#sld.built .bi{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .5s var(--ease);transition-delay:calc(var(--k,0) * 140ms)}
+#sld.built.kom .bi.dimk{opacity:.4}
+
 /* S8 timeline */
 #tl{width:100%;flex:1;min-height:0}
 #tl circle{transition:opacity .4s,transform .4s;transform-box:fill-box;transform-origin:center}
@@ -179,6 +205,37 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 #day{width:100%;flex:1;min-height:0}
 #day .soc{fill:none;stroke:var(--bat);stroke-width:4;stroke-dasharray:2000;stroke-dashoffset:2000}
 .active #day .soc,.seen #day .soc{transition:stroke-dashoffset 2.6s var(--ease) .4s;stroke-dashoffset:0}
+#day{cursor:crosshair}
+#day .soc.dim{stroke-opacity:.25}
+#day .pop{opacity:0;transform:translateY(6px) scale(.96);transform-box:fill-box;transform-origin:center;transition:opacity .3s cubic-bezier(.23,1,.32,1),transform .3s cubic-bezier(.23,1,.32,1)}
+#day .pop.in{opacity:1;transform:none}
+#day .halo{transform-box:fill-box;transform-origin:center;opacity:0}
+#day .halo.alert{animation:halo 1.2s cubic-bezier(.23,1,.32,1) infinite}
+@keyframes halo{from{transform:scale(.6);opacity:.7}to{transform:scale(2.4);opacity:0}}
+#day .flash{opacity:0;pointer-events:none}
+#day .flash.go{animation:flash .7s cubic-bezier(.23,1,.32,1)}
+@keyframes flash{12%{opacity:.22}to{opacity:0}}
+.simbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.simlbl{font-size:14px;font-weight:700;color:#ff5a5a;letter-spacing:.02em}
+.simbar .seg button{padding:6px 12px;font-size:13px}
+.hud{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;flex-basis:100%}
+.hud>div{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 12px;transition:border-color .25s ease,background-color .25s ease}
+.hud small{display:block;font:600 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.hud>div b{font:600 14px var(--mono);white-space:nowrap;transition:color .25s ease}
+.hc b{font-size:19px;font-variant-numeric:tabular-nums}
+#hPln .ic{font-size:18px;color:#f5c84c;transition:color .25s ease}
+#hPln[data-s=off],#hLoad[data-s=stop]{border-color:#ff5a5a;background:#ff5a5a1f}
+#hPln[data-s=off] .ic,#hPln[data-s=off] b,#hLoad[data-s=stop] b{color:#ff5a5a}
+.bb{width:46px;height:18px;border:2px solid var(--muted);border-radius:4px;position:relative;padding:2px;box-sizing:border-box}
+.bb::after{content:'';position:absolute;right:-6px;top:3px;width:3px;height:8px;background:var(--muted);border-radius:0 2px 2px 0}
+.bb i{display:block;height:100%;background:#2fd28a;border-radius:1px;transform-origin:left;transition:background-color .3s ease}
+#hBat[data-lv=mid] .bb i{background:#f7931e}
+#hBat[data-lv=low] .bb i{background:#ff5a5a}
+.gear{width:26px;height:26px;stroke:#2fd28a;animation:spin 1.4s linear infinite;transition:stroke .25s ease}
+#hLoad[data-s=stop] .gear{stroke:#ff5a5a;animation-play-state:paused}
+#hLoad[data-src=bat] b{color:#2fd28a}
+#simCap{margin:0;flex:1 1 280px;font-size:clamp(14px,1.9vh,17px);min-height:2.6em;display:flex;align-items:center}
+@media (prefers-reduced-motion: reduce){.gear{animation:none}#day .halo.alert,#day .flash.go{animation:none}}
 
 /* S10 layout */
 .lay{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;flex:1;min-height:0}
@@ -187,6 +244,19 @@ body.tech-on .slide .has-tech-shift{margin-right:min(460px,40vw)}
 .lay img{max-height:100%;object-fit:contain}
 .lay figcaption{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
 .lay figcaption b{color:var(--ink);font-family:var(--mono)}
+
+/* S10b PV potential */
+.pvg{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(14px,2vw,28px);flex:1;min-height:0}
+.pvg .photo{position:relative;border-radius:16px;overflow:hidden;min-height:0;border:1px solid var(--line);cursor:zoom-in}
+.pvg .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;transform:scale(1.06);transition:transform 6s var(--ease)}
+.active .pvg .photo img,.seen .pvg .photo img{transform:none}
+.pvg .photo span{position:absolute;left:12px;top:12px;font-size:12px;background:#000a;padding:4px 8px;border-radius:6px}
+.pvg .sun{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#ffd76a33 48%,transparent 66%);background-size:250% 100%;background-position:100% 0;pointer-events:none;mix-blend-mode:screen}
+.active .pvg .sun{animation:sweep 5s var(--ease) .6s infinite}
+@keyframes sweep{to{background-position:-150% 0}}
+.pvg .kv .card{display:flex;flex-direction:column;justify-content:center}
+.pvg .mini{font:600 clamp(18px,3vh,28px)/1 var(--mono);white-space:nowrap}
+.pvg .mini small{font-size:.5em;color:var(--muted);margin-left:4px}
 
 /* S11 benefits */
 .ben{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);flex:1;min-height:0;align-content:start}
@@ -253,13 +323,15 @@ body.scroll.tech-on .tech{display:block}
 body.scroll .sites,body.scroll .cfg,body.scroll .lay,body.scroll .next,body.scroll .apx,body.scroll .part{grid-template-columns:minmax(0,1fr)}
 body.scroll .chain{grid-template-columns:1fr 1fr}
 body.scroll .ben{grid-template-columns:1fr}
+body.scroll .pvg{grid-template-columns:minmax(0,1fr)}
+body.scroll .pvg .photo{height:260px}
 body.scroll .ds{grid-template-columns:minmax(0,1fr)}
 body.scroll .ds-cover{height:320px}
 body.scroll .ds-tbl{overflow:visible}
 body.scroll .grow{flex-direction:column}
 body.scroll .hex{display:none}
 body.scroll .bars{height:200px;flex:none}
-body.scroll #flow,body.scroll #tl,body.scroll #day{height:auto;flex:none}
+body.scroll #flow,body.scroll #sld,body.scroll #tl,body.scroll #day{height:auto;flex:none}
 body.scroll .lay .imgbox{height:240px;flex:none}
 body.scroll .epc{grid-template-columns:repeat(3,1fr)}
 body.scroll .step:not(:last-child)::after{display:none}
@@ -503,6 +575,27 @@ body.scroll .kv{grid-template-columns:1fr}
   <p class="note">Sizing final (jumlah rak baterai, rasio daya/energi) akan divalidasi dengan profil beban 15 menit hasil survei.</p></aside>
 </section>
 
+<!-- 7b SLD MOTION FLOW -->
+<section class="slide" data-title="Diagram detail" id="sldSlide">
+  <span class="kick rv">Single line diagram · Megarevo</span>
+  <h2 class="rv" style="--d:1">Jalur energi, dari PLN sampai mesin kritis</h2>
+  <div class="sldbar rv" style="--d:2">
+    <div class="seg" role="group" aria-label="Pilih pabrik" id="sldSite"><button data-s="sp1" aria-pressed="true">SP1 · Kudus 5</button><button data-s="sp2" aria-pressed="false">SP2 · Jekulo 3</button></div>
+    <div class="seg" role="group" aria-label="Mode aliran" id="sldMode"><button data-v="normal" aria-pressed="true">① Normal</button><button data-v="padam" aria-pressed="false">② PLN padam</button><button data-v="wbp" aria-pressed="false">③ Jam WBP</button><button data-v="kom" aria-pressed="false">④ Kontrol &amp; komunikasi</button></div>
+    <span class="sp"></span>
+    <button class="tbtn" id="sldOrig" data-zoomsrc="assets/sld-sp1.jpg">SLD asli ↗</button>
+  </div>
+  <svg id="sld" class="rv" style="--d:3" viewBox="0 0 1000 505" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Diagram aliran energi detail berdasarkan SLD Megarevo"></svg>
+  <div class="flowcap rv" style="--d:4"><span class="dot" id="sldDot"></span><p id="sldCap" aria-live="polite"></p></div>
+  <aside class="tech"><h3>Detail teknis</h3>
+  <h4>Sumber</h4><p>SLD Megarevo "SP1-2MW@2.21MWh ESS + 4 × PMAE0630" dan "SP2-3.5MW@3.87MWh ESS + 7 × PMAE0630" (V1, 11 Sep 2026). Diagram di slide ini adalah penyederhanaan animasi; jumlah blok dan sambungan mengikuti SLD.</p>
+  <h4>Komponen per blok</h4><ul><li><b>PMAE0630</b> — PCS modular dua arah (AC↔DC), grid port ke bus 400 V.</li><li><b>Baterai + BMS</b> — terhubung ke bus DC bersama (BAT input).</li><li><b>MPS0500TS</b> — inverter hybrid/microgrid: PV input (via combiner box), BAT input, dan <b>load port</b> ke panel distribusi AC beban kritis.</li></ul>
+  <h4>Jalur daya</h4><ul><li>Normal: PLN → trafo → bus 400 V → PMAE → bus DC → MPS → panel beban kritis; baterai diisi dari bus DC.</li><li>PLN padam: PMAE berhenti, baterai menyuplai bus DC; beban tetap disuplai MPS dari load port.</li><li>SP2 terbagi 2 grup: 4 blok (2 MW / 2,21 MWh) dan 3 blok (1,5 MW / 1,65 MWh), masing-masing dengan panel distribusi AC &amp; EMS-01 sendiri, pada satu bus 400 V bersama.</li></ul>
+  <h4>Komunikasi</h4><ul><li>EMS-01 ↔ PMAE &amp; MPS: TCP/IP via network switch, ke gateway &amp; monitoring platform.</li><li>BMS ↔ PCS: CAN. Antar MPS paralel: CAN.</li></ul>
+  <img src="assets/sld-sp1.jpg" data-zoom alt="SLD SP1"><p class="note">SP1 — klik untuk memperbesar</p><img src="assets/sld-sp2.jpg" data-zoom alt="SLD SP2"><p class="note">SP2 — klik untuk memperbesar</p>
+  <p class="note">Waktu transfer &amp; perilaku saat PLN padam diverifikasi pada FAT dan commissioning.</p></aside>
+</section>
+
 <!-- 8 COVERAGE -->
 <section class="slide" data-title="Cakupan">
   <span class="kick rv">Simulasi dengan data riil</span>
@@ -531,10 +624,24 @@ body.scroll .kv{grid-template-columns:1fr}
   <h2 class="rv" style="--d:1">Isi saat murah, bantu saat mahal, siaga setiap saat</h2>
   <p class="lead rv" style="--d:2">EMS menjaga <b>cadangan minimum</b> agar baterai selalu siap — penting karena puncak gangguan (17:00) bertepatan dengan awal jam mahal WBP.</p>
   <svg id="day" class="rv" style="--d:3" viewBox="0 0 1000 330" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Profil baterai harian"></svg>
+  <div class="simbar rv" style="--d:4">
+    <span class="simlbl">⚡ Simulasi PLN padam</span>
+    <div class="seg" role="group" aria-label="Jam padam" id="simAt"><button data-h="" aria-pressed="true">Tanpa padam</button><button data-h="10" aria-pressed="false">10:00</button><button data-h="17" aria-pressed="false">17:00 · puncak gangguan</button><button data-h="21.5" aria-pressed="false">21:30 · akhir WBP</button></div>
+    <div class="seg" role="group" aria-label="Lama padam" id="simDur"><button data-m="15" aria-pressed="false">15 mnt</button><button data-m="45" aria-pressed="true">45 mnt</button><button data-m="90" aria-pressed="false">1,5 jam</button><button data-m="180" aria-pressed="false">3 jam</button></div>
+    <button class="tbtn" id="simReplay" hidden>↻ Putar ulang</button>
+    <div class="hud" id="simHud">
+      <div class="hc"><small>Jam</small><b id="hClock">--:--</b></div>
+      <div class="hi" id="hPln" data-s="on"><span class="ic">⚡</span><span><small>PLN</small><b id="hPlnV">Normal</b></span></div>
+      <div class="hi" id="hBat" data-lv="ok"><span class="bb"><i id="hBatFill"></i></span><span><small>Baterai</small><b id="hBatV">100%</b></span></div>
+      <div class="hi" id="hLoad" data-s="run"><svg class="gear" viewBox="-16 -16 32 32" aria-hidden="true"><circle r="11" fill="none" stroke-width="3"/><path d="M0 -11V11M-11 0H11M-8 -8L8 8M8 -8L-8 8" stroke-width="2"/></svg><span><small>Mesin kritis</small><b id="hLoadV">Jalan · dari PLN</b></span></div>
+      <p id="simCap" aria-live="polite"></p>
+    </div>
+  </div>
   <aside class="tech"><h3>Detail teknis</h3><h4>Strategi EMS (usulan awal)</h4>
   <ul><li><b>22:00–04:00</b> — isi baterai dari PLN (LWBP Rp 1.035,78/kWh).</li><li><b>04:00–17:00</b> — siaga penuh (SoC ±100%), mode backup.</li><li><b>17:00–22:00</b> — discharge terkendali untuk mengurangi kWh WBP (Rp 1.553,67/kWh), berhenti pada SoC cadangan.</li><li><b>Cadangan 40%</b> ≈ 45–50 menit backup penuh beban kritis — mencakup ±80% kejadian gangguan historis.</li></ul>
   <p>Batas cadangan, jadwal dan prioritas dapat diatur ulang dari EMS sesuai pola produksi SWA.</p>
-  <p class="note">Batang kecil di bawah grafik = jumlah gangguan historis per jam.</p></aside>
+  <p class="note">Batang kecil di bawah grafik = jumlah gangguan historis per jam.</p>
+  <h4>Asumsi simulasi padam</h4><p>Beban kritis penuh SP1 (0,90 MW dari 2,21 MWh) ⇒ SoC turun ±48%/jam (100% ≈ 2,1 jam). Setelah PLN kembali, baterai diisi ulang ±25%/jam hingga kembali ke profil normal — kecuali di jam WBP (17:00–22:00): baterai tidak diisi agar tidak membeli listrik mahal; bila SoC masih di atas 40%, baterai lanjut membantu suplai dengan laju yang diatur agar mencapai 40% tepat pukul 22:00. Pengisian dimulai 22:00.</p></aside>
 </section>
 
 <!-- 10 LAYOUT -->
@@ -555,6 +662,32 @@ body.scroll .kv{grid-template-columns:1fr}
   <tr><td>Ruang baterai</td><td class="n">14,0 × 7,9 m</td><td class="n">15,1 × 10,5 m</td></tr></table>
   <h4>Berat peralatan (datasheet)</h4><ul><li>MPS 500 kW: ±3,3 ton per unit</li><li>PMAE0630: ±480 kg per unit</li><li>Kabinet baterai: hingga ±2 ton per unit</li></ul>
   <h4>Persyaratan ruang</h4><ul><li>Peralatan IP20/IP21 — wajib indoor, ventilasi/AC (operasi baterai optimal ±25 °C).</li><li>Proteksi kebakaran khusus ruang baterai (deteksi gas &amp; asap, sistem pemadam).</li><li>Daya dukung lantai &amp; jalur kabel diverifikasi saat survei sipil.</li></ul></aside>
+</section>
+
+<!-- 10b PV POTENTIAL -->
+<section class="slide" data-title="Potensi PLTS">
+  <span class="kick rv">Potensi PLTS atap</span>
+  <h2 class="rv" style="--d:1">Atap pabrik bisa menghasilkan <span class="c-pv">±4 GWh</span> listrik per tahun</h2>
+  <div class="pvg">
+    <div class="photo rv" style="--d:2" data-zoomsrc="assets/pv-atap.webp"><img src="assets/pv-atap.webp" alt="Simulasi tata letak 4.060 modul PV di atap pabrik"><i class="sun"></i><span>Simulasi tata letak modul · klik untuk memperbesar</span></div>
+    <div class="col rv" style="--d:3">
+      <div class="kv">
+        <div class="card"><div class="num c-pv" data-n="2537.5" data-dec="1"><small>kWp</small></div><div class="lbl">Kapasitas DC terpasang</div></div>
+        <div class="card"><div class="num c-grid" data-n="3.95" data-dec="2"><small>GWh/th</small></div><div class="lbl">Estimasi produksi tahunan</div></div>
+        <div class="card"><div class="mini" data-n="4060"><small>modul</small></div><div class="lbl">±625 Wp per modul</div></div>
+        <div class="card"><div class="mini" data-n="10.8" data-dec="1"><small>MWh/hari</small></div><div class="lbl">Rata-rata produksi harian</div></div>
+        <div class="card"><div class="mini c-hme" data-n="4.1" data-dec="1" data-pre="±Rp "><small>miliar/th</small></div><div class="lbl">Setara pembelian kWh PLN (tarif LWBP)</div></div>
+        <div class="card"><div class="mini c-bat" data-n="3400" data-pre="±"><small>t CO₂/th</small></div><div class="lbl">Emisi yang dihindari</div></div>
+      </div>
+      <p class="lead" style="font-size:clamp(13px,1.8vh,16px)">PV masuk langsung ke <b>input PV inverter MPS</b> — siang hari menyuplai mesin, kelebihannya <b>mengisi baterai</b>, sehingga energi surya terpakai 100% di pabrik.</p>
+    </div>
+  </div>
+  <aside class="tech"><h3>Detail teknis</h3>
+  <h4>Hasil simulasi tata letak</h4>
+  <table><tr><td>Jumlah modul</td><td class="n">4.060</td></tr><tr><td>Kapasitas DC</td><td class="n">2.537,5 kWp</td></tr><tr><td>Estimasi produksi</td><td class="n">3,95 GWh/tahun</td></tr><tr><td>Specific yield</td><td class="n">±1.557 kWh/kWp/th</td></tr></table>
+  <h4>Perhitungan turunan</h4><ul><li>Rata-rata harian = 3,95 GWh ÷ 365 ≈ 10,8 MWh/hari.</li><li>Nilai energi = 3,95 GWh × Rp 1.035,78/kWh (LWBP) ≈ Rp 4,1 miliar/tahun, dengan asumsi seluruh produksi terpakai sendiri.</li><li>CO₂ dihindari ≈ 3,95 GWh × ±0,87 t/MWh (faktor emisi grid Jawa-Bali, asumsi) ≈ ±3.400 t/tahun.</li></ul>
+  <h4>Integrasi dengan sistem Megarevo</h4><ul><li>Input PV MPS0500TS: maks 600–720 kW per unit, MPPT 250–850 V. SP1 (4 unit) ≥ 2,4 MW; SP2 (7 unit) ≥ 4,2 MW.</li><li>Sejak Permen ESDM 2/2024 ekspor PLTS atap tidak dikompensasi — baterai menyerap kelebihan siang hari.</li></ul>
+  <p class="note">Angka produksi adalah estimasi software desain; final mengikuti survei struktur atap, shading dan izin PLN.</p></aside>
 </section>
 
 <!-- 11 BENEFITS -->
@@ -794,6 +927,90 @@ $$('#cfgSeg button').forEach(b => b.onclick = () => setCfg(b.dataset.s));
 hooks[6] = () => setCfg($('#cfgSeg [aria-pressed=true]').dataset.s);
 setCfg('sp1');
 
+/* ---------- S7b SLD motion flow ---------- */
+(function () {
+  const svg = $('#sld'), slideEl = $('#sldSlide');
+  const SITES = { sp1: { img: 'assets/sld-sp1.jpg', g: [[4, '2 MW · 2,21 MWh']] }, sp2: { img: 'assets/sld-sp2.jpg', g: [[4, '2 MW · 2,21 MWh'], [3, '1,5 MW · 1,65 MWh']] } };
+  const COL = { grid: '#f5c84c', bat: '#2fd28a', fault: '#ff5a5a', pv: '#5ab8ff', hme: '#f7931e', tcp: '#8fd14f', can: '#a77bff' };
+  const BUS = 92, X0 = 60, X1 = 990, GAP = 36;
+  function build(k) {
+    const G = SITES[k].g, N = G.reduce((a, g) => a + g[0], 0), cw = (X1 - X0 - GAP * (G.length - 1)) / N;
+    const bw = Math.min(84, cw * .42), off = Math.min(50, cw * .23), fs = cw < 150 ? 11.5 : 14, ss = cw < 150 ? 9 : 10.5;
+    let base = '', wires = '', nodes = '', com = '', x = X0, no = 0;
+    const W = (d, r, kk) => { base += `<path class="wb bi" style="--k:${kk}" d="${d}"/>`; wires += `<path class="w" data-r="${r}" d="${d}"/>`; };
+    const box = (cx, y, h, a, b, kk, extra = '') => `<g class="bi dimk" style="--k:${kk}"><rect class="bx" x="${cx - bw / 2}" y="${y}" width="${bw}" height="${h}" rx="7"/><text class="t" x="${cx}" y="${y + h / 2 - 2}" text-anchor="middle" font-size="${fs}">${a}</text><text class="s" x="${cx}" y="${y + h / 2 + ss + 2}" text-anchor="middle" font-size="${ss}">${b}</text>${extra}</g>`;
+    /* PLN, trafo, bus 400 V */
+    nodes += `<g class="bi dimk" style="--k:0" id="sldGrid"><rect class="bx" x="450" y="4" width="100" height="36" rx="8"/><text class="t" x="500" y="22" text-anchor="middle" font-size="13">PLN</text><text class="s" x="500" y="34" text-anchor="middle" font-size="9.5">20 kV</text>
+      <circle cx="500" cy="58" r="8" fill="none" stroke="#94a6c4" stroke-width="1.6"/><circle cx="500" cy="69" r="8" fill="none" stroke="#94a6c4" stroke-width="1.6"/><text class="s" x="514" y="67" font-size="9.5">Trafo 20 kV / 400 V</text></g>
+      <g class="cutx" id="sldCut"><circle cx="476" cy="56" r="11" fill="#ff5a5a"/><path d="M471 51l10 10M481 51l-10 10" stroke="#fff" stroke-width="2.5"/></g>
+      <text class="s bi" style="--k:1" x="${X0}" y="${BUS - 7}" font-size="10">BUS AC 400 V · 3Φ</text>`;
+    W('M500 40V50', 'feed', 0); W(`M500 77V${BUS}`, 'feed', 0); W(`M500 ${BUS}H${X0}`, 'bus', 1); W(`M500 ${BUS}H${X1}`, 'bus', 1);
+    G.forEach(([n, lbl]) => {
+      const gx0 = x, gx1 = x + n * cw, gc = (gx0 + gx1) / 2, cols = [];
+      for (let i = 0; i < n; i++) {
+        const cx = x + cw * (i + .5), lx = cx - off, rx = cx + off; no++; cols.push([lx, rx]);
+        W(`M${lx} ${BUS}V125`, 'g', 2); W(`M${lx} 172V246`, 'dc', 3); W(`M${lx} 246H${rx - bw / 2}`, 'dcm', 3); W(`M${lx} 246V318`, 'bat', 4); W(`M${rx} 161V215`, 'pv', 2); W(`M${rx} 278V404`, 'ld', 5);
+        nodes += box(lx, 125, 47, 'PMAE', cw < 150 ? '0630' : '0630 · AC↔DC', 2);
+        nodes += `<g class="bi dimk" style="--k:2"><rect x="${rx - bw / 2}" y="118" width="${bw}" height="22" rx="3" fill="#5ab8ff22" stroke="#5ab8ff" stroke-width="1.3"/><path d="M${rx - bw / 6} 118v22M${rx + bw / 6} 118v22M${rx - bw / 2} 129h${bw}" stroke="#5ab8ff66" stroke-width="1"/><rect class="bx" x="${rx - 10}" y="146" width="20" height="15" rx="3"/><text class="s" x="${rx}" y="113" text-anchor="middle" font-size="${ss}">PV ${no}#</text></g>`;
+        nodes += box(rx, 215, 63, 'MPS ' + no + '#', '0500TS', 3);
+        nodes += box(lx, 318, 50, 'BAT ' + no + '#', 'LFP · BMS', 4, `<rect x="${lx - bw / 2 + 8}" y="359" width="${bw - 16}" height="4" rx="2" fill="#24375a"/><rect class="soc" x="${lx - bw / 2 + 8}" y="359" width="${bw - 16}" height="4" rx="2" fill="#2fd28a"/>`);
+        nodes += `<circle class="bi" style="--k:3" cx="${lx}" cy="246" r="3.5" fill="#2fd28a"/>`;
+        com += `<path stroke="${COL.tcp}" d="M${lx + bw / 2 - 8} 104V125"/><path stroke="${COL.tcp}" d="M${rx + bw / 2 + 5} 104V230H${rx + bw / 2}"/>`;
+        com += `<path stroke="${COL.can}" d="M${lx + bw / 2} 352H${rx - bw / 4}V278"/>`;
+      }
+      /* TCP/IP backbone from EMS-01; parallel CAN between MPS units */
+      com += `<path stroke="${COL.tcp}" d="M${gx0 + 40} 40V104H${cols[n - 1][1] + bw / 2 + 5}"/>`;
+      if (n > 1) com += `<path stroke="${COL.can}" d="M${cols[0][1]} 292H${cols[n - 1][1]}"/>`;
+      nodes += `<g class="bi" style="--k:0"><rect class="bx" x="${gx0}" y="6" width="80" height="34" rx="7" style="stroke:#8fd14f88"/><text class="t" x="${gx0 + 40}" y="22" text-anchor="middle" font-size="11.5">EMS-01</text><text class="s" x="${gx0 + 40}" y="34" text-anchor="middle" font-size="8.5">→ monitoring</text></g>`;
+      /* AC distribution cabinet + critical load */
+      nodes += `<g class="bi dimk" style="--k:5"><rect class="bx cab" x="${gx0 + 6}" y="404" width="${gx1 - gx0 - 12}" height="12" rx="4"/><text class="s" x="${gx0 + 8}" y="432" font-size="9.5">PANEL DISTRIBUSI AC</text><text class="t" x="${gx1 - 8}" y="432" text-anchor="end" font-size="11" style="fill:#f7931e">${lbl}</text></g>`;
+      W(`M${gc} 416V446`, 'crit', 6);
+      nodes += `<g class="bi dimk" style="--k:6"><rect class="bx crit" x="${gc - 96}" y="446" width="192" height="54" rx="10"/><text class="t" x="${gc - 12}" y="469" text-anchor="middle" font-size="14">Beban kritis</text><text class="s" x="${gc - 12}" y="486" text-anchor="middle" font-size="9.5">ring · winding · kompresor</text>
+        <g transform="translate(${gc + 74} 473)"><g class="spin"><circle r="9" fill="none" stroke="#2fd28a" stroke-width="2.4"/><path d="M0 -9V9M-9 0H9M-6.4 -6.4L6.4 6.4M6.4 -6.4L-6.4 6.4" stroke="#2fd28a" stroke-width="1.6"/></g></g></g>`;
+      x = gx1 + GAP;
+    });
+    svg.innerHTML = base + wires + nodes + `<g class="com">${com}</g>`;
+    $('#sldOrig').dataset.zoomsrc = SITES[k].img;
+  }
+  const on = (st, c) => [st, c];
+  const SM = {
+    normal: { feed: on('go', COL.grid), bus: on('go', COL.grid), g: on('go', COL.grid), dc: on('go', COL.grid), dcm: on('go', COL.grid), bat: on('go', COL.grid), pv: on('go', COL.pv), ld: on('go', COL.grid), crit: on('go', COL.grid), soc: .9, cut: 0, dot: COL.grid,
+      cap: 'PLN → trafo → bus 400 V → PMAE (AC→DC) → bus DC → MPS (DC→AC) → panel beban kritis. Bus DC sekaligus mengisi baterai; PV masuk lewat combiner box.' },
+    padam: { pv: on('go', COL.pv), bat: on('back', COL.bat), dcm: on('go', COL.bat), ld: on('go', COL.bat), crit: on('go', COL.bat), soc: .6, cut: 1, dot: COL.bat,
+      cap: 'PLN padam → PMAE berhenti. Baterai sudah terhubung di bus DC, jadi MPS terus menyuplai dari load port — mesin kritis tetap berputar.' },
+    wbp: { feed: on('go', COL.grid), bus: on('go', COL.grid), g: on('go', COL.grid), dc: on('go', COL.grid), dcm: on('go', COL.hme), bat: on('back', COL.bat), pv: on('go', COL.pv), ld: on('go', COL.hme), crit: on('go', COL.hme), soc: .55, cut: 0, dot: COL.hme,
+      cap: 'Jam WBP 17:00–22:00: EMS menurunkan daya ambil dari PLN; baterai menambal sisanya lewat bus DC.' },
+    kom: { soc: .9, cut: 0, dot: COL.tcp,
+      cap: 'Lapisan kontrol: EMS-01 ↔ tiap PMAE & MPS via switch jaringan (TCP/IP, hijau) ke monitoring. BMS ↔ PCS dan antar MPS paralel via CAN (ungu).' }
+  };
+  const order = ['normal', 'padam', 'wbp', 'kom'];
+  let mode = 'normal', site = 'sp1', timer = null;
+  function setSm(m) {
+    const M = SM[m]; mode = m;
+    svg.classList.toggle('kom', m === 'kom');
+    $$('.w', svg).forEach(p => { const [st, c] = M[p.dataset.r] || ['off']; p.classList.remove('go', 'back', 'off'); p.classList.add(st); if (c) p.style.stroke = c; });
+    $$('.soc', svg).forEach(r => r.style.transform = `scaleX(${M.soc})`);
+    $('#sldCut').style.opacity = M.cut; $('#sldGrid .bx').style.stroke = M.cut ? COL.fault : '';
+    $$('.cab', svg).forEach(r => r.style.stroke = M.crit ? M.crit[1] : '');
+    $$('.crit', svg).forEach(r => r.style.stroke = m === 'padam' ? COL.bat : '');
+    $('#sldCap').textContent = M.cap; $('#sldDot').style.background = M.dot;
+    $$('#sldMode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === m));
+  }
+  function setSite(k, animate) {
+    site = k; $$('#sldSite button').forEach(b => b.setAttribute('aria-pressed', b.dataset.s === k));
+    svg.classList.remove('built'); build(k); setSm(mode);
+    if (animate && !reduce) requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.add('built'))); else svg.classList.add('built');
+  }
+  const stop = () => { clearInterval(timer); timer = null; };
+  $$('#sldMode button').forEach(b => b.onclick = () => { stop(); setSm(b.dataset.v); });
+  $$('#sldSite button').forEach(b => b.onclick = () => setSite(b.dataset.s, true));
+  hooks[slides.indexOf(slideEl)] = () => {
+    stop(); setSm('normal'); setSite(site, true);
+    if (!reduce) timer = setInterval(() => { if (slides[cur] !== slideEl) { stop(); return; } setSm(order[(order.indexOf(mode) + 1) % order.length]); }, 5500);
+  };
+  setSite('sp1', false);
+})();
+
 /* ---------- S8 timeline ---------- */
 const OUT = {"sp1":[[19,3],[28,3],[28,1],[29,1],[36,1],[44,4],[44,5],[57,87],[4,25],[68,5],[69,1],[74,1],[80,1],[86,1],[86,1],[112,1],[114,14],[120,1],[132,2],[136,1],[144,53],[150,205],[153,1],[160,1],[160,1],[167,1],[172,60],[180,1],[182,1],[182,1],[183,1],[195,1],[202,1],[212,1],[220,1],[222,1],[224,7],[230,1],[234,1],[235,1],[248,1],[252,3],[255,3],[263,1],[264,6],[278,1],[279,1],[280,1],[280,1],[283,1],[283,1],[283,1],[284,6],[284,3],[285,1],[291,1],[299,1],[300,1],[302,3],[309,1],[321,1],[332,1],[335,23],[341,1],[344,1],[345,1],[351,30],[365,1],[366,1],[371,1],[373,237],[375,1],[375,5],[378,85],[384,4],[385,1],[385,14],[387,1],[391,23],[393,143],[395,2],[413,14],[425,2],[425,5],[426,26],[427,225],[427,280],[439,2],[441,28],[449,1],[452,1],[453,1],[432,1],[445,2],[450,3],[455,1],[455,5],[457,7],[467,1],[468,67],[471,1],[479,1],[479,1],[480,1],[492,1],[492,7],[494,250],[494,2],[503,1],[503,1],[504,9],[508,3],[538,3],[538,3],[544,2]],
 "sp2":[[14,1],[18,113],[19,59],[27,4],[30,3],[32,1],[57,1],[71,2],[76,47],[79,2],[95,1],[111,50],[114,29],[122,1],[136,74],[138,45],[155,1],[161,130],[164,183],[177,1],[184,66],[196,60],[212,36],[221,6],[230,6],[232,66],[232,1],[233,9],[235,1],[245,1],[246,13],[246,73],[285,1],[287,1],[293,1],[295,41],[297,6],[298,1],[303,1],[304,1],[315,1],[315,69],[319,1],[321,10],[332,1],[333,158],[352,1],[359,34],[373,37],[373,1],[374,1],[377,1],[377,22],[379,2],[383,1],[384,161],[387,5],[396,5],[401,55],[411,1],[412,74],[422,1],[456,26],[399,136],[406,1],[411,5],[429,1],[447,1],[451,1],[451,1],[475,1],[478,1],[479,2],[486,1],[494,52],[494,2],[502,161],[506,1],[521,19],[545,1]]};
@@ -812,14 +1029,15 @@ const LIM = { sp1: 126, sp2: 118 };
   });
   $('#tl').innerHTML = g;
 })();
-hooks[7] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'; c.style.opacity = 0; c.style.transform = 'scale(.2)';
+hooks[8] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'; c.style.opacity = 0; c.style.transform = 'scale(.2)';
   requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transition = ''; c.style.transitionDelay = (reduce ? 0 : 300 + c.dataset.d * 3) + 'ms'; c.style.opacity = 1; c.style.transform = 'none'; })); }); };
 
 /* ---------- S9 day profile ---------- */
 (function buildDay() {
   const X0 = 60, X1 = 980, Y0 = 260, Y1 = 70, sx = h => X0 + h / 24 * (X1 - X0), sy = p => Y0 - p / 100 * (Y0 - Y1);
   const pts = [[0, 70], [4, 100], [17, 100], [22, 40], [24, 70]];
-  let g = `<rect x="${sx(17)}" y="${Y1 - 10}" width="${sx(22) - sx(17)}" height="${Y0 - Y1 + 10}" fill="#f7931e" opacity=".1" rx="8"/>
+  let g = `<defs><pattern id="wbpHatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#f7931e" fill-opacity=".10"/><line x1="0" y1="0" x2="0" y2="10" stroke="#f7931e" stroke-opacity=".28" stroke-width="3"/></pattern></defs>
+  <rect x="${sx(17)}" y="${Y1 - 10}" width="${sx(22) - sx(17)}" height="${Y0 - Y1 + 10}" fill="url(#wbpHatch)" stroke="#f7931e" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="6 4" rx="8"/>
   <text x="${(sx(17) + sx(22)) / 2}" y="${Y1 - 22}" text-anchor="middle" fill="#f7931e" font-size="13" font-weight="700">WBP · tarif mahal</text>
   <text x="${(sx(4) + sx(17)) / 2}" y="${Y1 - 22}" text-anchor="middle" fill="#94a6c4" font-size="13">LWBP · siaga penuh</text>`;
   [0, 25, 50, 75, 100].forEach(p => g += `<line x1="${X0}" x2="${X1}" y1="${sy(p)}" y2="${sy(p)}" stroke="#24375a" stroke-width="1"/><text x="${X0 - 10}" y="${sy(p) + 4}" text-anchor="end" fill="#5f7396" font-size="12" font-family="Fira Code,monospace">${p}%</text>`);
@@ -831,9 +1049,133 @@ hooks[7] = s => { $$('#tl circle', s).forEach(c => { c.style.transition = 'none'
   g += `<text x="${sx(1.2)}" y="${sy(92)}" text-anchor="middle" fill="#2fd28a" font-size="13" font-weight="600">Isi ⬆</text><text x="${sx(20.3)}" y="${sy(88)}" text-anchor="middle" fill="#2fd28a" font-size="13" font-weight="600">Bantu suplai ⬇</text><text x="${sx(23)}" y="${sy(60)}" text-anchor="middle" fill="#2fd28a" font-size="13" font-weight="600">Isi ⬆</text>`;
   hrs.forEach((v, h) => g += `<rect x="${sx(h) + 6}" y="${Y0 + 30 + (23 - v) * .9}" width="${(X1 - X0) / 24 - 12}" height="${v * .9}" rx="2" fill="${v >= 19 ? '#ff5a5a' : '#4f6a98'}"/>`);
   g += `<text x="${X0 - 10}" y="${Y0 + 52}" text-anchor="end" fill="#5f7396" font-size="11">gangguan</text>`;
+  g += `<g id="daySim"></g>`;
   $('#day').setAttribute('viewBox', '0 0 1000 330'); $('#day').innerHTML = g;
+
+  /* blackout simulation, played as a story: the clock sweeps the day, slows to "real time" during the outage,
+     and pauses on each moment that matters (PLN off → battery empty → PLN back). Model: full critical load
+     drains ~100% in 2,1 h; recharge ~25%/h after PLN returns. */
+  const DIS = 100 / 2.1, CHG = 25;
+  const base = h => { for (let i = 1; i < pts.length; i++) if (h <= pts[i][0]) { const [a, sa] = pts[i - 1], [b, sb] = pts[i]; return sa + (sb - sa) * (h - a) / (b - a); } return pts[pts.length - 1][1]; };
+  const hhmm = h => { const m = Math.round(h * 60); if (m === 1440) return '24:00'; return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const durTxt = m => m < 60 ? m + ' menit' : (m / 60).toString().replace('.', ',') + ' jam';
+  const lin = x => x, easeIO = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2, easeOut = x => 1 - Math.pow(1 - x, 3);
+  const OUTLINE = 'paint-order="stroke" stroke="#0a1220" stroke-width="5" stroke-linejoin="round"';
+  let simH = null, simM = 45, raf = 0, capKey = '';
+  const H = { clock: $('#hClock'), pln: $('#hPln'), plnV: $('#hPlnV'), bat: $('#hBat'), batF: $('#hBatFill'), batV: $('#hBatV'), load: $('#hLoad'), loadV: $('#hLoadV') };
+
+  function setHud(t, soc, st) {
+    const off = st === 'out' || st === 'empty';
+    H.clock.textContent = t === null ? '--:--' : hhmm(t);
+    H.batF.style.transform = `scaleX(${Math.max(.001, soc / 100)})`; H.batV.textContent = Math.round(soc) + '%';
+    H.bat.dataset.lv = soc < 15 ? 'low' : soc < 40 ? 'mid' : 'ok';
+    H.pln.dataset.s = off ? 'off' : 'on'; H.plnV.textContent = off ? 'Padam' : 'Normal';
+    H.load.dataset.s = st === 'empty' ? 'stop' : 'run'; H.load.dataset.src = st === 'out' ? 'bat' : 'pln';
+    H.loadV.textContent = st === 'empty' ? 'Berhenti' : st === 'out' ? 'Jalan · dari baterai' : 'Jalan · dari PLN';
+  }
+  function say(key, html) {
+    if (key === capKey) return; capKey = key;
+    const p = $('#simCap'); p.innerHTML = html;
+    if (!reduce) p.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+  }
+  const pop = el => requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
+
+  function sim(fromSlide) {
+    cancelAnimationFrame(raf);
+    const G = $('#daySim'), socP = $('#day .soc');
+    $$('#simAt button').forEach(b => b.setAttribute('aria-pressed', b.dataset.h === (simH === null ? '' : String(simH))));
+    $$('#simDur button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.m === simM));
+    $('#simReplay').hidden = simH === null;
+    if (simH === null) {
+      G.innerHTML = ''; socP.classList.remove('dim'); setHud(null, 100, 'normal');
+      say('idle', 'Pilih jam &amp; lama padam — atau <b>klik grafik</b> — lalu lihat apa yang terjadi saat PLN padam.'); return;
+    }
+    if (fromSlide === true && !G.innerHTML) return;
+
+    const t0 = simH, tF = t0 + simM / 60, t1 = Math.min(24, tF), s0 = base(t0), tEmpty = t0 + s0 / DIS;
+    const s1 = Math.max(0, s0 - (t1 - t0) * DIS), sF = Math.max(0, s0 - (tF - t0) * DIS), empties = tEmpty < t1;
+    const isWbp = t => t >= 17 && t < 22;
+    // after PLN returns in WBP: no charging; above reserve keep discharging, paced to hit 40% right at 22:00; recharge from 22:00 (LWBP)
+    const REC = [], DT = .02; for (let t = t1, v = s1; t <= 24 + DT; t += DT) { REC.push(v); v = isWbp(t) ? (v > 40 ? v - (v - 40) * DT / Math.max(DT, 22 - t) : v) : Math.min(base(t + DT), v + CHG * DT); }
+    const rec = t => { const k = (t - t1) / DT, i = Math.floor(k), f = k - i; return REC[i] + ((REC[i + 1] ?? REC[i]) - REC[i]) * f; };
+    const at = t => t <= t0 ? base(t) : t <= t1 ? Math.max(0, s0 - (t - t0) * DIS) : rec(t);
+    const backWbp = isWbp(t1) && t1 < 24, chgTxt = !backWbp ? 'baterai diisi ulang' : s1 > 40 ? 'baterai <b>lanjut membantu suplai WBP</b> sampai cadangan 40% tepat pukul 22:00, lalu diisi saat LWBP' : 'baterai <b>tidak diisi selama WBP</b> (tarif mahal) — pengisian mulai 22:00';
+    const state = t => t < t0 ? 'normal' : t < Math.min(tEmpty, t1) ? 'out' : t < t1 ? 'empty' : 'back';
+    const tA = Math.max(0, t0 - 3), L = x => x + (x > 720 ? -12 : 12), A = x => x > 720 ? 'end' : 'start';
+
+    G.innerHTML = `<rect class="flash" x="${X0}" y="${Y1 - 10}" width="${X1 - X0}" height="${Y0 - Y1 + 10}" fill="#ff5a5a" rx="8"/>
+      <rect id="sBand" x="${sx(t0)}" y="${Y1 - 10}" width="0" height="${Y0 - Y1 + 10}" fill="#ff5a5a" opacity=".16" rx="4"/>
+      <line id="sZero" y1="${sy(0)}" y2="${sy(0)}" stroke="#ff5a5a" stroke-width="7" stroke-linecap="round" opacity="0"/>
+      <line id="sCur" y1="${Y1 - 10}" y2="${Y0}" stroke="#eef3fb" stroke-opacity=".35" stroke-dasharray="3 4"/>
+      <path id="sTrail" fill="none" stroke="#ffd166" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+      <g transform="translate(${sx(t0) + (t0 > 3 ? -10 : 10)} ${Y1 + 22})"><g class="pop" id="bOut"><text text-anchor="${t0 > 3 ? 'end' : 'start'}" fill="#ff5a5a" font-size="14" font-weight="700" ${OUTLINE}>⚡ PLN padam ${hhmm(t0)}</text></g></g>
+      ${empties ? `<g transform="translate(${L(sx(tEmpty))} ${sy(18)})"><g class="pop" id="bEmpty"><text text-anchor="${A(sx(tEmpty))}" fill="#ff5a5a" font-size="14" font-weight="700" ${OUTLINE}>Baterai habis ${hhmm(tEmpty)}</text></g></g>` : ''}
+      ${tF <= 24 ? `<g transform="translate(${sx(t1) + (sx(t1) > 840 ? -12 : 12)} ${Y0 - 12})"><g class="pop" id="bBack"><text text-anchor="${sx(t1) > 840 ? 'end' : 'start'}" fill="#2fd28a" font-size="14" font-weight="700" ${OUTLINE}>✔ PLN kembali ${hhmm(t1)}</text></g></g>` : ''}
+      <circle class="halo" id="sHalo" r="9" fill="#ff5a5a"/><circle id="sDot" r="7" fill="#ffd166" stroke="#0a1220" stroke-width="3"/>`;
+    socP.classList.add('dim'); capKey = '';
+    const $s = id => $('#' + id, G), band = $s('sBand'), zero = $s('sZero'), cur = $s('sCur'), trail = $s('sTrail'), dot = $s('sDot'), halo = $s('sHalo');
+
+    function draw(t) {
+      let d = '';
+      for (let u = tA; u < t; u += .05) d += (d ? 'L' : 'M') + sx(u).toFixed(1) + ' ' + sy(at(u)).toFixed(1);
+      d += (d ? 'L' : 'M') + sx(t).toFixed(1) + ' ' + sy(at(t)).toFixed(1);
+      trail.setAttribute('d', d);
+      const x = sx(t), y = sy(at(t)), st = state(t);
+      cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+      dot.setAttribute('cx', x); dot.setAttribute('cy', y); halo.setAttribute('cx', x); halo.setAttribute('cy', y);
+      dot.setAttribute('fill', st === 'empty' ? '#ff5a5a' : st === 'out' ? '#ffd166' : '#2fd28a');
+      band.setAttribute('width', Math.max(0, sx(Math.min(t, t1)) - sx(t0)));
+      if (empties && t > tEmpty) { zero.setAttribute('x1', sx(tEmpty)); zero.setAttribute('x2', sx(Math.min(t, t1))); zero.setAttribute('opacity', 1); }
+      halo.classList.toggle('alert', st === 'out' || st === 'empty');
+      setHud(t, at(t), st);
+      if (st === 'normal') say('n', `${hhmm(t)} — hari berjalan normal. PLN menyuplai pabrik, baterai siaga di <b>${Math.round(s0)}%</b>.`);
+      else if (st === 'out') say('o', `<span><b style="color:#ff5a5a">⚡ ${hhmm(t0)} PLN padam.</b> Baterai langsung mengambil alih — <b style="color:#2fd28a">mesin kritis tetap berputar</b>, isi baterai mulai berkurang.</span>`);
+      else if (st === 'empty') say('e', `<span><b style="color:#ff5a5a">${hhmm(tEmpty)} baterai habis.</b> PLN belum kembali — mesin kritis berhenti sampai listrik normal.</span>`);
+      else say('b', `<span><b style="color:#2fd28a">✔ ${hhmm(t1)} PLN kembali.</b> Beban pindah lagi ke PLN tanpa putus, ${chgTxt}.</span>`);
+    }
+    function verdict() {
+      const win = t0 >= 17 && t0 < 22 && s0 < 99 ? ' (jam WBP — baterai sudah sebagian terpakai)' : '';
+      if (!empties && tEmpty >= tF) say('v', `<span><b style="color:#2fd28a">✔ Aman.</b> Padam ${hhmm(t0)}–${hhmm(tF)} (${durTxt(simM)})${win}: mesin kritis jalan terus, baterai ${Math.round(s0)}% → ${Math.round(sF)}%, lalu ${!backWbp ? 'terisi kembali' : sF > 40 ? 'lanjut membantu suplai WBP hingga 40% tepat pukul 22:00, baru diisi saat LWBP' : 'ditahan sampai 22:00 dan baru diisi saat LWBP'}.</span>`);
+      else { const ok = Math.round((tEmpty - t0) * 60), short = Math.round((tF - tEmpty) * 60);
+        say('v', `<span><b style="color:#ff5a5a">✖ Melebihi cadangan.</b> Mulai ${hhmm(t0)} dengan baterai ${Math.round(s0)}%${win}: mesin kritis tertolong <b>${ok} menit</b>, ${short} menit sisanya tanpa backup. Solusi: lepas beban non-prioritas atau naikkan cadangan.</span>`); }
+    }
+
+    const beat = { out: () => { $('.flash', G).classList.add('go'); pop($s('bOut')); }, empty: () => pop($s('bEmpty')), back: () => $s('bBack') && pop($s('bBack')) };
+    if (reduce) { ['bOut', 'bEmpty', 'bBack'].forEach(id => $s(id) && $s(id).classList.add('in')); draw(24); verdict(); return; }
+
+    const slow = h => Math.min(4200, Math.max(900, h * 1800));   // outage plays at ~1,8 s per hour
+    const seq = [{ a: tA, b: t0, d: t0 - tA ? 1300 : 0, e: easeIO }, { beat: 'out', at: t0, d: 900 }];
+    if (empties) seq.push({ a: t0, b: tEmpty, d: slow(tEmpty - t0), e: lin }, { beat: 'empty', at: tEmpty, d: 1000 }, { a: tEmpty, b: t1, d: slow(t1 - tEmpty), e: lin });
+    else seq.push({ a: t0, b: t1, d: slow(t1 - t0), e: lin });
+    if (t1 < 24) seq.push({ beat: 'back', at: t1, d: 800 }, { a: t1, b: 24, d: Math.min(2200, 400 + (24 - t1) * 420), e: easeOut });
+
+    const start = performance.now(), fired = new Set();
+    (function frame(now) {
+      if (!document.body.classList.contains('scroll') && !$('#day').closest('.slide').classList.contains('active')) return;
+      let el = now - start;
+      for (const s of seq) {
+        if (el < s.d || s === seq[seq.length - 1]) {
+          if (s.beat) { if (!fired.has(s.beat)) { fired.add(s.beat); beat[s.beat](); } draw(s.at); }
+          else draw(s.a + (s.b - s.a) * s.e(Math.min(1, s.d ? el / s.d : 1)));
+          if (s === seq[seq.length - 1] && el >= s.d) { verdict(); return; }
+          break;
+        }
+        el -= s.d;
+      }
+      raf = requestAnimationFrame(frame);
+    })(start);
+  }
+  $$('#simAt button').forEach(b => b.onclick = () => { simH = b.dataset.h === '' ? null : +b.dataset.h; sim(); });
+  $$('#simDur button').forEach(b => b.onclick = () => { simM = +b.dataset.m; if (simH === null) simH = 17; sim(); });
+  $('#simReplay').onclick = () => sim();
+  $('#day').addEventListener('click', e => {
+    const svg = $('#day'), pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const x = pt.matrixTransform(svg.getScreenCTM().inverse()).x, h = (x - X0) / (X1 - X0) * 24;
+    if (h < 0 || h > 24) return; simH = Math.min(23.75, Math.round(h * 4) / 4); sim();
+  });
+  window.__daySim = sim; sim();
 })();
-hooks[8] = s => { const p = $('#day .soc'); p.style.transition = 'none'; p.style.strokeDashoffset = 2000; requestAnimationFrame(() => requestAnimationFrame(() => { p.style.transition = ''; p.style.strokeDashoffset = ''; })); };
+hooks[9] = s => { const p = $('#day .soc'); p.style.transition = 'none'; p.style.strokeDashoffset = 2000; requestAnimationFrame(() => requestAnimationFrame(() => { p.style.transition = ''; p.style.strokeDashoffset = ''; })); window.__daySim(true); };
 
 /* ---------- S10 layout ---------- */
 const LAY = { sp1: ['assets/layout-sp1.jpg', '11,1 × 5,0 m', '14,0 × 7,9 m'], sp2: ['assets/layout-sp2.jpg', '11,0 × 7,0 m', '15,1 × 10,5 m'] };
